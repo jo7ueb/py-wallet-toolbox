@@ -15,6 +15,13 @@ from dataclasses import dataclass, asdict
 from difflib import SequenceMatcher
 import subprocess
 
+try:
+    from tree_sitter import Language, Parser
+    import tree_sitter_typescript as ts_ts
+    TREE_SITTER_AVAILABLE = True
+except ImportError:
+    TREE_SITTER_AVAILABLE = False
+
 
 @dataclass
 class TestStep:
@@ -249,10 +256,79 @@ class PythonTestParser:
 
 
 class TypeScriptTestParser:
-    """Parse TypeScript test code and extract test steps."""
+    """Parse TypeScript test code and extract test steps using AST parsing."""
+
+    def __init__(self):
+        """Initialize the parser with tree-sitter if available."""
+        self.parser = None
+        self.language = None
+        self.use_ast = False
+        
+        if TREE_SITTER_AVAILABLE:
+            try:
+                # Initialize tree-sitter TypeScript parser
+                self.language = Language(ts_ts.language_typescript())
+                self.parser = Parser(self.language)
+                self.use_ast = True
+            except Exception as e:
+                print(f"Warning: Could not initialize tree-sitter parser: {e}")
+                print("Falling back to regex-based parsing")
+                self.use_ast = False
 
     def parse_test(self, code: str) -> List[TestStep]:
-        """Parse TypeScript test code using regex patterns."""
+        """Parse TypeScript test code using AST or regex patterns."""
+        if self.use_ast:
+            return self._parse_with_ast(code)
+        else:
+            return self._parse_with_regex(code)
+
+    def _parse_with_ast(self, code: str) -> List[TestStep]:
+        """Parse TypeScript code using tree-sitter AST."""
+        steps = []
+        
+        try:
+            tree = self.parser.parse(bytes(code, 'utf8'))
+            root_node = tree.root_node
+            
+            # Build parent map for easier traversal
+            parent_map = {}
+            def build_parent_map(node, parent=None):
+                parent_map[node] = parent
+                if hasattr(node, 'children'):
+                    for child in node.children:
+                        build_parent_map(child, node)
+            build_parent_map(root_node)
+            
+            # Use regex only to check if code contains test() calls (flow control)
+            has_test_call = bool(re.search(r'\btest\s*\(|it\s*\(|describe\s*\(', code))
+            
+            if has_test_call:
+                # Find test functions (test(), it(), describe() calls)
+                test_functions = self._find_test_functions(root_node, code, parent_map)
+                
+                if test_functions:
+                    # We found test() calls - extract from their bodies only
+                    for test_func in test_functions:
+                        func_steps = self._extract_steps_from_function(test_func, code, parent_map)
+                        steps.extend(func_steps)
+                else:
+                    # No test functions found in AST, but regex detected test() - parse root
+                    # This handles edge cases where AST structure is different
+                    root_steps = self._extract_statements_from_node(root_node, code, parent_map)
+                    steps.extend(root_steps)
+            else:
+                # No test() wrapper - parse statements directly from root (code snippets)
+                root_steps = self._extract_statements_from_node(root_node, code, parent_map)
+                steps.extend(root_steps)
+            
+            return steps
+        except Exception as e:
+            # On error, use regex only for flow control, then parse with AST again
+            # This handles cases where AST parsing fails due to syntax issues
+            return self._parse_with_regex(code)
+
+    def _parse_with_regex(self, code: str) -> List[TestStep]:
+        """Fallback regex-based parsing (original implementation)."""
         steps = []
 
         # Remove comments
@@ -272,18 +348,381 @@ class TypeScriptTestParser:
 
         return steps
 
-    def _parse_line(self, line: str) -> Optional[TestStep]:
-        """Parse a single line of TypeScript."""
+    def _find_test_functions(self, node, code: str, parent_map: dict) -> List:
+        """Find test function calls (test, it, describe) using AST."""
+        test_functions = []
+        
+        # Check if this node is a call_expression (could be nested in expression_statement)
+        if node.type == 'call_expression':
+            # Check if this is a test function call
+            func_name = self._get_function_name(node, code)
+            if func_name in ['test', 'it', 'describe']:
+                # Find the arrow function or function expression argument
+                if hasattr(node, 'children'):
+                    for child in node.children:
+                        if child.type == 'arguments' and hasattr(child, 'children'):
+                            # Look for arrow_function or function in arguments
+                            for arg_child in child.children:
+                                if arg_child.type in ['arrow_function', 'function', 'function_expression']:
+                                    test_functions.append(arg_child)
+        
+        # Recursively search children
+        if hasattr(node, 'children'):
+            for child in node.children:
+                test_functions.extend(self._find_test_functions(child, code, parent_map))
+        
+        return test_functions
 
-        # Expect assertions - check FIRST before generic function calls
-        # expect(x).toBe(y) or expect(await x).toBe(y) or expect(x).not.toBe(y)
-        # Strip await from inside expect() - it doesn't affect test logic
+    def _get_function_name(self, node, code: str) -> str:
+        """Extract function name from a call expression."""
+        if node.type == 'call_expression':
+            for child in node.children:
+                if child.type == 'identifier':
+                    return code[child.start_byte:child.end_byte]
+                elif child.type == 'member_expression':
+                    # Handle obj.method() - get the method name
+                    for subchild in child.children:
+                        if subchild.type == 'property_identifier':
+                            return code[subchild.start_byte:subchild.end_byte]
+        return ''
+
+    def _extract_steps_from_function(self, func_node, code: str, parent_map: dict) -> List[TestStep]:
+        """Extract test steps from a function body."""
+        steps = []
+        
+        # Find the function body - could be statement_block or expression_statement
+        body = None
+        if hasattr(func_node, 'children'):
+            for child in func_node.children:
+                if child.type == 'statement_block':
+                    body = child
+                    break
+                elif child.type == 'expression_statement':
+                    # Single expression function body
+                    step = self._parse_statement(child, code, parent_map)
+                    if step:
+                        steps.append(step)
+                    return steps
+        
+        if body:
+            # Extract all statements from the body (handles nested blocks)
+            body_steps = self._extract_statements_from_node(body, code, parent_map)
+            steps.extend(body_steps)
+        
+        return steps
+    
+    def _extract_statements_from_node(self, node, code: str, parent_map: dict) -> List[TestStep]:
+        """Recursively extract all statements from a node, handling nested blocks and control flow."""
+        steps = []
+        
+        if not hasattr(node, 'children'):
+            return steps
+        
+        for child in node.children:
+            # Skip punctuation and braces
+            if child.type in ['{', '}', '(', ')', ',', ';', ':', '=>']:
+                continue
+            
+            # Handle statement blocks (nested blocks)
+            if child.type == 'statement_block':
+                # Recursively extract from nested blocks
+                nested_steps = self._extract_statements_from_node(child, code, parent_map)
+                steps.extend(nested_steps)
+            # Handle for loops - extract from the body
+            elif child.type == 'for_statement' or child.type == 'for_in_statement' or child.type == 'for_of_statement':
+                # Extract statements from the loop body
+                if hasattr(child, 'children'):
+                    for subchild in child.children:
+                        if subchild.type == 'statement_block':
+                            loop_steps = self._extract_statements_from_node(subchild, code, parent_map)
+                            steps.extend(loop_steps)
+                        elif subchild.type == 'expression_statement':
+                            # Single statement loop body
+                            step = self._parse_statement(subchild, code, parent_map)
+                            if step:
+                                steps.append(step)
+            # Handle if statements - extract from then/else blocks
+            elif child.type == 'if_statement':
+                if hasattr(child, 'children'):
+                    for subchild in child.children:
+                        if subchild.type == 'statement_block':
+                            if_steps = self._extract_statements_from_node(subchild, code, parent_map)
+                            steps.extend(if_steps)
+            # Handle variable declarations
+            elif child.type in ['lexical_declaration', 'variable_declaration']:
+                step = self._parse_variable_declaration(child, code)
+                if step:
+                    steps.append(step)
+            # Handle expression statements
+            elif child.type == 'expression_statement':
+                step = self._parse_statement(child, code, parent_map)
+                if step:
+                    steps.append(step)
+            # Handle other statement types
+            elif child.type.endswith('_statement'):
+                step = self._parse_statement(child, code, parent_map)
+                if step:
+                    steps.append(step)
+        
+        return steps
+
+    def _get_statements(self, node) -> List:
+        """Get all statement nodes from a block."""
+        statements = []
+        
+        if node.type == 'statement_block':
+            for child in node.children:
+                if child.type.endswith('_statement') or child.type == 'expression_statement':
+                    statements.append(child)
+        elif node.type == 'expression_statement':
+            statements.append(node)
+        
+        return statements
+
+    def _parse_statement(self, node, code: str, parent_map: dict) -> Optional[TestStep]:
+        """Parse a statement node into a TestStep."""
+        if not hasattr(node, 'children') or not node.children:
+            return None
+        
+        # Check for expect() assertions - these are member_expression chains
+        if node.type == 'expression_statement':
+            expr = node.children[0]
+            if expr:
+                # Check if it's expect().toBe() pattern
+                expect_step = self._parse_expect_assertion(expr, code, parent_map)
+                if expect_step:
+                    return expect_step
+                
+                # Check for other function calls
+                if expr.type == 'call_expression':
+                    return self._parse_function_call(expr, code)
+        
+        return None
+
+    def _parse_expect_assertion(self, expr_node, code: str, parent_map: dict) -> Optional[TestStep]:
+        """Parse expect().toBe() or expect().not.toBe() patterns using AST."""
+        # expect().toBe() structure:
+        # call_expression (toBe)
+        #   -> member_expression
+        #       -> call_expression (expect)
+        #       -> property_identifier (toBe)
+        
+        if expr_node.type != 'call_expression':
+            return None
+        
+        # Get the method name (toBe, toEqual, etc.)
+        method_name = self._get_function_name(expr_node, code)
+        if method_name not in ['toBe', 'toEqual', 'toStrictEqual', 'toBeGreaterThan', 
+                              'toBeLessThan', 'toBeTruthy', 'toBeFalsy', 'toBeGreaterThanOrEqual',
+                              'toBeLessThanOrEqual', 'toBeNull', 'toBeUndefined', 'toBeDefined']:
+            return None
+        
+        method_call = expr_node
+        expect_call = None
+        is_not = False
+        
+        # Find the member_expression that contains expect()
+        if hasattr(expr_node, 'children'):
+            for child in expr_node.children:
+                if child.type == 'member_expression':
+                    # Traverse to find expect() call
+                    expect_call = self._find_expect_in_member_expression(child, code)
+                    # Check for 'not' in the chain
+                    if self._has_not_in_chain(child, code):
+                        is_not = True
+                    break
+        
+        if not expect_call:
+            return None
+        
+        # Get arguments
+        expect_arg = self._get_first_argument(expect_call, code)
+        method_arg = self._get_first_argument(method_call, code)
+        
+        if not expect_arg:
+            return None
+        
+        target = code[expect_arg.start_byte:expect_arg.end_byte]
+        # Remove await keyword (async differences are whitelisted)
+        target = re.sub(r'\bawait\s+', '', target).strip()
+        
+        if is_not:
+            method_name = f'not.{method_name}'
+        
+        operator = self._jest_to_operator(method_name)
+        arg_text = code[method_arg.start_byte:method_arg.end_byte].strip() if method_arg else ''
+        
+        return TestStep(
+            type='assertion',
+            target=target,
+            operator=operator,
+            args=[arg_text] if arg_text else []
+        )
+    
+    def _find_expect_in_member_expression(self, node, code: str):
+        """Find expect() call within a member_expression."""
+        if not hasattr(node, 'children'):
+            return None
+        
+        for child in node.children:
+            if child.type == 'call_expression':
+                func_name = self._get_function_name(child, code)
+                if func_name == 'expect':
+                    return child
+            elif child.type == 'member_expression':
+                result = self._find_expect_in_member_expression(child, code)
+                if result:
+                    return result
+        return None
+    
+    def _has_not_in_chain(self, node, code: str) -> bool:
+        """Check if 'not' appears in a member_expression chain."""
+        if not hasattr(node, 'children'):
+            return False
+        
+        for child in node.children:
+            if child.type == 'property_identifier':
+                prop_name = code[child.start_byte:child.end_byte]
+                if prop_name == 'not':
+                    return True
+            elif child.type == 'member_expression':
+                if self._has_not_in_chain(child, code):
+                    return True
+        return False
+    
+    def _get_first_argument(self, call_node, code: str):
+        """Get the first argument from a call_expression."""
+        if not hasattr(call_node, 'children'):
+            return None
+        
+        for child in call_node.children:
+            if child.type == 'arguments' and hasattr(child, 'children'):
+                for arg_child in child.children:
+                    if arg_child.type not in ['(', ')', ',']:
+                        return arg_child
+        return None
+
+    def _parse_variable_declaration(self, node, code: str) -> Optional[TestStep]:
+        """Parse variable declaration (const/let/var x = ...) using AST."""
+        if not hasattr(node, 'children'):
+            return None
+        
+        target = None
+        value_node = None
+        
+        # Find the variable declarator
+        for child in node.children:
+            if child.type == 'variable_declarator':
+                if hasattr(child, 'children'):
+                    for subchild in child.children:
+                        if subchild.type == 'identifier':
+                            target = code[subchild.start_byte:subchild.end_byte]
+                        elif subchild.type in ['call_expression', 'await_expression', 'new_expression', 
+                                               'object', 'array', 'binary_expression', 'member_expression']:
+                            # Handle await expressions by getting the inner expression
+                            if subchild.type == 'await_expression':
+                                if hasattr(subchild, 'children'):
+                                    for await_child in subchild.children:
+                                        if await_child.type == 'call_expression':
+                                            value_node = await_child
+                                            break
+                            else:
+                                value_node = subchild
+                break
+        
+        if not target:
+            return None
+        
+        # Check if value is a function call
+        if value_node and value_node.type == 'call_expression':
+            func_name = self._get_call_expression_name(value_node, code)
+            args = self._get_call_arguments(value_node, code)
+            
+            return TestStep(
+                type='assignment',
+                target=target,
+                function=func_name,
+                args=args
+            )
+        elif value_node:
+            # Assignment without function call
+            value_text = code[value_node.start_byte:value_node.end_byte]
+            # Remove await keyword if present
+            value_text = re.sub(r'\bawait\s+', '', value_text).strip()
+            return TestStep(
+                type='assignment',
+                target=target,
+                args=[value_text]
+            )
+        
+        return None
+
+    def _parse_function_call(self, call_node, code: str) -> Optional[TestStep]:
+        """Parse a function call expression."""
+        func_name = self._get_call_expression_name(call_node, code)
+        
+        # Skip expect() calls (handled separately)
+        if func_name == 'expect':
+            return None
+        
+        args = self._get_call_arguments(call_node, code)
+        
+        return TestStep(
+            type='call',
+            function=func_name,
+            args=args
+        )
+
+    def _get_call_expression_name(self, call_node, code: str) -> str:
+        """Get the function name from a call expression using AST."""
+        if not hasattr(call_node, 'children'):
+            return ''
+        
+        for child in call_node.children:
+            if child.type == 'identifier':
+                return code[child.start_byte:child.end_byte]
+            elif child.type == 'member_expression':
+                # Handle obj.method() - return "obj.method"
+                parts = []
+                if hasattr(child, 'children'):
+                    for subchild in child.children:
+                        if subchild.type in ['identifier', 'property_identifier', 'shorthand_property_identifier']:
+                            parts.append(code[subchild.start_byte:subchild.end_byte])
+                        elif subchild.type == 'member_expression':
+                            # Handle nested member expressions like obj.prop.method()
+                            nested_name = self._get_call_expression_name(subchild, code)
+                            if nested_name:
+                                parts.append(nested_name)
+                return '.'.join(parts) if parts else ''
+        return ''
+
+    def _get_call_arguments(self, call_node, code: str) -> List[str]:
+        """Extract arguments from a call expression using AST."""
+        args = []
+        
+        if not hasattr(call_node, 'children'):
+            return args
+        
+        for child in call_node.children:
+            if child.type == 'arguments':
+                # Get argument nodes (skip punctuation)
+                if hasattr(child, 'children'):
+                    for arg_node in child.children:
+                        if arg_node.type not in ['(', ')', ',']:
+                            arg_text = code[arg_node.start_byte:arg_node.end_byte]
+                            # Remove await keyword (async differences are whitelisted)
+                            arg_text = re.sub(r'\bawait\s+', '', arg_text).strip()
+                            args.append(arg_text)
+        
+        return args
+
+    def _parse_line(self, line: str) -> Optional[TestStep]:
+        """Parse a single line of TypeScript (regex fallback)."""
+        # Expect assertions
         match = re.match(r'expect\((.*?)\)\.(?:not\.)?(\w+)\((.*?)\)', line)
         if match:
             target, assertion, arg = match.groups()
-            # Remove await keyword from target (async differences are whitelisted)
             target = re.sub(r'\bawait\s+', '', target).strip()
-            # Handle 'not.toBe' case
             if 'not.' in line and line.find('not.') < line.find(assertion):
                 assertion = f'not.{assertion}'
             operator = self._jest_to_operator(assertion)
@@ -295,13 +734,10 @@ class TypeScriptTestParser:
             )
 
         # Variable assignment with function call
-        # const x = func(args) or const x = await func(args)
-        # Note: await is stripped - async differences are whitelisted
         match = re.match(r'(?:const|let|var)\s+(\w+)\s*=\s*(?:await\s+)?(\w+(?:\.\w+)*)\((.*?)\)', line)
         if match:
             target, func, args_str = match.groups()
             args = [a.strip() for a in args_str.split(',') if a.strip()]
-            # Remove await from args if present (normalize async differences)
             args = [re.sub(r'\bawait\s+', '', arg) for arg in args]
             return TestStep(
                 type='assignment',
@@ -311,7 +747,6 @@ class TypeScriptTestParser:
             )
 
         # Assignment without function call
-        # const x = value
         match = re.match(r'(?:const|let|var)\s+(\w+)\s*=\s*(.+)', line)
         if match:
             target, value = match.groups()
@@ -321,17 +756,13 @@ class TypeScriptTestParser:
                 args=[value.rstrip(';')]
             )
 
-        # Function call (but skip expect calls as they should be assertions)
-        # func(args) or await func(args)
-        # Note: await is stripped - async differences are whitelisted
+        # Function call
         match = re.match(r'(?:await\s+)?(\w+(?:\.\w+)*)\((.*?)\)', line)
         if match:
             func, args_str = match.groups()
-            # Skip expect() calls that weren't caught as assertions
             if func == 'expect':
                 return None
             args = [a.strip() for a in args_str.split(',') if a.strip()]
-            # Remove await from args if present (normalize async differences)
             args = [re.sub(r'\bawait\s+', '', arg) for arg in args]
             return TestStep(
                 type='call',
@@ -534,11 +965,15 @@ class TestComparator:
             # Remove all whitespace inside dictionaries (handles nested dicts)
             import re
             # Recursively remove whitespace from dictionary contents
-            while True:
+            # Match innermost dicts first, then work outward
+            max_iterations = 10  # Prevent infinite loops
+            iteration = 0
+            while iteration < max_iterations:
                 new_target = re.sub(r'\{([^{}]*)\}', lambda m: '{' + re.sub(r'\s+', '', m.group(1)) + '}', target)
                 if new_target == target:
                     break
                 target = new_target
+                iteration += 1
         
         return target
 
