@@ -242,7 +242,8 @@ Focus on:
             elif semantic_score >= 0.70 and structural_score >= 0.40 and alignment_score >= 0.50:
                 status = "PASS"
             # Criterion 3: Core operations match (normalized) + good semantic
-            else:
+            # Only apply if operations exist and are non-empty
+            if ts_operations and py_operations:
                 # Check if normalized operations overlap well
                 ts_ops_norm = set([self._normalize_operation(op) for op in ts_operations])
                 py_ops_norm = set([self._normalize_operation(op) for op in py_operations])
@@ -334,8 +335,9 @@ Focus on:
         operations = []
         for call in elements.get('calls', []):
             op = f"{call['object']}.{call['method']}"
-            # ADDITIVE: Normalize operation names for better matching
-            operations.append(self._normalize_operation(op))
+            # ORIGINAL: Don't normalize here - preserve original operation strings
+            # Normalization happens in comparison methods where needed (alignment score)
+            operations.append(op)
         return operations
     
     def _extract_verifications(self, elements: Dict[str, Any]) -> List[str]:
@@ -1234,22 +1236,10 @@ Focus on:
         if not ts_ops or not py_ops:
             return 0.0
         
-        # ADDITIVE: Normalize operation names before comparison
-        ts_ops_norm = [self._normalize_operation(op) for op in ts_ops]
-        py_ops_norm = [self._normalize_operation(op) for op in py_ops]
-        
-        # Compare operation sequences
+        # ORIGINAL: Compare operation sequences as-is (preserves 351/540 behavior exactly)
         from difflib import SequenceMatcher
-        matcher = SequenceMatcher(None, ts_ops_norm, py_ops_norm)
-        base_score = matcher.ratio()
-        
-        # ADDITIVE: Also check if core operations match (set-based)
-        ts_set = set(ts_ops_norm)
-        py_set = set(py_ops_norm)
-        set_overlap = len(ts_set & py_set) / max(len(ts_set), len(py_set)) if (ts_set or py_set) else 1.0
-        
-        # Combine sequence and set scores (favor sequence but give credit for set overlap)
-        return max(base_score, set_overlap * 0.7)  # Set overlap gives up to 70% boost
+        matcher = SequenceMatcher(None, ts_ops, py_ops)
+        return matcher.ratio()
     
     def _calculate_semantic_similarity(
         self, 
