@@ -29,6 +29,7 @@ class MatchedTest:
     ts_line_number: int
     py_file_path: str
     py_line_number: int
+    py_function_name: str  # Actual Python function name (e.g., test_something)
     similarity_score: float
 
 
@@ -157,6 +158,7 @@ def find_matching_tests(
                     ts_line_number=ts_test.line_number,
                     py_file_path=py_test.file_path,
                     py_line_number=py_test.line_number,
+                    py_function_name=py_test.test_name,  # Store actual Python function name
                     similarity_score=1.0
                 ))
             continue
@@ -179,6 +181,7 @@ def find_matching_tests(
                 ts_line_number=ts_test.line_number,
                 py_file_path=best_match.file_path,
                 py_line_number=best_match.line_number,
+                py_function_name=best_match.test_name,  # Store actual Python function name
                 similarity_score=best_score
             ))
 
@@ -198,8 +201,8 @@ def generate_markdown_table(matched_tests: List[MatchedTest], ts_root: Path, py_
         "",
         f"**Total matching tests: {len(matched_tests)}**",
         "",
-        "| Test Name | TypeScript File | Python File |",
-        "|-----------|-----------------|-------------|",
+        "| Test Name | TypeScript File | Python File | Python Function |",
+        "|-----------|-----------------|-------------|----------------|",
     ]
 
     for test in matched_tests:
@@ -208,12 +211,13 @@ def generate_markdown_table(matched_tests: List[MatchedTest], ts_root: Path, py_
         # Create clickable file:line links
         ts_link = f"[{test.ts_file_path}:{test.ts_line_number}](file://{ts_root}/{test.ts_file_path}#L{test.ts_line_number})"
         py_link = f"[{test.py_file_path}:{test.py_line_number}](file://{py_root}/tests/{test.py_file_path}#L{test.py_line_number})"
+        py_function = test.py_function_name.replace('|', '\\|')
 
         # Add similarity indicator for fuzzy matches
         if test.similarity_score < 1.0:
             test_name += f" *({test.similarity_score:.0%})*"
 
-        lines.append(f"| {test_name} | {ts_link} | {py_link} |")
+        lines.append(f"| {test_name} | {ts_link} | {py_link} | `{py_function}` |")
 
     lines.append("")
     lines.append("---")

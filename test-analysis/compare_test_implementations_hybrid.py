@@ -1511,25 +1511,40 @@ class TestComparator:
         """Check if a step is setup code that should be whitelisted.
         
         Setup code includes:
-        - Mock object creation (type(), Mock(), etc.)
+        - Mock object creation (Mock(), AsyncMock(), MagicMock(), etc.)
         - Test fixture creation
+        - Object instantiation (constructor calls)
+        - Authentication/setup method calls (provide_presentation_key, provide_password, authenticate)
+        - Mock attribute configuration (mock_obj.attr = AsyncMock(...))
         - But NOT assignments that call methods on mocks (those are test operations)
+        - But NOT the actual test operations or assertions
         """
+        # Setup function patterns (mock creation, fixtures)
+        setup_functions = ['mock', 'magicmock', 'asyncmock', 'patch', 'fixture', 'setup', 'type']
+        
+        # Authentication/setup method patterns (these prepare test state)
+        setup_methods = [
+            'provide_presentation_key', 'providepassword', 'provide_password',
+            'authenticate', 'setup', 'initialize', 'configure'
+        ]
+        
         if step.type == 'assignment':
             # Check if it's creating a mock or test fixture (not using one)
             if step.function:
-                # Mock creation patterns: type(), Mock(), MagicMock(), etc.
-                # The function might be parsed as 'type(...)' or just 'type'
-                setup_functions = ['type', 'mock', 'magicmock', 'patch', 'fixture', 'setup']
                 func_lower = step.function.lower()
                 
-                # Check if function name starts with or equals a setup function
-                # e.g., 'type(...)' or 'type' or 'mock(...)'
+                # Mock creation patterns: Mock(), AsyncMock(), MagicMock(), etc.
                 if any(func_lower.startswith(setup_func + '(') or func_lower == setup_func 
                        for setup_func in setup_functions):
                     return True
                 # If it contains 'type(' in the function name, it's likely mock creation
-                if 'type(' in func_lower:
+                if 'type(' in func_lower or 'mock(' in func_lower:
+                    return True
+                
+                # Constructor calls (object instantiation) are setup
+                # Check if function name looks like a class name (PascalCase)
+                if func_lower and func_lower[0].isupper() and '(' in func_lower:
+                    # This is likely a constructor call like CWIStyleWalletManager(...)
                     return True
             
             # Check if target name suggests setup AND it's creating a mock
@@ -1544,10 +1559,31 @@ class TestComparator:
                     if step.function:
                         func_lower = step.function.lower()
                         if any(func_lower.startswith(setup_func + '(') or func_lower == setup_func 
-                               for setup_func in ['type', 'mock', 'magicmock']):
+                               for setup_func in ['type', 'mock', 'magicmock', 'asyncmock']):
                             return True
-                        if 'type(' in func_lower:
+                        if 'type(' in func_lower or 'mock(' in func_lower:
                             return True
+                        # Constructor calls
+                        if func_lower and func_lower[0].isupper():
+                            return True
+        
+        # Mock attribute assignments (mock_obj.attr = AsyncMock(...)) are setup
+        if step.type == 'assignment' and step.target:
+            target_lower = step.target.lower()
+            # Check if target is a mock attribute assignment (mock_obj.attr)
+            if '.' in target_lower and any(prefix in target_lower for prefix in ['mock_', 'test_']):
+                if step.function:
+                    func_lower = step.function.lower()
+                    if any(setup_func in func_lower for setup_func in ['mock', 'asyncmock', 'magicmock']):
+                        return True
+        
+        # Authentication/setup method calls are setup (but only if they're not the main test operation)
+        if step.type in ['call', 'await']:
+            if step.function:
+                func_lower = step.function.lower()
+                # Check if it's a setup/authentication method
+                if any(setup_method in func_lower for setup_method in setup_methods):
+                    return True
         
         return False
 
@@ -1687,6 +1723,46 @@ class TestComparator:
                 elif diff.startswith("INSERT"):
                     suggestions.append(self._generate_insertion_suggestion(diff, py_steps_detailed))
         
+        # Convert differences into critical issues when they represent missing operations
+        critical_issues.extend(self._convert_differences_to_critical_issues(
+            differences, ts_steps_detailed, py_steps_detailed, similarity
+        ))
+        
+        # If similarity is very low and no critical issues found, generate a general alignment issue
+        if similarity < DEFAULT_SIMILARITY_THRESHOLD and not critical_issues:
+            critical_issues.append({
+                'type': 'low_similarity',
+                'message': f"Test implementations have low similarity ({similarity:.1%}). Structural and semantic differences indicate misalignment.",
+                'similarity': similarity,
+                'structural_score': None,  # Will be filled if available
+                'semantic_score': semantic_score
+            })
+            status = "FAIL"
+        
+        # If there are significant structural differences, add critical issue
+        if differences:
+            # Count missing operations (DELETE differences indicate missing TS operations in PY)
+            missing_ops = [d for d in differences if d.startswith("DELETE")]
+            extra_ops = [d for d in differences if d.startswith("INSERT")]
+            
+            if missing_ops and not any(issue.get('type') == 'missing_operations' for issue in critical_issues):
+                critical_issues.append({
+                    'type': 'missing_operations',
+                    'message': f"Python test is missing {len(missing_ops)} operation(s) present in TypeScript test",
+                    'missing_count': len(missing_ops),
+                    'differences': missing_ops[:3]  # Include first 3 for context
+                })
+            
+            if extra_ops and not any(issue.get('type') == 'extra_operations' for issue in critical_issues):
+                # Extra operations are less critical, but still worth noting if similarity is low
+                if similarity < DEFAULT_SIMILARITY_THRESHOLD:
+                    critical_issues.append({
+                        'type': 'extra_operations',
+                        'message': f"Python test has {len(extra_ops)} extra operation(s) not in TypeScript test",
+                        'extra_count': len(extra_ops),
+                        'differences': extra_ops[:3]
+                    })
+        
         return {
             'status': status,
             'similarity': similarity,
@@ -1694,6 +1770,70 @@ class TestComparator:
             'suggestions': suggestions,
             'summary': self._generate_summary(status, similarity, critical_issues, len(ts_steps), len(py_steps))
         }
+    
+    def _convert_differences_to_critical_issues(
+        self, differences: List[str], ts_steps_detailed: List[Dict], 
+        py_steps_detailed: List[Dict], similarity: float
+    ) -> List[Dict]:
+        """Convert structural differences into critical issues when they represent missing test operations."""
+        critical_issues = []
+        
+        for diff in differences:
+            if diff.startswith("DELETE"):
+                # DELETE means TS has operations that PY is missing
+                # Extract the step range from the difference
+                import re
+                match = re.match(r'DELETE: TS\[(\d+):(\d+)\]', diff)
+                if match:
+                    ts_start, ts_end = map(int, match.groups())
+                    missing_steps = ts_steps_detailed[ts_start:ts_end]
+                    
+                    # Check if any of the missing steps are assertions or important operations
+                    for step in missing_steps:
+                        step_type = step.get('type', '')
+                        if step_type == 'assertion':
+                            # This is already handled by assertion count check, but add detail
+                            critical_issues.append({
+                                'type': 'missing_assertion_detail',
+                                'message': f"Missing assertion from TypeScript: {step.get('function', 'unknown')} {step.get('operator', '')}",
+                                'ts_step': step,
+                                'ts_index': ts_start + missing_steps.index(step)
+                            })
+                        elif step_type in ['call', 'await']:
+                            # Missing function call - this is a critical operation
+                            func_name = step.get('function', 'unknown')
+                            if func_name and func_name not in ['test', 'describe', 'it']:
+                                critical_issues.append({
+                                    'type': 'missing_operation',
+                                    'message': f"Missing operation from TypeScript: {func_name}()",
+                                    'ts_step': step,
+                                    'ts_index': ts_start + missing_steps.index(step)
+                                })
+            
+            elif diff.startswith("REPLACE"):
+                # REPLACE means operations are different - this is a structural mismatch
+                import re
+                match = re.match(r'REPLACE: TS\[(\d+):(\d+)\] <-> PY\[(\d+):(\d+)\]', diff)
+                if match:
+                    ts_start, ts_end, py_start, py_end = map(int, match.groups())
+                    ts_steps = ts_steps_detailed[ts_start:ts_end]
+                    py_steps = py_steps_detailed[py_start:py_end]
+                    
+                    # If the replaced steps have different types or functions, it's a critical issue
+                    ts_types = [s.get('type') for s in ts_steps]
+                    py_types = [s.get('type') for s in py_steps]
+                    
+                    if ts_types != py_types:
+                        critical_issues.append({
+                            'type': 'operation_mismatch',
+                            'message': f"Operation type mismatch: TS has {ts_types} but PY has {py_types}",
+                            'ts_steps': ts_steps,
+                            'py_steps': py_steps,
+                            'ts_range': (ts_start, ts_end),
+                            'py_range': (py_start, py_end)
+                        })
+        
+        return critical_issues
     
     def _are_operators_equivalent(self, op1: str, op2: str) -> bool:
         """Check if two operators are semantically equivalent."""
@@ -2116,8 +2256,12 @@ def _generate_detailed_report(test_data: List[Dict], comparator: 'TestComparator
                 report_lines.append(f"*Error reading TypeScript file: {e}*")
                 report_lines.append("")
         
-        # Show PY header with file link
-        report_lines.append(f"### PY Test: [{entry['py_file']}]({py_link})")
+        # Show PY header with file link and function name
+        py_function_name = entry.get('py_function_name', '')
+        if py_function_name:
+            report_lines.append(f"### PY Test: [{entry['py_file']}]({py_link}) - `{py_function_name}`")
+        else:
+            report_lines.append(f"### PY Test: [{entry['py_file']}]({py_link})")
         report_lines.append("")
         
         # Only show Python code snippet for FAIL tests

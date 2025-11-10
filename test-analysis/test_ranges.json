@@ -6,7 +6,8 @@
     "ts_end": 491,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 896,
-    "py_end": 939
+    "py_end": 939,
+    "py_function_name": "test_all_proxied_methods_call_underlying_with_correct_arguments"
   },
   {
     "test_name": "Decryption of primary key and building the wallet",
@@ -15,7 +16,8 @@
     "ts_end": 256,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 222,
-    "py_end": 261
+    "py_end": 261,
+    "py_function_name": "test_decryption_of_primary_key_and_building_the_wallet"
   },
   {
     "test_name": "Destroy callback clears sensitive data",
@@ -24,7 +26,8 @@
     "ts_end": 451,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 733,
-    "py_end": 777
+    "py_end": 777,
+    "py_function_name": "test_destroy_callback_clears_sensitive_data"
   },
   {
     "test_name": "Passes if user is authenticated and originator is not admin",
@@ -33,7 +36,8 @@
     "ts_end": 480,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 854,
-    "py_end": 893
+    "py_end": 893,
+    "py_function_name": "test_passes_if_user_is_authenticated_and_originator_is_not_admin"
   },
   {
     "test_name": "Password retriever callback: the test function is passed and returns a boolean",
@@ -42,7 +46,8 @@
     "ts_end": 566,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 1083,
-    "py_end": 1131
+    "py_end": 1131,
+    "py_function_name": "test_password_retriever_callback_the_test_function_is_passed_and_returns_a_boolean"
   },
   {
     "test_name": "Privileged key expiry: each call to decrypt via the privileged manager invokes passwordRetriever",
@@ -51,7 +56,8 @@
     "ts_end": 604,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 1134,
-    "py_end": 1201
+    "py_end": 1201,
+    "py_function_name": "test_privileged_key_expiry_each_call_to_decrypt_via_the_privileged_manager_invokes_passwordretriever"
   },
   {
     "test_name": "Prompts to save the new key, updates the token",
@@ -60,7 +66,8 @@
     "ts_end": 409,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 605,
-    "py_end": 644
+    "py_end": 644,
+    "py_function_name": "test_prompts_to_save_the_new_key_updates_the_token"
   },
   {
     "test_name": "Requires authentication and updates the UMP token on-chain",
@@ -69,7 +76,8 @@
     "ts_end": 380,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 526,
-    "py_end": 566
+    "py_end": 566,
+    "py_function_name": "test_requires_authentication_and_updates_the_ump_token_on_chain"
   },
   {
     "test_name": "Requires authentication, re-publishes the token, old token consumed",
@@ -78,7 +86,8 @@
     "ts_end": 433,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 683,
-    "py_end": 723
+    "py_end": 723,
+    "py_function_name": "test_requires_authentication_re_publishes_the_token_old_token_consumed"
   },
   {
     "test_name": "Saves a snapshot and can load it into a fresh manager instance",
@@ -87,7 +96,8 @@
     "ts_end": 348,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 409,
-    "py_end": 459
+    "py_end": 459,
+    "py_function_name": "test_saves_a_snapshot_and_can_load_it_into_a_fresh_manager_instance"
   },
   {
     "test_name": "Successfully creates a new token and calls buildAndSend",
@@ -96,7 +106,8 @@
     "ts_end": 223,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 154,
-    "py_end": 184
+    "py_end": 184,
+    "py_function_name": "test_successfully_creates_a_new_token_and_calls_buildandsend"
   },
   {
     "test_name": "Successfully decrypts with presentation+recovery",
@@ -105,7 +116,8 @@
     "ts_end": 278,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 264,
-    "py_end": 302
+    "py_end": 302,
+    "py_function_name": "test_successfully_decrypts_with_presentation_plus_recovery"
   },
   {
     "test_name": "Throws error if saving snapshot while no primary key or token set",
@@ -114,7 +126,8 @@
     "ts_end": 353,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 462,
-    "py_end": 486
+    "py_end": 486,
+    "py_function_name": "test_throws_error_if_saving_snapshot_while_no_primary_key_or_token_set"
   },
   {
     "test_name": "Throws if no token found by recovery key hash",
@@ -123,7 +136,8 @@
     "ts_end": 309,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 375,
-    "py_end": 403
+    "py_end": 403,
+    "py_function_name": "test_throws_if_no_token_found_by_recovery_key_hash"
   },
   {
     "test_name": "Throws if not authenticated",
@@ -132,7 +146,8 @@
     "ts_end": 386,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 569,
-    "py_end": 595
+    "py_end": 595,
+    "py_function_name": "test_throws_if_not_authenticated"
   },
   {
     "test_name": "Throws if not authenticated",
@@ -141,7 +156,8 @@
     "ts_end": 413,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 569,
-    "py_end": 595
+    "py_end": 595,
+    "py_function_name": "test_throws_if_not_authenticated"
   },
   {
     "test_name": "Throws if originator is adminOriginator",
@@ -150,7 +166,8 @@
     "ts_end": 475,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 815,
-    "py_end": 851
+    "py_end": 851,
+    "py_function_name": "test_throws_if_originator_is_adminoriginator"
   },
   {
     "test_name": "Throws if presentation key not provided first",
@@ -159,7 +176,8 @@
     "ts_end": 283,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 305,
-    "py_end": 331
+    "py_end": 331,
+    "py_function_name": "test_throws_if_presentation_key_not_provided_first"
   },
   {
     "test_name": "Throws if snapshot is corrupt or cannot be decrypted",
@@ -168,7 +186,8 @@
     "ts_end": 358,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 489,
-    "py_end": 516
+    "py_end": 516,
+    "py_function_name": "test_throws_if_snapshot_is_corrupt_or_cannot_be_decrypted"
   },
   {
     "test_name": "Throws if user is not authenticated",
@@ -177,7 +196,8 @@
     "ts_end": 469,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 787,
-    "py_end": 812
+    "py_end": 812,
+    "py_function_name": "test_throws_if_user_is_not_authenticated"
   },
   {
     "test_name": "Throws if user tries to provide recovery key during new-user flow",
@@ -186,7 +206,8 @@
     "ts_end": 233,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 187,
-    "py_end": 216
+    "py_end": 216,
+    "py_function_name": "test_throws_if_user_tries_to_provide_recovery_key_during_new_user_flow"
   },
   {
     "test_name": "Works with correct keys, sets mode as existing-user",
@@ -195,7 +216,8 @@
     "ts_end": 304,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 334,
-    "py_end": 372
+    "py_end": 372,
+    "py_function_name": "test_works_with_correct_keys_sets_mode_as_existing_user"
   },
   {
     "test_name": "XOR function: verifies correctness",
@@ -204,7 +226,8 @@
     "ts_end": 182,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 132,
-    "py_end": 148
+    "py_end": 148,
+    "py_function_name": "test_xor_function_verifies_correctness"
   },
   {
     "test_name": "isAuthenticated() rejects if originator is admin, resolves otherwise",
@@ -213,7 +236,8 @@
     "ts_end": 501,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 942,
-    "py_end": 982
+    "py_end": 982,
+    "py_function_name": "test_isauthenticated_rejects_if_originator_is_admin_resolves_otherwise"
   },
   {
     "test_name": "serializeUMPToken and deserializeUMPToken correctly round-trip a UMP token",
@@ -222,7 +246,8 @@
     "ts_end": 536,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 1035,
-    "py_end": 1080
+    "py_end": 1080,
+    "py_function_name": "test_serializeumptoken_and_deserializeumptoken_correctly_round_trip_a_ump_token"
   },
   {
     "test_name": "waitForAuthentication() eventually resolves",
@@ -231,7 +256,8 @@
     "ts_end": 507,
     "py_file": "integration/test_cwi_style_wallet_manager.py",
     "py_start": 985,
-    "py_end": 1025
+    "py_end": 1025,
+    "py_function_name": "test_waitforauthentication_eventually_resolves"
   },
   {
     "test_name": "a failing callback (throwing an error) does not block subsequent callbacks",
@@ -240,7 +266,8 @@
     "ts_end": 128,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 135,
-    "py_end": 170
+    "py_end": 170,
+    "py_function_name": "test_a_failing_callback_throwing_an_error_does_not_block_subsequent_callbacks"
   },
   {
     "test_name": "bindCallback() should register multiple callbacks for the same event, which are called in sequence",
@@ -249,7 +276,8 @@
     "ts_end": 49,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 34,
-    "py_end": 73
+    "py_end": 73,
+    "py_function_name": "test_bindcallback_should_register_multiple_callbacks_for_the_same_event_which_are_called_in_sequence"
   },
   {
     "test_name": "multiple pending requests for different resources should trigger separate onXxxRequested callbacks",
@@ -258,7 +286,8 @@
     "ts_end": 322,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 328,
-    "py_end": 373
+    "py_end": 373,
+    "py_function_name": "test_multiple_pending_requests_for_different_resources_should_trigger_separate_onxxxrequested_callbacks"
   },
   {
     "test_name": "multiple pending requests for the same resource should trigger only one onXxxRequested callback",
@@ -267,7 +296,8 @@
     "ts_end": 274,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 279,
-    "py_end": 326
+    "py_end": 326,
+    "py_function_name": "test_multiple_pending_requests_for_the_same_resource_should_trigger_only_one_onxxxrequested_callback"
   },
   {
     "test_name": "should reject the original caller promise when permission is denied",
@@ -276,7 +306,8 @@
     "ts_end": 231,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 248,
-    "py_end": 277
+    "py_end": 277,
+    "py_function_name": "test_should_reject_the_original_caller_promise_when_permission_is_denied"
   },
   {
     "test_name": "should resolve the original caller promise when requests are granted",
@@ -285,7 +316,8 @@
     "ts_end": 203,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 214,
-    "py_end": 246
+    "py_end": 246,
+    "py_function_name": "test_should_resolve_the_original_caller_promise_when_requests_are_granted"
   },
   {
     "test_name": "should trigger onProtocolPermissionRequested with correct params when a non-admin domain requests a protocol operation",
@@ -294,7 +326,8 @@
     "ts_end": 169,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 172,
-    "py_end": 212
+    "py_end": 212,
+    "py_function_name": "test_should_trigger_onprotocolpermissionrequested_with_correct_params_when_a_non_admin_domain_requests_a_protocol_operation"
   },
   {
     "test_name": "unbindCallback() by function reference should remove the callback",
@@ -303,7 +336,8 @@
     "ts_end": 107,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 105,
-    "py_end": 133
+    "py_end": 133,
+    "py_function_name": "test_unbindcallback_by_function_reference_should_remove_the_callback"
   },
   {
     "test_name": "unbindCallback() by numeric ID should prevent the callback from being called again",
@@ -312,7 +346,8 @@
     "ts_end": 77,
     "py_file": "permissions/test_wallet_permissions_manager_callbacks.py",
     "py_start": 75,
-    "py_end": 103
+    "py_end": 103,
+    "py_function_name": "test_unbindcallback_by_numeric_id_should_prevent_the_callback_from_being_called_again"
   },
   {
     "test_name": "should also prompt for listing actions by label if seekPermissionWhenListingActionsByLabel=true",
@@ -321,7 +356,8 @@
     "ts_end": 842,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 785,
-    "py_end": 803
+    "py_end": 803,
+    "py_function_name": "test_should_also_prompt_for_listing_actions_by_label_if_seekpermissionwhenlistingactionsbylabel_true"
   },
   {
     "test_name": "should check monthly limit usage and prompt renewal if insufficient",
@@ -330,7 +366,8 @@
     "ts_end": 711,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 660,
-    "py_end": 696
+    "py_end": 696,
+    "py_function_name": "test_should_check_monthly_limit_usage_and_prompt_renewal_if_insufficient"
   },
   {
     "test_name": "should check that requested fields are a subset of the token’s fields",
@@ -339,7 +376,8 @@
     "ts_end": 537,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 533,
-    "py_end": 570
+    "py_end": 570,
+    "py_function_name": "test_should_check_that_requested_fields_are_a_subset_of_the_tokens_fields"
   },
   {
     "test_name": "should deny protocol usage if user denies permission",
@@ -348,7 +386,8 @@
     "ts_end": 102,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 97,
-    "py_end": 125
+    "py_end": 125,
+    "py_function_name": "test_should_deny_protocol_usage_if_user_denies_permission"
   },
   {
     "test_name": "should enforce privileged token if differentiatePrivilegedOperations=true",
@@ -357,7 +396,8 @@
     "ts_end": 134,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 127,
-    "py_end": 158
+    "py_end": 158,
+    "py_function_name": "test_should_enforce_privileged_token_if_differentiateprivilegedoperations_true"
   },
   {
     "test_name": "should fail if label starts with",
@@ -366,7 +406,8 @@
     "ts_end": 774,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 730,
-    "py_end": 744
+    "py_end": 744,
+    "py_function_name": "test_should_fail_if_label_starts_with_admin"
   },
   {
     "test_name": "should fail if protocol name is admin-reserved and caller is not admin",
@@ -375,7 +416,8 @@
     "ts_end": 181,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 193,
-    "py_end": 218
+    "py_end": 218,
+    "py_function_name": "test_should_fail_if_protocol_name_is_admin_reserved_and_caller_is_not_admin"
   },
   {
     "test_name": "should fail immediately if using an admin-only basket as non-admin",
@@ -384,7 +426,8 @@
     "ts_end": 253,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 269,
-    "py_end": 302
+    "py_end": 302,
+    "py_function_name": "test_should_fail_immediately_if_using_an_admin_only_basket_as_non_admin"
   },
   {
     "test_name": "should fail immediately if using the reserved basket",
@@ -393,7 +436,8 @@
     "ts_end": 273,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 304,
-    "py_end": 336
+    "py_end": 336,
+    "py_function_name": "test_should_fail_immediately_if_using_the_reserved_basket_default_as_non_admin"
   },
   {
     "test_name": "should ignore `privileged=true` if differentiatePrivilegedOperations=false",
@@ -402,7 +446,8 @@
     "ts_end": 161,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 160,
-    "py_end": 191
+    "py_end": 191,
+    "py_function_name": "test_should_ignore_privileged_true_if_differentiateprivilegedoperations_false"
   },
   {
     "test_name": "should pass if usage plus new spend is within the monthly limit",
@@ -411,7 +456,8 @@
     "ts_end": 751,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 698,
-    "py_end": 728
+    "py_end": 728,
+    "py_function_name": "test_should_pass_if_usage_plus_new_spend_is_within_the_monthly_limit"
   },
   {
     "test_name": "should prompt for insertion permission if seekBasketInsertionPermissions=true",
@@ -420,7 +466,8 @@
     "ts_end": 315,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 338,
-    "py_end": 386
+    "py_end": 386,
+    "py_function_name": "test_should_prompt_for_insertion_permission_if_seekbasketinsertionpermissions_true"
   },
   {
     "test_name": "should prompt for label usage if seekPermissionWhenApplyingActionLabels=true",
@@ -429,7 +476,8 @@
     "ts_end": 817,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 763,
-    "py_end": 783
+    "py_end": 783,
+    "py_function_name": "test_should_prompt_for_label_usage_if_seekpermissionwhenapplyingactionlabels_true"
   },
   {
     "test_name": "should prompt for protocol usage if securityLevel=1 and no existing token",
@@ -438,7 +486,8 @@
     "ts_end": 78,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 64,
-    "py_end": 95
+    "py_end": 95,
+    "py_function_name": "test_should_prompt_for_protocol_usage_if_securitylevel_1_and_no_existing_token"
   },
   {
     "test_name": "should prompt for removal permission if seekBasketRemovalPermissions=true",
@@ -447,7 +496,8 @@
     "ts_end": 401,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 451,
-    "py_end": 468
+    "py_end": 468,
+    "py_function_name": "test_should_prompt_for_removal_permission_if_seekbasketremovalpermissions_true"
   },
   {
     "test_name": "should prompt for renewal if token is expired",
@@ -456,7 +506,8 @@
     "ts_end": 584,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 572,
-    "py_end": 609
+    "py_end": 609,
+    "py_function_name": "test_should_prompt_for_renewal_if_token_is_expired_cert"
   },
   {
     "test_name": "should prompt for renewal if token is found but expired",
@@ -465,7 +516,8 @@
     "ts_end": 224,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 220,
-    "py_end": 267
+    "py_end": 267,
+    "py_function_name": "test_should_prompt_for_renewal_if_token_is_found_but_expired"
   },
   {
     "test_name": "should require listing permission if seekBasketListingPermissions=true and no token",
@@ -474,7 +526,8 @@
     "ts_end": 376,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 432,
-    "py_end": 449
+    "py_end": 449,
+    "py_function_name": "test_should_require_listing_permission_if_seekbasketlistingpermissions_true_and_no_token"
   },
   {
     "test_name": "should require permission if seekCertificateDisclosurePermissions=true, no valid token",
@@ -483,7 +536,8 @@
     "ts_end": 465,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 500,
-    "py_end": 531
+    "py_end": 531,
+    "py_function_name": "test_should_require_permission_if_seekcertificatedisclosurepermissions_true_no_valid_token"
   },
   {
     "test_name": "should require spending token if netSpent > 0 and seekSpendingPermissions=true",
@@ -492,7 +546,8 @@
     "ts_end": 664,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 633,
-    "py_end": 658
+    "py_end": 658,
+    "py_function_name": "test_should_require_spending_token_if_netspent_gt_0_and_seekspendingpermissions_true"
   },
   {
     "test_name": "should skip certificate disclosure permission if config.seekCertificateDisclosurePermissions=false",
@@ -501,7 +556,8 @@
     "ts_end": 432,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 470,
-    "py_end": 498
+    "py_end": 498,
+    "py_function_name": "test_should_skip_certificate_disclosure_permission_if_config_seekcertificatedisclosurepermissions_false"
   },
   {
     "test_name": "should skip if seekSpendingPermissions=false",
@@ -510,7 +566,8 @@
     "ts_end": 619,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 611,
-    "py_end": 631
+    "py_end": 631,
+    "py_function_name": "test_should_skip_if_seekspendingpermissions_false"
   },
   {
     "test_name": "should skip insertion permission if seekBasketInsertionPermissions=false",
@@ -519,7 +576,8 @@
     "ts_end": 348,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 388,
-    "py_end": 430
+    "py_end": 430,
+    "py_function_name": "test_should_skip_insertion_permission_if_seekbasketinsertionpermissions_false"
   },
   {
     "test_name": "should skip label permission if seekPermissionWhenApplyingActionLabels=false",
@@ -528,7 +586,8 @@
     "ts_end": 792,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 746,
-    "py_end": 761
+    "py_end": 761,
+    "py_function_name": "test_should_skip_label_permission_if_seekpermissionwhenapplyingactionlabels_false"
   },
   {
     "test_name": "should skip permission prompt if secLevel=0 (open usage)",
@@ -537,7 +596,8 @@
     "ts_end": 47,
     "py_file": "permissions/test_wallet_permissions_manager_checks.py",
     "py_start": 33,
-    "py_end": 62
+    "py_end": 62,
+    "py_function_name": "test_should_skip_permission_prompt_if_seclevel_0_open_usage"
   },
   {
     "test_name": "should NOT call underlying.encrypt() if encryptWalletMetadata=false",
@@ -546,7 +606,8 @@
     "ts_end": 53,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 64,
-    "py_end": 80
+    "py_end": 80,
+    "py_function_name": "test_should_not_call_underlying_encrypt_if_encryptwalletmetadata_false"
   },
   {
     "test_name": "should call underlying.decrypt() with correct protocol and key, returning plaintext on success",
@@ -555,7 +616,8 @@
     "ts_end": 82,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 82,
-    "py_end": 108
+    "py_end": 108,
+    "py_function_name": "test_should_call_underlying_decrypt_with_correct_protocol_and_key_returning_plaintext_on_success"
   },
   {
     "test_name": "should call underlying.encrypt() with the correct protocol and key when encryptWalletMetadata=true",
@@ -564,7 +626,8 @@
     "ts_end": 41,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 39,
-    "py_end": 62
+    "py_end": 62,
+    "py_function_name": "test_should_call_underlying_encrypt_with_correct_protocol_and_key_when_encryptwalletmetadata_true"
   },
   {
     "test_name": "should decrypt customInstructions in listOutputs if encryptWalletMetadata=true",
@@ -573,7 +636,8 @@
     "ts_end": 348,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 293,
-    "py_end": 337
+    "py_end": 337,
+    "py_function_name": "test_should_decrypt_custominstructions_in_listoutputs_if_encryptwalletmetadata_true"
   },
   {
     "test_name": "should encrypt metadata fields in createAction when encryptWalletMetadata=true, then decrypt them in listActions",
@@ -582,7 +646,8 @@
     "ts_end": 202,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 132,
-    "py_end": 215
+    "py_end": 215,
+    "py_function_name": "test_should_encrypt_metadata_fields_in_createaction_when_encryptwalletmetadata_true_then_decrypt_them_in_listactions"
   },
   {
     "test_name": "should fallback to original string if underlying.decrypt() fails",
@@ -591,7 +656,8 @@
     "ts_end": 99,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 110,
-    "py_end": 127
+    "py_end": 127,
+    "py_function_name": "test_should_fallback_to_original_string_if_underlying_decrypt_fails"
   },
   {
     "test_name": "should fallback to the original ciphertext if decrypt fails in listOutputs",
@@ -600,7 +666,8 @@
     "ts_end": 410,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 339,
-    "py_end": 374
+    "py_end": 374,
+    "py_function_name": "test_should_fallback_to_the_original_ciphertext_if_decrypt_fails_in_listoutputs"
   },
   {
     "test_name": "should not encrypt metadata if encryptWalletMetadata=false, storing and retrieving plaintext",
@@ -609,7 +676,8 @@
     "ts_end": 280,
     "py_file": "permissions/test_wallet_permissions_manager_encryption.py",
     "py_start": 217,
-    "py_end": 288
+    "py_end": 288,
+    "py_function_name": "test_should_not_encrypt_metadata_if_encryptwalletmetadata_false_storing_and_retrieving_plaintext"
   },
   {
     "test_name": "should coalesce parallel requests for the same resource into a single user prompt",
@@ -618,7 +686,8 @@
     "ts_end": 92,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 33,
-    "py_end": 107
+    "py_end": 107,
+    "py_function_name": "test_should_coalesce_parallel_requests_for_the_same_resource_into_a_single_user_prompt"
   },
   {
     "test_name": "should create a token if ephemeral=false, so subsequent calls do not re-trigger if unexpired",
@@ -627,7 +696,8 @@
     "ts_end": 399,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 376,
-    "py_end": 432
+    "py_end": 432,
+    "py_function_name": "test_should_create_a_token_if_ephemeral_false_so_subsequent_calls_do_not_re_trigger_if_unexpired"
   },
   {
     "test_name": "should generate two distinct user prompts for two different permission requests",
@@ -636,7 +706,8 @@
     "ts_end": 146,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 109,
-    "py_end": 185
+    "py_end": 185,
+    "py_function_name": "test_should_generate_two_distinct_user_prompts_for_two_different_permission_requests"
   },
   {
     "test_name": "should handle renewal if the found token is expired, passing previousToken in the request",
@@ -645,7 +716,8 @@
     "ts_end": 460,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 434,
-    "py_end": 483
+    "py_end": 483,
+    "py_function_name": "test_should_handle_renewal_if_the_found_token_is_expired_passing_previoustoken_in_the_request"
   },
   {
     "test_name": "should not create a token if ephemeral=true, so subsequent calls re-trigger the request",
@@ -654,7 +726,8 @@
     "ts_end": 321,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 320,
-    "py_end": 374
+    "py_end": 374,
+    "py_function_name": "test_should_not_create_a_token_if_ephemeral_true_so_subsequent_calls_re_trigger_the_request"
   },
   {
     "test_name": "should reject only the matching request queue on deny if requestID is specified",
@@ -663,7 +736,8 @@
     "ts_end": 253,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 258,
-    "py_end": 318
+    "py_end": 318,
+    "py_function_name": "test_should_reject_only_the_matching_request_queue_on_deny_if_requestid_is_specified"
   },
   {
     "test_name": "should resolve all parallel requests when permission is granted, referencing the same requestID",
@@ -672,7 +746,8 @@
     "ts_end": 199,
     "py_file": "permissions/test_wallet_permissions_manager_flows.py",
     "py_start": 187,
-    "py_end": 256
+    "py_end": 256,
+    "py_function_name": "test_should_resolve_all_parallel_requests_when_permission_is_granted_referencing_the_same_requestid"
   },
   {
     "test_name": "should consider calls from the adminOriginator as admin, bypassing checks",
@@ -681,7 +756,8 @@
     "ts_end": 115,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 136,
-    "py_end": 174
+    "py_end": 174,
+    "py_function_name": "test_should_consider_calls_from_the_adminoriginator_as_admin_bypassing_checks"
   },
   {
     "test_name": "should enforce protocol permission checks for signing if seekProtocolPermissionsForSigning=true",
@@ -690,7 +766,8 @@
     "ts_end": 180,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 209,
-    "py_end": 250
+    "py_end": 250,
+    "py_function_name": "test_should_enforce_protocol_permission_checks_for_signing_if_seekprotocolpermissionsforsigning_true"
   },
   {
     "test_name": "should initialize with all config flags set to false",
@@ -699,7 +776,8 @@
     "ts_end": 82,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 93,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_should_initialize_with_all_config_flags_set_to_false"
   },
   {
     "test_name": "should initialize with default config if none is provided",
@@ -708,7 +786,8 @@
     "ts_end": 32,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 34,
-    "py_end": 60
+    "py_end": 60,
+    "py_function_name": "test_should_initialize_with_default_config_if_none_is_provided"
   },
   {
     "test_name": "should initialize with partial config overrides, merging with defaults",
@@ -717,7 +796,8 @@
     "ts_end": 51,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 62,
-    "py_end": 91
+    "py_end": 91,
+    "py_function_name": "test_should_initialize_with_partial_config_overrides_merging_with_defaults"
   },
   {
     "test_name": "should skip basket insertion permission checks if seekBasketInsertionPermissions=false",
@@ -726,7 +806,8 @@
     "ts_end": 215,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 252,
-    "py_end": 298
+    "py_end": 298,
+    "py_function_name": "test_should_skip_basket_insertion_permission_checks_if_seekbasketinsertionpermissions_false"
   },
   {
     "test_name": "should skip protocol permission checks for signing if seekProtocolPermissionsForSigning=false",
@@ -735,7 +816,8 @@
     "ts_end": 143,
     "py_file": "permissions/test_wallet_permissions_manager_initialization.py",
     "py_start": 176,
-    "py_end": 207
+    "py_end": 207,
+    "py_function_name": "test_should_skip_protocol_permission_checks_for_signing_if_seekprotocolpermissionsforsigning_false"
   },
   {
     "test_name": "should abort the action if spending permission is denied",
@@ -744,7 +826,8 @@
     "ts_end": 223,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 95,
-    "py_end": 142
+    "py_end": 142,
+    "py_function_name": "test_should_abort_the_action_if_spending_permission_is_denied"
   },
   {
     "test_name": "should call acquireCertificate, verifying permission if config.seekCertificateAcquisitionPermissions=true",
@@ -753,7 +836,8 @@
     "ts_end": 604,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 595,
-    "py_end": 626
+    "py_end": 626,
+    "py_function_name": "test_should_call_acquirecertificate_verifying_permission_if_config_seekcertificateacquisitionpermissions_true"
   },
   {
     "test_name": "should call discoverByAttributes after ensuring identity resolution permission",
@@ -762,7 +846,8 @@
     "ts_end": 665,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 748,
-    "py_end": 775
+    "py_end": 775,
+    "py_function_name": "test_should_call_discoverbyattributes_after_ensuring_identity_resolution_permission"
   },
   {
     "test_name": "should call discoverByIdentityKey after ensuring identity resolution permission",
@@ -771,7 +856,8 @@
     "ts_end": 659,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 719,
-    "py_end": 746
+    "py_end": 746,
+    "py_function_name": "test_should_call_discoverbyidentitykey_after_ensuring_identity_resolution_permission"
   },
   {
     "test_name": "should call getPublicKey on underlying after ensuring protocol permission",
@@ -780,7 +866,8 @@
     "ts_end": 448,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 348,
-    "py_end": 375
+    "py_end": 375,
+    "py_function_name": "test_should_call_getpublickey_on_underlying_after_ensuring_protocol_permission"
   },
   {
     "test_name": "should call listActions on the underlying wallet and decrypt metadata fields if encryptWalletMetadata=true",
@@ -789,7 +876,8 @@
     "ts_end": 330,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 219,
-    "py_end": 248
+    "py_end": 248,
+    "py_function_name": "test_should_call_listactions_on_the_underlying_wallet_and_decrypt_metadata_fields_if_encryptwalletmetadata_true"
   },
   {
     "test_name": "should call listCertificates, verifying permission if config.seekCertificateListingPermissions=true",
@@ -798,7 +886,8 @@
     "ts_end": 617,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 628,
-    "py_end": 657
+    "py_end": 657,
+    "py_function_name": "test_should_call_listcertificates_verifying_permission_if_config_seekcertificatelistingpermissions_true"
   },
   {
     "test_name": "should call proveCertificate after ensuring certificate permission",
@@ -807,7 +896,8 @@
     "ts_end": 636,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 659,
-    "py_end": 686
+    "py_end": 686,
+    "py_function_name": "test_should_call_provecertificate_after_ensuring_certificate_permission"
   },
   {
     "test_name": "should call relinquishCertificate if config.seekCertificateRelinquishmentPermissions=true",
@@ -816,7 +906,8 @@
     "ts_end": 649,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 688,
-    "py_end": 717
+    "py_end": 717,
+    "py_function_name": "test_should_call_relinquishcertificate_if_config_seekcertificaterelinquishmentpermissions_true"
   },
   {
     "test_name": "should call revealCounterpartyKeyLinkage with permission check, pass result",
@@ -825,7 +916,8 @@
     "ts_end": 472,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 377,
-    "py_end": 404
+    "py_end": 404,
+    "py_function_name": "test_should_call_revealcounterpartykeylinkage_with_permission_check_pass_result"
   },
   {
     "test_name": "should call revealSpecificKeyLinkage with permission check, pass result",
@@ -834,7 +926,8 @@
     "ts_end": 500,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 406,
-    "py_end": 435
+    "py_end": 435,
+    "py_function_name": "test_should_call_revealspecifickeylinkage_with_permission_check_pass_result"
   },
   {
     "test_name": "should ensure basket listing permission then call listOutputs, decrypting customInstructions",
@@ -843,7 +936,8 @@
     "ts_end": 412,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 288,
-    "py_end": 317
+    "py_end": 317,
+    "py_function_name": "test_should_ensure_basket_listing_permission_then_call_listoutputs_decrypting_custominstructions"
   },
   {
     "test_name": "should ensure basket removal permission then call relinquishOutput",
@@ -852,7 +946,8 @@
     "ts_end": 424,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 319,
-    "py_end": 346
+    "py_end": 346,
+    "py_function_name": "test_should_ensure_basket_removal_permission_then_call_relinquishoutput"
   },
   {
     "test_name": "should pass createAction calls through, label them, handle metadata encryption, and check spending authorization",
@@ -861,7 +956,8 @@
     "ts_end": 169,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 33,
-    "py_end": 93
+    "py_end": 93,
+    "py_function_name": "test_should_pass_createaction_calls_through_label_them_handle_metadata_encryption_and_check_spending_authorization"
   },
   {
     "test_name": "should pass internalizeAction calls to underlying, after ensuring basket permissions and encrypting customInstructions if config=on",
@@ -870,7 +966,8 @@
     "ts_end": 358,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 250,
-    "py_end": 286
+    "py_end": 286,
+    "py_function_name": "test_should_pass_internalizeaction_calls_to_underlying_after_ensuring_basket_permissions_and_encrypting_custominstructions_if_config_on"
   },
   {
     "test_name": "should propagate errors from the underlying wallet calls",
@@ -879,7 +976,8 @@
     "ts_end": 719,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 903,
-    "py_end": 918
+    "py_end": 918,
+    "py_function_name": "test_should_propagate_errors_from_the_underlying_wallet_calls"
   },
   {
     "test_name": "should proxy abortAction calls directly",
@@ -888,7 +986,8 @@
     "ts_end": 283,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 198,
-    "py_end": 217
+    "py_end": 217,
+    "py_function_name": "test_should_proxy_abortaction_calls_directly"
   },
   {
     "test_name": "should proxy createHmac() calls",
@@ -897,7 +996,8 @@
     "ts_end": 544,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 495,
-    "py_end": 522
+    "py_end": 522,
+    "py_function_name": "test_should_proxy_createhmac_calls"
   },
   {
     "test_name": "should proxy createSignature() calls (already tested the netSpent logic in createAction, but let’s double-check)",
@@ -906,7 +1006,8 @@
     "ts_end": 572,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 544,
-    "py_end": 573
+    "py_end": 573,
+    "py_function_name": "test_should_proxy_createsignature_calls_already_tested_the_netspent_logic_in_createaction_but_lets_double_check"
   },
   {
     "test_name": "should proxy decrypt() calls after checking protocol permission",
@@ -915,7 +1016,8 @@
     "ts_end": 531,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 466,
-    "py_end": 493
+    "py_end": 493,
+    "py_function_name": "test_should_proxy_decrypt_calls_after_checking_protocol_permission"
   },
   {
     "test_name": "should proxy encrypt() calls after checking protocol permission",
@@ -924,7 +1026,8 @@
     "ts_end": 518,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 437,
-    "py_end": 464
+    "py_end": 464,
+    "py_function_name": "test_should_proxy_encrypt_calls_after_checking_protocol_permission"
   },
   {
     "test_name": "should proxy getHeaderForHeight",
@@ -933,7 +1036,8 @@
     "ts_end": 694,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 840,
-    "py_end": 859
+    "py_end": 859,
+    "py_function_name": "test_should_proxy_getheaderforheight"
   },
   {
     "test_name": "should proxy getHeight",
@@ -942,7 +1046,8 @@
     "ts_end": 688,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 819,
-    "py_end": 838
+    "py_end": 838,
+    "py_function_name": "test_should_proxy_getheight"
   },
   {
     "test_name": "should proxy getNetwork",
@@ -951,7 +1056,8 @@
     "ts_end": 700,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 861,
-    "py_end": 880
+    "py_end": 880,
+    "py_function_name": "test_should_proxy_getnetwork"
   },
   {
     "test_name": "should proxy getVersion",
@@ -960,7 +1066,8 @@
     "ts_end": 706,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 882,
-    "py_end": 901
+    "py_end": 901,
+    "py_function_name": "test_should_proxy_getversion"
   },
   {
     "test_name": "should proxy isAuthenticated without any special permission checks",
@@ -969,7 +1076,8 @@
     "ts_end": 676,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 777,
-    "py_end": 796
+    "py_end": 796,
+    "py_function_name": "test_should_proxy_isauthenticated_without_any_special_permission_checks"
   },
   {
     "test_name": "should proxy signAction calls directly if invoked by the user",
@@ -978,7 +1086,8 @@
     "ts_end": 276,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 175,
-    "py_end": 196
+    "py_end": 196,
+    "py_function_name": "test_should_proxy_signaction_calls_directly_if_invoked_by_the_user"
   },
   {
     "test_name": "should proxy verifyHmac() calls",
@@ -987,7 +1096,8 @@
     "ts_end": 558,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 524,
-    "py_end": 542
+    "py_end": 542,
+    "py_function_name": "test_should_proxy_verifyhmac_calls"
   },
   {
     "test_name": "should proxy verifySignature() calls",
@@ -996,7 +1106,8 @@
     "ts_end": 586,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 575,
-    "py_end": 593
+    "py_end": 593,
+    "py_function_name": "test_should_proxy_verifysignature_calls"
   },
   {
     "test_name": "should proxy waitForAuthentication without any special permission checks",
@@ -1005,7 +1116,8 @@
     "ts_end": 682,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 798,
-    "py_end": 817
+    "py_end": 817,
+    "py_function_name": "test_should_proxy_waitforauthentication_without_any_special_permission_checks"
   },
   {
     "test_name": "should throw an error if a non-admin tries signAndProcess=true",
@@ -1014,7 +1126,8 @@
     "ts_end": 246,
     "py_file": "permissions/test_wallet_permissions_manager_proxying.py",
     "py_start": 144,
-    "py_end": 173
+    "py_end": 173,
+    "py_function_name": "test_should_throw_an_error_if_a_non_admin_tries_signandprocess_true"
   },
   {
     "test_name": "should allow updating the authorizedAmount in DSAP renewal",
@@ -1023,7 +1136,8 @@
     "ts_end": 451,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 323,
-    "py_end": 352
+    "py_end": 352,
+    "py_function_name": "test_should_allow_updating_the_authorizedamount_in_dsap_renewal"
   },
   {
     "test_name": "should build correct fields for a basket token (DBAP)",
@@ -1032,7 +1146,8 @@
     "ts_end": 106,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 70,
-    "py_end": 94
+    "py_end": 94,
+    "py_function_name": "test_should_build_correct_fields_for_a_basket_token_dbap"
   },
   {
     "test_name": "should build correct fields for a certificate token (DCAP)",
@@ -1041,7 +1156,8 @@
     "ts_end": 135,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 96,
-    "py_end": 126
+    "py_end": 126,
+    "py_function_name": "test_should_build_correct_fields_for_a_certificate_token_dcap"
   },
   {
     "test_name": "should build correct fields for a protocol token (DPACP)",
@@ -1050,7 +1166,8 @@
     "ts_end": 88,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 37,
-    "py_end": 68
+    "py_end": 68,
+    "py_function_name": "test_should_build_correct_fields_for_a_protocol_token_dpacp"
   },
   {
     "test_name": "should build correct fields for a spending token (DSAP)",
@@ -1059,7 +1176,8 @@
     "ts_end": 158,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 128,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_should_build_correct_fields_for_a_spending_token_dsap"
   },
   {
     "test_name": "should create a new basket token (DBAP)",
@@ -1068,7 +1186,8 @@
     "ts_end": 259,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 195,
-    "py_end": 221
+    "py_end": 221,
+    "py_function_name": "test_should_create_a_new_basket_token_dbap"
   },
   {
     "test_name": "should create a new certificate token (DCAP)",
@@ -1077,7 +1196,8 @@
     "ts_end": 296,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 223,
-    "py_end": 255
+    "py_end": 255,
+    "py_function_name": "test_should_create_a_new_certificate_token_dcap"
   },
   {
     "test_name": "should create a new protocol token with the correct basket, script, and tags",
@@ -1086,7 +1206,8 @@
     "ts_end": 228,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 159,
-    "py_end": 193
+    "py_end": 193,
+    "py_function_name": "test_should_create_a_new_protocol_token_with_the_correct_basket_script_and_tags"
   },
   {
     "test_name": "should create a new spending authorization token (DSAP)",
@@ -1095,7 +1216,8 @@
     "ts_end": 328,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 257,
-    "py_end": 283
+    "py_end": 283,
+    "py_function_name": "test_should_create_a_new_spending_authorization_token_dsap"
   },
   {
     "test_name": "should create a transaction that consumes (spends) the old token with no new outputs",
@@ -1104,7 +1226,8 @@
     "ts_end": 502,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 354,
-    "py_end": 383
+    "py_end": 383,
+    "py_function_name": "test_should_create_a_transaction_that_consumes_spends_the_old_token_with_no_new_outputs"
   },
   {
     "test_name": "should remove the old token from listing after revocation",
@@ -1113,7 +1236,8 @@
     "ts_end": 583,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 385,
-    "py_end": 408
+    "py_end": 408,
+    "py_function_name": "test_should_remove_the_old_token_from_listing_after_revocation"
   },
   {
     "test_name": "should spend the old token input and create a new protocol token output with updated expiry",
@@ -1122,7 +1246,8 @@
     "ts_end": 400,
     "py_file": "permissions/test_wallet_permissions_manager_tokens.py",
     "py_start": 285,
-    "py_end": 321
+    "py_end": 321,
+    "py_function_name": "test_should_spend_the_old_token_input_and_create_a_new_protocol_token_output_with_updated_expiry"
   },
   {
     "test_name": "2a complete flow MasterCertificate and VerifiableCertificate",
@@ -1131,7 +1256,8 @@
     "ts_end": 102,
     "py_file": "certificates/test_certificate_life_cycle.py",
     "py_start": 53,
-    "py_end": 145
+    "py_end": 145,
+    "py_function_name": "test_complete_flow_mastercertificate_and_verifiablecertificate"
   },
   {
     "test_name": "Calls keyGetter only once if getPrivilegedKey is invoked multiple times within retention period",
@@ -1140,7 +1266,8 @@
     "ts_end": 565,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 787,
-    "py_end": 814
+    "py_end": 814,
+    "py_function_name": "test_calls_keygetter_only_once_if_getprivilegedkey_is_invoked_multiple_times_within_retention_period"
   },
   {
     "test_name": "Computes HMAC over messages verifiable by the counterparty",
@@ -1149,7 +1276,8 @@
     "ts_end": 281,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 614,
-    "py_end": 652
+    "py_end": 652,
+    "py_function_name": "test_computes_hmac_over_messages_verifiable_by_the_counterparty"
   },
   {
     "test_name": "Correctly derives keys for a counterparty",
@@ -1158,7 +1286,8 @@
     "ts_end": 150,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 417,
-    "py_end": 450
+    "py_end": 450,
+    "py_function_name": "test_correctly_derives_keys_for_a_counterparty"
   },
   {
     "test_name": "Destroys key after retention period elapses",
@@ -1167,7 +1296,8 @@
     "ts_end": 589,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 817,
-    "py_end": 844
+    "py_end": 844,
+    "py_function_name": "test_destroys_key_after_retention_period_elapses"
   },
   {
     "test_name": "Directly signs hash of message verifiable by the counterparty",
@@ -1176,7 +1306,8 @@
     "ts_end": 204,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 494,
-    "py_end": 541
+    "py_end": 541,
+    "py_function_name": "test_directly_signs_hash_of_message_verifiable_by_the_counterparty"
   },
   {
     "test_name": "Encrypts messages decryptable by the counterparty",
@@ -1185,7 +1316,8 @@
     "ts_end": 85,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 317,
-    "py_end": 354
+    "py_end": 354,
+    "py_function_name": "test_encrypts_messages_decryptable_by_the_counterparty"
   },
   {
     "test_name": "Ensures chunk-splitting logic is correct for a 32-byte key",
@@ -1194,7 +1326,8 @@
     "ts_end": 683,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 896,
-    "py_end": 914
+    "py_end": 914,
+    "py_function_name": "test_ensures_chunk_splitting_logic_is_correct_for_a_32_byte_key"
   },
   {
     "test_name": "Explicitly calls destroyKey() and removes all chunk properties",
@@ -1203,7 +1336,8 @@
     "ts_end": 611,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 847,
-    "py_end": 866
+    "py_end": 866,
+    "py_function_name": "test_explicitly_calls_destroykey_and_removes_all_chunk_properties"
   },
   {
     "test_name": "Fails to decryupt messages for the wrong protocol, key, and counterparty",
@@ -1212,7 +1346,8 @@
     "ts_end": 126,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 357,
-    "py_end": 414
+    "py_end": 414,
+    "py_function_name": "test_fails_to_decryupt_messages_for_the_wrong_protocol_key_and_counterparty"
   },
   {
     "test_name": "Fails to verify HMAC for the wrong data, protocol, key, and counterparty",
@@ -1221,7 +1356,8 @@
     "ts_end": 335,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 655,
-    "py_end": 702
+    "py_end": 702,
+    "py_function_name": "test_fails_to_verify_hmac_for_the_wrong_data_protocol_key_and_counterparty"
   },
   {
     "test_name": "Fails to verify signature for the wrong data, protocol, key, and counterparty",
@@ -1230,7 +1366,8 @@
     "ts_end": 258,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 544,
-    "py_end": 611
+    "py_end": 611,
+    "py_function_name": "test_fails_to_verify_signature_for_the_wrong_data_protocol_key_and_counterparty"
   },
   {
     "test_name": "Generates random property names",
@@ -1239,7 +1376,8 @@
     "ts_end": 710,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 939,
-    "py_end": 959
+    "py_end": 959,
+    "py_function_name": "test_generates_random_property_names"
   },
   {
     "test_name": "New decoy properties are created on each key fetch and destroyed on destroy",
@@ -1248,7 +1386,8 @@
     "ts_end": 736,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 980,
-    "py_end": 1000
+    "py_end": 1000,
+    "py_function_name": "test_new_decoy_properties_are_created_on_each_key_fetch_and_destroyed_on_destroy"
   },
   {
     "test_name": "Reuses in-memory obfuscated key if data is valid, otherwise fetches a new key",
@@ -1257,7 +1396,8 @@
     "ts_end": 635,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 869,
-    "py_end": 893
+    "py_end": 893,
+    "py_function_name": "test_reuses_in_memory_obfuscated_key_if_data_is_valid_otherwise_fetches_a_new_key"
   },
   {
     "test_name": "Sets up initial decoy properties in the constructor",
@@ -1266,7 +1406,8 @@
     "ts_end": 722,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 962,
-    "py_end": 977
+    "py_end": 977,
+    "py_function_name": "test_sets_up_initial_decoy_properties_in_the_constructor"
   },
   {
     "test_name": "Signs messages verifiable by the counterparty",
@@ -1275,7 +1416,8 @@
     "ts_end": 173,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 453,
-    "py_end": 491
+    "py_end": 491,
+    "py_function_name": "test_signs_messages_verifiable_by_the_counterparty"
   },
   {
     "test_name": "Uses anyone for creating signatures and self for other operations if no counterparty is provided",
@@ -1284,7 +1426,8 @@
     "ts_end": 427,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 705,
-    "py_end": 725
+    "py_end": 725,
+    "py_function_name": "test_uses_anyone_for_creating_signatures_and_self_for_other_operations_if_no_counterparty_is_provided"
   },
   {
     "test_name": "Validates the BRC-2 Encryption compliance vector",
@@ -1293,7 +1436,8 @@
     "ts_end": 63,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 201,
-    "py_end": 314
+    "py_end": 314,
+    "py_function_name": "test_validates_the_brc_2_encryption_compliance_vector"
   },
   {
     "test_name": "Validates the BRC-2 HMAC compliance vector",
@@ -1302,7 +1446,8 @@
     "ts_end": 45,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 138,
-    "py_end": 198
+    "py_end": 198,
+    "py_function_name": "test_validates_the_brc_2_hmac_compliance_vector"
   },
   {
     "test_name": "Validates the BRC-3 compliance vector",
@@ -1311,7 +1456,8 @@
     "ts_end": 28,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 39,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_validates_the_brc_3_compliance_vector"
   },
   {
     "test_name": "Validates the revealCounterpartyKeyLinkage function",
@@ -1320,7 +1466,8 @@
     "ts_end": 460,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 728,
-    "py_end": 754
+    "py_end": 754,
+    "py_function_name": "test_validates_the_revealcounterpartykeylinkage_function"
   },
   {
     "test_name": "Validates the revealSpecificKeyLinkage function",
@@ -1329,7 +1476,8 @@
     "ts_end": 535,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 757,
-    "py_end": 784
+    "py_end": 784,
+    "py_function_name": "test_validates_the_revealspecifickeylinkage_function"
   },
   {
     "test_name": "XOR function works as expected",
@@ -1338,7 +1486,8 @@
     "ts_end": 699,
     "py_file": "integration/test_privileged_key_manager.py",
     "py_start": 917,
-    "py_end": 936
+    "py_end": 936,
+    "py_function_name": "test_xor_function_works_as_expected"
   },
   {
     "test_name": "0 verify merkle proof to merkle path",
@@ -1347,7 +1496,8 @@
     "ts_end": 11,
     "py_file": "utils/test_bitrails.py",
     "py_start": 53,
-    "py_end": 70
+    "py_end": 70,
+    "py_function_name": "test_verify_merkle_proof_to_merkle_path"
   },
   {
     "test_name": "0 postBeef mainnet",
@@ -1356,7 +1506,8 @@
     "ts_end": 13,
     "py_file": "services/test_post_beef.py",
     "py_start": 99,
-    "py_end": 115
+    "py_end": 115,
+    "py_function_name": "test_postbeef_mainnet"
   },
   {
     "test_name": "1 postBeef testnet",
@@ -1365,7 +1516,8 @@
     "ts_end": 19,
     "py_file": "services/test_post_beef.py",
     "py_start": 117,
-    "py_end": 133
+    "py_end": 133,
+    "py_function_name": "test_postbeef_testnet"
   },
   {
     "test_name": "0 mainNet findHeaderForHeight",
@@ -1374,7 +1526,8 @@
     "ts_end": 14,
     "py_file": "chaintracks/test_service_client.py",
     "py_start": 26,
-    "py_end": 49
+    "py_end": 49,
+    "py_function_name": "test_mainnet_findheaderforheight"
   },
   {
     "test_name": "1 testNet findHeaderForHeight",
@@ -1383,7 +1536,8 @@
     "ts_end": 22,
     "py_file": "chaintracks/test_service_client.py",
     "py_start": 51,
-    "py_end": 77
+    "py_end": 77,
+    "py_function_name": "test_testnet_findheaderforheight"
   },
   {
     "test_name": "0 mainNet",
@@ -1392,7 +1546,8 @@
     "ts_end": 23,
     "py_file": "integration/test_bulk_ingestor_cdn_babbage.py",
     "py_start": 39,
-    "py_end": 58
+    "py_end": 58,
+    "py_function_name": "test_mainnet"
   },
   {
     "test_name": "1 testNet",
@@ -1401,7 +1556,8 @@
     "ts_end": 31,
     "py_file": "integration/test_bulk_ingestor_cdn_babbage.py",
     "py_start": 61,
-    "py_end": 80
+    "py_end": 80,
+    "py_function_name": "test_testnet"
   },
   {
     "test_name": "0 listen for first new header",
@@ -1410,7 +1566,8 @@
     "ts_end": 32,
     "py_file": "monitor/test_live_ingestor_whats_on_chain_poll.py",
     "py_start": 30,
-    "py_end": 63
+    "py_end": 63,
+    "py_function_name": "test_listen_for_first_new_header"
   },
   {
     "test_name": "2 get latest header bytes",
@@ -1419,7 +1576,8 @@
     "ts_end": 94,
     "py_file": "services/test_services.py",
     "py_start": 165,
-    "py_end": 187
+    "py_end": 187,
+    "py_function_name": "test_get_latest_header_bytes"
   },
   {
     "test_name": "3 get headers",
@@ -1428,7 +1586,8 @@
     "ts_end": 110,
     "py_file": "services/test_services.py",
     "py_start": 189,
-    "py_end": 212
+    "py_end": 212,
+    "py_function_name": "test_get_headers"
   },
   {
     "test_name": "4 get header byte file links",
@@ -1437,7 +1596,8 @@
     "ts_end": 123,
     "py_file": "services/test_services.py",
     "py_start": 214,
-    "py_end": 236
+    "py_end": 236,
+    "py_function_name": "test_get_header_byte_file_links"
   },
   {
     "test_name": "getChainTipHeight",
@@ -1446,7 +1606,8 @@
     "ts_end": 27,
     "py_file": "services/test_services.py",
     "py_start": 56,
-    "py_end": 74
+    "py_end": 74,
+    "py_function_name": "test_getchaintipheight"
   },
   {
     "test_name": "getHeaderByHash",
@@ -1455,7 +1616,8 @@
     "ts_end": 22,
     "py_file": "services/test_services.py",
     "py_start": 35,
-    "py_end": 54
+    "py_end": 54,
+    "py_function_name": "test_getheaderbyhash"
   },
   {
     "test_name": "1 NoDb mainnet",
@@ -1464,7 +1626,8 @@
     "ts_end": 29,
     "py_file": "chaintracks/test_chaintracks.py",
     "py_start": 28,
-    "py_end": 53
+    "py_end": 53,
+    "py_function_name": "test_nodb_mainnet"
   },
   {
     "test_name": "2 NoDb testnet",
@@ -1473,7 +1636,8 @@
     "ts_end": 33,
     "py_file": "chaintracks/test_chaintracks.py",
     "py_start": 55,
-    "py_end": 79
+    "py_end": 79,
+    "py_function_name": "test_nodb_testnet"
   },
   {
     "test_name": "0 getChain",
@@ -1482,7 +1646,8 @@
     "ts_end": 81,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 70,
-    "py_end": 87
+    "py_end": 87,
+    "py_function_name": "test_getchain"
   },
   {
     "test_name": "1 getInfo",
@@ -1491,7 +1656,8 @@
     "ts_end": 90,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 89,
-    "py_end": 109
+    "py_end": 109,
+    "py_function_name": "test_getinfo"
   },
   {
     "test_name": "2 getPresentHeight",
@@ -1500,7 +1666,8 @@
     "ts_end": 97,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 111,
-    "py_end": 128
+    "py_end": 128,
+    "py_function_name": "test_getpresentheight"
   },
   {
     "test_name": "3 getHeaders",
@@ -1509,7 +1676,8 @@
     "ts_end": 122,
     "py_file": "services/test_services.py",
     "py_start": 189,
-    "py_end": 212
+    "py_end": 212,
+    "py_function_name": "test_get_headers"
   },
   {
     "test_name": "4 findChainTipHeader",
@@ -1518,7 +1686,8 @@
     "ts_end": 129,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 174,
-    "py_end": 191
+    "py_end": 191,
+    "py_function_name": "test_findchaintipheader"
   },
   {
     "test_name": "5 findChainTipHash",
@@ -1527,7 +1696,8 @@
     "ts_end": 136,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 193,
-    "py_end": 209
+    "py_end": 209,
+    "py_function_name": "test_findchaintiphash"
   },
   {
     "test_name": "6 findHeaderForHeight",
@@ -1536,7 +1706,8 @@
     "ts_end": 152,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 211,
-    "py_end": 241
+    "py_end": 241,
+    "py_function_name": "test_findheaderforheight"
   },
   {
     "test_name": "7 addHeader",
@@ -1545,7 +1716,8 @@
     "ts_end": 167,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 243,
-    "py_end": 267
+    "py_end": 267,
+    "py_function_name": "test_addheader"
   },
   {
     "test_name": "subscribeHeaders",
@@ -1554,7 +1726,8 @@
     "ts_end": 177,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 269,
-    "py_end": 293
+    "py_end": 293,
+    "py_function_name": "test_subscribeheaders"
   },
   {
     "test_name": "subscribeReorgs",
@@ -1563,7 +1736,8 @@
     "ts_end": 186,
     "py_file": "chaintracks/test_client_api.py",
     "py_start": 295,
-    "py_end": 318
+    "py_end": 318,
+    "py_function_name": "test_subscribereorgs"
   },
   {
     "test_name": "0 default options CDN files",
@@ -1572,7 +1746,8 @@
     "ts_end": 82,
     "py_file": "integration/test_bulk_file_data_manager.py",
     "py_start": 146,
-    "py_end": 160
+    "py_end": 160,
+    "py_function_name": "test_default_options_cdn_files"
   },
   {
     "test_name": "0a default options CDN files noDropAll",
@@ -1581,7 +1756,8 @@
     "ts_end": 93,
     "py_file": "integration/test_bulk_file_data_manager.py",
     "py_start": 166,
-    "py_end": 188
+    "py_end": 188,
+    "py_function_name": "test_default_options_cdn_files_nodropall"
   },
   {
     "test_name": "0b default options CDN files dropAll",
@@ -1590,7 +1766,8 @@
     "ts_end": 104,
     "py_file": "integration/test_bulk_file_data_manager.py",
     "py_start": 166,
-    "py_end": 188
+    "py_end": 188,
+    "py_function_name": "test_default_options_cdn_files_nodropall"
   },
   {
     "test_name": "0 fetchJson",
@@ -1599,7 +1776,8 @@
     "ts_end": 18,
     "py_file": "chaintracks/test_fetch.py",
     "py_start": 32,
-    "py_end": 51
+    "py_end": 51,
+    "py_function_name": "test_fetchjson"
   },
   {
     "test_name": "1 download",
@@ -1608,7 +1786,8 @@
     "ts_end": 28,
     "py_file": "chaintracks/test_fetch.py",
     "py_start": 53,
-    "py_end": 73
+    "py_end": 73,
+    "py_function_name": "test_download"
   },
   {
     "test_name": "3 download",
@@ -1617,7 +1796,8 @@
     "ts_end": 49,
     "py_file": "chaintracks/test_fetch.py",
     "py_start": 53,
-    "py_end": 73
+    "py_end": 73,
+    "py_function_name": "test_download"
   },
   {
     "test_name": "4 download",
@@ -1626,7 +1806,8 @@
     "ts_end": 59,
     "py_file": "chaintracks/test_fetch.py",
     "py_start": 53,
-    "py_end": 73
+    "py_end": 73,
+    "py_function_name": "test_download"
   },
   {
     "test_name": "copy",
@@ -1635,7 +1816,8 @@
     "ts_end": 13,
     "py_file": "utils/test_height_range.py",
     "py_start": 51,
-    "py_end": 61
+    "py_end": 61,
+    "py_function_name": "test_copy"
   },
   {
     "test_name": "intersect",
@@ -1644,7 +1826,8 @@
     "ts_end": 31,
     "py_file": "utils/test_height_range.py",
     "py_start": 63,
-    "py_end": 88
+    "py_end": 88,
+    "py_function_name": "test_intersect"
   },
   {
     "test_name": "length",
@@ -1653,7 +1836,8 @@
     "ts_end": 10,
     "py_file": "utils/test_height_range.py",
     "py_start": 36,
-    "py_end": 49
+    "py_end": 49,
+    "py_function_name": "test_length"
   },
   {
     "test_name": "subtract",
@@ -1662,7 +1846,8 @@
     "ts_end": 66,
     "py_file": "utils/test_height_range.py",
     "py_start": 122,
-    "py_end": 147
+    "py_end": 147,
+    "py_function_name": "test_subtract"
   },
   {
     "test_name": "union",
@@ -1671,7 +1856,8 @@
     "ts_end": 49,
     "py_file": "utils/test_height_range.py",
     "py_start": 90,
-    "py_end": 120
+    "py_end": 120,
+    "py_function_name": "test_union"
   },
   {
     "test_name": "0 getRawTx testnet",
@@ -1680,7 +1866,8 @@
     "ts_end": 33,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 44,
-    "py_end": 68
+    "py_end": 68,
+    "py_function_name": "test_getrawtx_testnet"
   },
   {
     "test_name": "00",
@@ -1689,7 +1876,8 @@
     "ts_end": 13,
     "py_file": "wallet/test_certificates.py",
     "py_start": 22,
-    "py_end": 31
+    "py_end": 31,
+    "py_function_name": "test_00"
   },
   {
     "test_name": "1 getRawTx mainnet",
@@ -1698,7 +1886,8 @@
     "ts_end": 43,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 70,
-    "py_end": 94
+    "py_end": 94,
+    "py_function_name": "test_getrawtx_mainnet"
   },
   {
     "test_name": "2 getMerklePath testnet",
@@ -1707,7 +1896,8 @@
     "ts_end": 65,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 96,
-    "py_end": 127
+    "py_end": 127,
+    "py_function_name": "test_getmerklepath_testnet"
   },
   {
     "test_name": "3 getMerklePath mainnet",
@@ -1716,7 +1906,8 @@
     "ts_end": 87,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 129,
-    "py_end": 162
+    "py_end": 162,
+    "py_function_name": "test_getmerklepath_mainnet"
   },
   {
     "test_name": "4 updateBsvExchangeRate",
@@ -1725,7 +1916,8 @@
     "ts_end": 96,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 164,
-    "py_end": 183
+    "py_end": 183,
+    "py_function_name": "test_updatebsvexchangerate"
   },
   {
     "test_name": "5 getTxPropagation testnet",
@@ -1734,7 +1926,8 @@
     "ts_end": 105,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 185,
-    "py_end": 198
+    "py_end": 198,
+    "py_function_name": "test_gettxpropagation_testnet"
   },
   {
     "test_name": "6 getTxPropagation mainnet",
@@ -1743,7 +1936,8 @@
     "ts_end": 107,
     "py_file": "services/test_whats_on_chain.py",
     "py_start": 200,
-    "py_end": 208
+    "py_end": 208,
+    "py_function_name": "test_gettxpropagation_mainnet"
   },
   {
     "test_name": "0 two outputs",
@@ -1752,7 +1946,8 @@
     "ts_end": 34,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 21,
-    "py_end": 65
+    "py_end": 65,
+    "py_function_name": "test_two_outputs"
   },
   {
     "test_name": "0a two outputs exact input",
@@ -1761,7 +1956,8 @@
     "ts_end": 54,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 66,
-    "py_end": 110
+    "py_end": 110,
+    "py_function_name": "test_two_outputs_exact_input"
   },
   {
     "test_name": "0b two outputs 666666 200",
@@ -1770,7 +1966,8 @@
     "ts_end": 74,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 111,
-    "py_end": 155
+    "py_end": 155,
+    "py_function_name": "test_two_outputs_666666_200"
   },
   {
     "test_name": "0c two outputs 666666 200 two change inputs",
@@ -1779,7 +1976,8 @@
     "ts_end": 104,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 156,
-    "py_end": 202
+    "py_end": 202,
+    "py_function_name": "test_two_outputs_666666_200_two_change_inputs"
   },
   {
     "test_name": "1 two outputs four change outputs",
@@ -1788,7 +1986,8 @@
     "ts_end": 124,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 203,
-    "py_end": 254
+    "py_end": 254,
+    "py_function_name": "test_two_outputs_four_change_outputs"
   },
   {
     "test_name": "2 WERR_INSUFFICIENT_FUNDS",
@@ -1797,7 +1996,8 @@
     "ts_end": 142,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 255,
-    "py_end": 287
+    "py_end": 287,
+    "py_function_name": "test_werr_insufficient_funds"
   },
   {
     "test_name": "2a WERR_INSUFFICIENT_FUNDS no inputs",
@@ -1806,7 +2006,8 @@
     "ts_end": 160,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 288,
-    "py_end": 315
+    "py_end": 315,
+    "py_function_name": "test_werr_insufficient_funds_no_inputs"
   },
   {
     "test_name": "3 allocate all",
@@ -1815,7 +2016,8 @@
     "ts_end": 180,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 316,
-    "py_end": 353
+    "py_end": 353,
+    "py_function_name": "test_allocate_all"
   },
   {
     "test_name": "4 feeModel 5 sat per kb",
@@ -1824,7 +2026,8 @@
     "ts_end": 201,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 354,
-    "py_end": 390
+    "py_end": 390,
+    "py_function_name": "test_feemodel_5_sat_per_kb"
   },
   {
     "test_name": "4a feeModel 1 sat per kb",
@@ -1833,7 +2036,8 @@
     "ts_end": 222,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 391,
-    "py_end": 427
+    "py_end": 427,
+    "py_function_name": "test_feemodel_1_sat_per_kb"
   },
   {
     "test_name": "5 one fixedInput",
@@ -1842,7 +2046,8 @@
     "ts_end": 243,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 428,
-    "py_end": 479
+    "py_end": 479,
+    "py_function_name": "test_one_fixed_input"
   },
   {
     "test_name": "5a one larger fixedInput",
@@ -1851,7 +2056,8 @@
     "ts_end": 264,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 480,
-    "py_end": 524
+    "py_end": 524,
+    "py_function_name": "test_one_larger_fixed_input"
   },
   {
     "test_name": "5b one fixedInput 1001 73",
@@ -1860,7 +2066,8 @@
     "ts_end": 280,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 525,
-    "py_end": 565
+    "py_end": 565,
+    "py_function_name": "test_one_fixed_input_1001_73"
   },
   {
     "test_name": "6 no fixedOutputs one fixedInput",
@@ -1869,7 +2076,8 @@
     "ts_end": 299,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 566,
-    "py_end": 614
+    "py_end": 614,
+    "py_function_name": "test_no_fixed_outputs_one_fixed_input"
   },
   {
     "test_name": "6a no fixedOutputs no fixedInput",
@@ -1878,7 +2086,8 @@
     "ts_end": 317,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 615,
-    "py_end": 663
+    "py_end": 663,
+    "py_function_name": "test_no_fixed_outputs_no_fixed_input"
   },
   {
     "test_name": "7 paramsText4 d4",
@@ -1887,7 +2096,8 @@
     "ts_end": 348,
     "py_file": "utils/test_generate_change_sdk.py",
     "py_start": 664,
-    "py_end": 707
+    "py_end": 707,
+    "py_function_name": "test_params_text4_d4"
   },
   {
     "test_name": "0_equals identifies matching CertificateField entities",
@@ -1896,7 +2106,8 @@
     "ts_end": 77,
     "py_file": "storage/entities/test_certificate_field.py",
     "py_start": 16,
-    "py_end": 46
+    "py_end": 46,
+    "py_function_name": "test_equals_identifies_matching_certificatefield_entities"
   },
   {
     "test_name": "1_equals identifies non-matching CertificateField entities",
@@ -1905,7 +2116,8 @@
     "ts_end": 153,
     "py_file": "storage/entities/test_certificate_field.py",
     "py_start": 47,
-    "py_end": 90
+    "py_end": 90,
+    "py_function_name": "test_equals_identifies_non_matching_certificatefield_entities"
   },
   {
     "test_name": "CertificateField getters and setters",
@@ -1914,7 +2126,8 @@
     "ts_end": 352,
     "py_file": "storage/entities/test_certificate_field.py",
     "py_start": 181,
-    "py_end": 236
+    "py_end": 236,
+    "py_function_name": "test_certificatefield_getters_and_setters"
   },
   {
     "test_name": "mergeExisting does not update entity when ei.updated_at <= this.updated_at",
@@ -1923,7 +2136,8 @@
     "ts_end": 301,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 148,
-    "py_end": 196
+    "py_end": 196,
+    "py_function_name": "test_mergeexisting_does_not_update_entity_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "mergeExisting updates entity and database when ei.updated_at > this.updated_at",
@@ -1932,7 +2146,8 @@
     "ts_end": 227,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 89,
-    "py_end": 147
+    "py_end": 147,
+    "py_function_name": "test_mergeexisting_updates_entity_and_database_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "0_equals identifies matching Certificate entities",
@@ -1941,7 +2156,8 @@
     "ts_end": 57,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 14,
-    "py_end": 45
+    "py_end": 45,
+    "py_function_name": "test_equals_identifies_matching_certificate_entities"
   },
   {
     "test_name": "1_equals identifies non-matching Certificate entities",
@@ -1950,7 +2166,8 @@
     "ts_end": 121,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 46,
-    "py_end": 88
+    "py_end": 88,
+    "py_function_name": "test_equals_identifies_non_matching_certificate_entities"
   },
   {
     "test_name": "2_mergeExisting updates entity and database when ei.updated_at > this.updated_at",
@@ -1959,7 +2176,8 @@
     "ts_end": 200,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 89,
-    "py_end": 147
+    "py_end": 147,
+    "py_function_name": "test_mergeexisting_updates_entity_and_database_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "3_mergeExisting does not update entity when ei.updated_at <= this.updated_at",
@@ -1968,7 +2186,8 @@
     "ts_end": 279,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 148,
-    "py_end": 196
+    "py_end": 196,
+    "py_function_name": "test_mergeexisting_does_not_update_entity_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "4_Certificate class getters and setters",
@@ -1977,7 +2196,8 @@
     "ts_end": 353,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 197,
-    "py_end": 270
+    "py_end": 270,
+    "py_function_name": "test_certificate_class_getters_and_setters"
   },
   {
     "test_name": "0_equals identifies matching Commission entities",
@@ -1986,7 +2206,8 @@
     "ts_end": 80,
     "py_file": "storage/entities/test_commission.py",
     "py_start": 14,
-    "py_end": 45
+    "py_end": 45,
+    "py_function_name": "test_equals_identifies_matching_commission_entities"
   },
   {
     "test_name": "1_equals identifies non-matching Commission entities",
@@ -1995,7 +2216,8 @@
     "ts_end": 160,
     "py_file": "storage/entities/test_commission.py",
     "py_start": 46,
-    "py_end": 87
+    "py_end": 87,
+    "py_function_name": "test_equals_identifies_non_matching_commission_entities"
   },
   {
     "test_name": "2_mergeExisting updates entity and database when ei.updated_at > this.updated_at",
@@ -2004,7 +2226,8 @@
     "ts_end": 236,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 89,
-    "py_end": 147
+    "py_end": 147,
+    "py_function_name": "test_mergeexisting_updates_entity_and_database_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "3_mergeExisting does not update when ei.updated_at <= this.updated_at",
@@ -2013,7 +2236,8 @@
     "ts_end": 312,
     "py_file": "storage/entities/test_commission.py",
     "py_start": 129,
-    "py_end": 167
+    "py_end": 167,
+    "py_function_name": "test_mergeexisting_does_not_update_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "4_Commission entity getters and setters",
@@ -2022,7 +2246,8 @@
     "ts_end": 370,
     "py_file": "storage/entities/test_commission.py",
     "py_start": 168,
-    "py_end": 228
+    "py_end": 228,
+    "py_function_name": "test_commission_entity_getters_and_setters"
   },
   {
     "test_name": "1_mergeExisting merges and updates entity when ei.updated_at > this.updated_at",
@@ -2031,7 +2256,8 @@
     "ts_end": 89,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 14,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_mergeexisting_merges_and_updates_entity_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "2_mergeExisting does not merge when ei.updated_at <= this.updated_at",
@@ -2040,7 +2266,8 @@
     "ts_end": 150,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 60,
-    "py_end": 103
+    "py_end": 103,
+    "py_function_name": "test_mergeexisting_does_not_merge_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "OutputBasket getters, setters, and updateApi",
@@ -2049,7 +2276,8 @@
     "ts_end": 277,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 175,
-    "py_end": 233
+    "py_end": 233,
+    "py_function_name": "test_outputbasket_getters_setters_and_updateapi"
   },
   {
     "test_name": "equals identifies matching entities with and without SyncMap",
@@ -2058,7 +2286,8 @@
     "ts_end": 181,
     "py_file": "storage/entities/test_output.py",
     "py_start": 15,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_equals_identifies_matching_entities_with_and_without_syncmap"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2067,7 +2296,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2076,7 +2306,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 134,
-    "py_end": 174
+    "py_end": 174,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2085,7 +2316,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 226,
-    "py_end": 263
+    "py_end": 263,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2094,7 +2326,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 580,
-    "py_end": 597
+    "py_end": 597,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2103,7 +2336,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_tx_label.py",
     "py_start": 179,
-    "py_end": 214
+    "py_end": 214,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "equals identifies non-matching entities",
@@ -2112,7 +2346,8 @@
     "ts_end": 224,
     "py_file": "storage/entities/test_users.py",
     "py_start": 125,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "0_OutputTagMap getters and setters",
@@ -2121,7 +2356,8 @@
     "ts_end": 68,
     "py_file": "storage/entities/test_output_tag_map.py",
     "py_start": 16,
-    "py_end": 57
+    "py_end": 57,
+    "py_function_name": "test_outputtagmap_getters_and_setters"
   },
   {
     "test_name": "1_equals returns true for matching entities",
@@ -2130,7 +2366,8 @@
     "ts_end": 96,
     "py_file": "storage/entities/test_output_tag_map.py",
     "py_start": 58,
-    "py_end": 83
+    "py_end": 83,
+    "py_function_name": "test_equals_returns_true_for_matching_entities"
   },
   {
     "test_name": "2_equals returns false for non-matching entities",
@@ -2139,7 +2376,8 @@
     "ts_end": 134,
     "py_file": "storage/entities/test_output_tag_map.py",
     "py_start": 84,
-    "py_end": 118
+    "py_end": 118,
+    "py_function_name": "test_equals_returns_false_for_non_matching_entities"
   },
   {
     "test_name": "3_mergeExisting merges and updates entity when ei.updated_at > this.updated_at",
@@ -2148,7 +2386,8 @@
     "ts_end": 190,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 14,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_mergeexisting_merges_and_updates_entity_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "4_mergeExisting does not merge when ei.updated_at <= this.updated_at",
@@ -2157,7 +2396,8 @@
     "ts_end": 241,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 60,
-    "py_end": 103
+    "py_end": 103,
+    "py_function_name": "test_mergeexisting_does_not_merge_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "0_mergeExisting merges and updates entity when ei.updated_at > this.updated_at",
@@ -2166,7 +2406,8 @@
     "ts_end": 81,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 14,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_mergeexisting_merges_and_updates_entity_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "1_mergeExisting does not merge when ei.updated_at <= this.updated_at",
@@ -2175,7 +2416,8 @@
     "ts_end": 133,
     "py_file": "storage/entities/test_output_basket.py",
     "py_start": 60,
-    "py_end": 103
+    "py_end": 103,
+    "py_function_name": "test_mergeexisting_does_not_merge_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "2_equals identifies matching entities without syncMap",
@@ -2184,7 +2426,8 @@
     "ts_end": 155,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 84,
-    "py_end": 108
+    "py_end": 108,
+    "py_function_name": "test_equals_identifies_matching_entities_without_syncmap"
   },
   {
     "test_name": "3_equals identifies non-matching entities when tags differ",
@@ -2193,7 +2436,8 @@
     "ts_end": 179,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 109,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_equals_identifies_non_matching_entities_when_tags_differ"
   },
   {
     "test_name": "4_equals identifies non-matching entities when isDeleted differs",
@@ -2202,7 +2446,8 @@
     "ts_end": 203,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 135,
-    "py_end": 160
+    "py_end": 160,
+    "py_function_name": "test_equals_identifies_non_matching_entities_when_isdeleted_differs"
   },
   {
     "test_name": "5_equals identifies matching entities with syncMap",
@@ -2211,7 +2456,8 @@
     "ts_end": 228,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 161,
-    "py_end": 187
+    "py_end": 187,
+    "py_function_name": "test_equals_identifies_matching_entities_with_syncmap"
   },
   {
     "test_name": "6_equals identifies non-matching entities when userIds differ and no syncMap is provided",
@@ -2220,7 +2466,8 @@
     "ts_end": 252,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 188,
-    "py_end": 213
+    "py_end": 213,
+    "py_function_name": "test_equals_identifies_non_matching_entities_when_userids_differ_and_no_syncmap_is_provided"
   },
   {
     "test_name": "7_getters and setters work as expected for OutputTag",
@@ -2229,7 +2476,8 @@
     "ts_end": 287,
     "py_file": "storage/entities/test_output_tag.py",
     "py_start": 214,
-    "py_end": 254
+    "py_end": 254,
+    "py_function_name": "test_getters_and_setters_work_as_expected_for_outputtag"
   },
   {
     "test_name": "0_equals identifies matching entities with and without SyncMap",
@@ -2238,7 +2486,8 @@
     "ts_end": 74,
     "py_file": "storage/entities/test_output.py",
     "py_start": 15,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_equals_identifies_matching_entities_with_and_without_syncmap"
   },
   {
     "test_name": "1_equals identifies non-matching entities",
@@ -2247,7 +2496,8 @@
     "ts_end": 118,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "2_equals handles optional fields and arrays",
@@ -2256,7 +2506,8 @@
     "ts_end": 162,
     "py_file": "storage/entities/test_output.py",
     "py_start": 103,
-    "py_end": 145
+    "py_end": 145,
+    "py_function_name": "test_equals_handles_optional_fields_and_arrays"
   },
   {
     "test_name": "3_mergeExisting updates entity and database when ei.updated_at > this.updated_at",
@@ -2265,7 +2516,8 @@
     "ts_end": 274,
     "py_file": "storage/entities/test_certificate.py",
     "py_start": 89,
-    "py_end": 147
+    "py_end": 147,
+    "py_function_name": "test_mergeexisting_updates_entity_and_database_when_ei_updated_at_greater_than_this_updated_at"
   },
   {
     "test_name": "4_mergeExisting does not update when ei.updated_at <= this.updated_at",
@@ -2274,7 +2526,8 @@
     "ts_end": 341,
     "py_file": "storage/entities/test_commission.py",
     "py_start": 129,
-    "py_end": 167
+    "py_end": 167,
+    "py_function_name": "test_mergeexisting_does_not_update_when_ei_updated_at_less_than_or_equal_this_updated_at"
   },
   {
     "test_name": "Output entity getters and setters",
@@ -2283,7 +2536,8 @@
     "ts_end": 463,
     "py_file": "storage/entities/test_output.py",
     "py_start": 288,
-    "py_end": 376
+    "py_end": 376,
+    "py_function_name": "test_output_entity_getters_and_setters"
   },
   {
     "test_name": "0_apiNotify_getter_and_setter",
@@ -2292,7 +2546,8 @@
     "ts_end": 51,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 16,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_apinotify_getter_and_setter"
   },
   {
     "test_name": "10_mergeHistory",
@@ -2301,7 +2556,8 @@
     "ts_end": 318,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 350,
-    "py_end": 365
+    "py_end": 365,
+    "py_function_name": "test_mergehistory"
   },
   {
     "test_name": "12_isTerminalStatus_with_real_data",
@@ -2310,7 +2566,8 @@
     "ts_end": 337,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 366,
-    "py_end": 382
+    "py_end": 382,
+    "py_function_name": "test_isterminalstatus_with_real_data"
   },
   {
     "test_name": "13_mergeExisting_real_data",
@@ -2319,7 +2576,8 @@
     "ts_end": 339,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 383,
-    "py_end": 397
+    "py_end": 397,
+    "py_function_name": "test_mergeexisting_real_data"
   },
   {
     "test_name": "1_getHistorySummary",
@@ -2328,7 +2586,8 @@
     "ts_end": 54,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 49,
-    "py_end": 64
+    "py_end": 64,
+    "py_function_name": "test_gethistorysummary"
   },
   {
     "test_name": "2_parseHistoryNote",
@@ -2337,7 +2596,8 @@
     "ts_end": 70,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 65,
-    "py_end": 92
+    "py_end": 92,
+    "py_function_name": "test_parsehistorynote"
   },
   {
     "test_name": "3_updateStorage",
@@ -2346,7 +2606,8 @@
     "ts_end": 95,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 93,
-    "py_end": 143
+    "py_end": 143,
+    "py_function_name": "test_updatestorage"
   },
   {
     "test_name": "4_insertOrMerge",
@@ -2355,7 +2616,8 @@
     "ts_end": 116,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 144,
-    "py_end": 180
+    "py_end": 180,
+    "py_function_name": "test_insertormerge"
   },
   {
     "test_name": "5_equals_identifies_matching_entities",
@@ -2364,7 +2626,8 @@
     "ts_end": 165,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 181,
-    "py_end": 225
+    "py_end": 225,
+    "py_function_name": "test_equals_identifies_matching_entities"
   },
   {
     "test_name": "6_equals_identifies_non_matching_entities",
@@ -2373,7 +2636,8 @@
     "ts_end": 213,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "7_mergeNotifyTransactionIds",
@@ -2382,7 +2646,8 @@
     "ts_end": 251,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 264,
-    "py_end": 283
+    "py_end": 283,
+    "py_function_name": "test_mergenotifytransactionids"
   },
   {
     "test_name": "8_getters_and_setters",
@@ -2391,7 +2656,8 @@
     "ts_end": 312,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 284,
-    "py_end": 333
+    "py_end": 333,
+    "py_function_name": "test_getters_and_setters"
   },
   {
     "test_name": "9_parseHistoryNote",
@@ -2400,7 +2666,8 @@
     "ts_end": 315,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 65,
-    "py_end": 92
+    "py_end": 92,
+    "py_function_name": "test_parsehistorynote"
   },
   {
     "test_name": "0_fromTxid: valid txid with rawTx and Merkle proof (real database)",
@@ -2409,7 +2676,8 @@
     "ts_end": 168,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 15,
-    "py_end": 69
+    "py_end": 69,
+    "py_function_name": "test_fromtxid_valid_txid_with_rawtx_and_merkle_proof_real_database"
   },
   {
     "test_name": "10_mergeExisting: always returns false",
@@ -2418,7 +2686,8 @@
     "ts_end": 503,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 352,
-    "py_end": 386
+    "py_end": 386,
+    "py_function_name": "test_mergeexisting_always_returns_false"
   },
   {
     "test_name": "1_fromTxid: txid with no rawTx available",
@@ -2427,7 +2696,8 @@
     "ts_end": 182,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 70,
-    "py_end": 94
+    "py_end": 94,
+    "py_function_name": "test_fromtxid_txid_with_no_rawtx_available"
   },
   {
     "test_name": "2_fromTxid: txid with no Merkle proof available",
@@ -2436,7 +2706,8 @@
     "ts_end": 199,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 95,
-    "py_end": 130
+    "py_end": 130,
+    "py_function_name": "test_fromtxid_txid_with_no_merkle_proof_available"
   },
   {
     "test_name": "3_ProvenTx getters and setters",
@@ -2445,7 +2716,8 @@
     "ts_end": 263,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 131,
-    "py_end": 191
+    "py_end": 191,
+    "py_function_name": "test_proventx_getters_and_setters"
   },
   {
     "test_name": "4_equals: identifies matching ProvenTx entities",
@@ -2454,7 +2726,8 @@
     "ts_end": 307,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 192,
-    "py_end": 234
+    "py_end": 234,
+    "py_function_name": "test_equals_identifies_matching_proventx_entities"
   },
   {
     "test_name": "5_equals: identifies non-matching txid",
@@ -2463,7 +2736,8 @@
     "ts_end": 338,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 235,
-    "py_end": 251
+    "py_end": 251,
+    "py_function_name": "test_equals_identifies_non_matching_txid"
   },
   {
     "test_name": "6_equals: identifies non-matching height",
@@ -2472,7 +2746,8 @@
     "ts_end": 369,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 252,
-    "py_end": 273
+    "py_end": 273,
+    "py_function_name": "test_equals_identifies_non_matching_height"
   },
   {
     "test_name": "7_equals: identifies non-matching merklePath",
@@ -2481,7 +2756,8 @@
     "ts_end": 400,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 274,
-    "py_end": 295
+    "py_end": 295,
+    "py_function_name": "test_equals_identifies_non_matching_merklepath"
   },
   {
     "test_name": "8_equals: identifies non-matching syncMap",
@@ -2490,7 +2766,8 @@
     "ts_end": 434,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 296,
-    "py_end": 314
+    "py_end": 314,
+    "py_function_name": "test_equals_identifies_non_matching_syncmap"
   },
   {
     "test_name": "9_equals: provenTxId mismatch without syncMap",
@@ -2499,7 +2776,8 @@
     "ts_end": 472,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 315,
-    "py_end": 351
+    "py_end": 351,
+    "py_function_name": "test_equals_proventxid_mismatch_without_syncmap"
   },
   {
     "test_name": "11_mergeExisting_always_returns_false",
@@ -2508,7 +2786,8 @@
     "ts_end": 287,
     "py_file": "storage/entities/test_proven_tx.py",
     "py_start": 352,
-    "py_end": 386
+    "py_end": 386,
+    "py_function_name": "test_mergeexisting_always_returns_false"
   },
   {
     "test_name": "7_getters_and_setters",
@@ -2517,7 +2796,8 @@
     "ts_end": 223,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 284,
-    "py_end": 333
+    "py_end": 333,
+    "py_function_name": "test_getters_and_setters"
   },
   {
     "test_name": "0_creates_instance_with_default_values",
@@ -2526,7 +2806,8 @@
     "ts_end": 52,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 18,
-    "py_end": 46
+    "py_end": 46,
+    "py_function_name": "test_creates_instance_with_default_values"
   },
   {
     "test_name": "10_getBsvTx_handles_undefined_rawTx",
@@ -2535,7 +2816,8 @@
     "ts_end": 251,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 282,
-    "py_end": 299
+    "py_end": 299,
+    "py_function_name": "test_getbsvtx_handles_undefined_rawtx"
   },
   {
     "test_name": "11_getInputs_handles_storage_lookups_and_input_merging",
@@ -2544,7 +2826,8 @@
     "ts_end": 302,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 300,
-    "py_end": 324
+    "py_end": 324,
+    "py_function_name": "test_getinputs_handles_storage_lookups_and_input_merging"
   },
   {
     "test_name": "15_getProvenTx_retrieves_proven_transaction",
@@ -2553,7 +2836,8 @@
     "ts_end": 322,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 325,
-    "py_end": 353
+    "py_end": 353,
+    "py_function_name": "test_getproventx_retrieves_proven_transaction"
   },
   {
     "test_name": "16_getProvenTx_returns_undefined_when_provenTxId_is_not_set",
@@ -2562,7 +2846,8 @@
     "ts_end": 336,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 354,
-    "py_end": 374
+    "py_end": 374,
+    "py_function_name": "test_getproventx_returns_undefined_when_proventxid_is_not_set"
   },
   {
     "test_name": "17_getProvenTx_returns_undefined_when_no_matching_ProvenTx_is_found",
@@ -2571,7 +2856,8 @@
     "ts_end": 350,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 375,
-    "py_end": 398
+    "py_end": 398,
+    "py_function_name": "test_getproventx_returns_undefined_when_no_matching_proventx_is_found"
   },
   {
     "test_name": "18_getInputs_merges_known_inputs_correctly",
@@ -2580,7 +2866,8 @@
     "ts_end": 393,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 399,
-    "py_end": 427
+    "py_end": 427,
+    "py_function_name": "test_getinputs_merges_known_inputs_correctly"
   },
   {
     "test_name": "19_get_version_returns_api_version",
@@ -2589,7 +2876,8 @@
     "ts_end": 399,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 428,
-    "py_end": 442
+    "py_end": 442,
+    "py_function_name": "test_get_version_returns_api_version"
   },
   {
     "test_name": "1_creates_instance_with_provided_api_object",
@@ -2598,7 +2886,8 @@
     "ts_end": 86,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 47,
-    "py_end": 89
+    "py_end": 89,
+    "py_function_name": "test_creates_instance_with_provided_api_object"
   },
   {
     "test_name": "20_get_lockTime_returns_api_lockTime",
@@ -2607,7 +2896,8 @@
     "ts_end": 405,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 443,
-    "py_end": 457
+    "py_end": 457,
+    "py_function_name": "test_get_locktime_returns_api_locktime"
   },
   {
     "test_name": "21_set_id_updates_transactionId",
@@ -2616,7 +2906,8 @@
     "ts_end": 412,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 458,
-    "py_end": 476
+    "py_end": 476,
+    "py_function_name": "test_set_id_updates_transactionid"
   },
   {
     "test_name": "22_get_entityName_returns_correct_value",
@@ -2625,7 +2916,8 @@
     "ts_end": 418,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 477,
-    "py_end": 491
+    "py_end": 491,
+    "py_function_name": "test_get_entityname_returns_correct_value"
   },
   {
     "test_name": "23_get_entityTable_returns_correct_value",
@@ -2634,7 +2926,8 @@
     "ts_end": 424,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 492,
-    "py_end": 506
+    "py_end": 506,
+    "py_function_name": "test_get_entitytable_returns_correct_value"
   },
   {
     "test_name": "25_equals_returns_false_for_mismatched_other_properties",
@@ -2643,7 +2936,8 @@
     "ts_end": 466,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 507,
-    "py_end": 530
+    "py_end": 530,
+    "py_function_name": "test_equals_returns_false_for_mismatched_other_properties"
   },
   {
     "test_name": "26_getInputs_handles_known_and_unknown_inputs",
@@ -2652,7 +2946,8 @@
     "ts_end": 508,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 531,
-    "py_end": 555
+    "py_end": 555,
+    "py_function_name": "test_getinputs_handles_known_and_unknown_inputs"
   },
   {
     "test_name": "27_equals_identifies_matching_entities",
@@ -2661,7 +2956,8 @@
     "ts_end": 560,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 181,
-    "py_end": 225
+    "py_end": 225,
+    "py_function_name": "test_equals_identifies_matching_entities"
   },
   {
     "test_name": "28_equals_identifies_non_matching_entities",
@@ -2670,7 +2966,8 @@
     "ts_end": 603,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "2_getters_and_setters_work_correctly",
@@ -2679,7 +2976,8 @@
     "ts_end": 126,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 90,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_getters_and_setters_work_correctly"
   },
   {
     "test_name": "3_getBsvTx_returns_parsed_transaction",
@@ -2688,7 +2986,8 @@
     "ts_end": 137,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 135,
-    "py_end": 156
+    "py_end": 156,
+    "py_function_name": "test_getbsvtx_returns_parsed_transaction"
   },
   {
     "test_name": "4_getBsvTx_returns_undefined_if_no_rawTx",
@@ -2697,7 +2996,8 @@
     "ts_end": 144,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 157,
-    "py_end": 174
+    "py_end": 174,
+    "py_function_name": "test_getbsvtx_returns_undefined_if_no_rawtx"
   },
   {
     "test_name": "5_getBsvTxIns_returns_inputs",
@@ -2706,7 +3006,8 @@
     "ts_end": 155,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 175,
-    "py_end": 193
+    "py_end": 193,
+    "py_function_name": "test_getbsvtxins_returns_inputs"
   },
   {
     "test_name": "6_getInputs_combines_spentBy_and_rawTx_inputs",
@@ -2715,7 +3016,8 @@
     "ts_end": 198,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 194,
-    "py_end": 223
+    "py_end": 223,
+    "py_function_name": "test_getinputs_combines_spentby_and_rawtx_inputs"
   },
   {
     "test_name": "9_mergeExisting_updates_when_ei_updated_at_is_newer",
@@ -2724,7 +3026,8 @@
     "ts_end": 244,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 224,
-    "py_end": 281
+    "py_end": 281,
+    "py_function_name": "test_mergeexisting_updates_when_ei_updated_at_is_newer"
   },
   {
     "test_name": "10_entityName_returns_correct_value",
@@ -2733,7 +3036,8 @@
     "ts_end": 215,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 261,
-    "py_end": 275
+    "py_end": 275,
+    "py_function_name": "test_entityname_returns_correct_value"
   },
   {
     "test_name": "11_entityTable_returns_correct_value",
@@ -2742,7 +3046,8 @@
     "ts_end": 221,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 276,
-    "py_end": 290
+    "py_end": 290,
+    "py_function_name": "test_entitytable_returns_correct_value"
   },
   {
     "test_name": "12_equals_identifies_matching_entities",
@@ -2751,7 +3056,8 @@
     "ts_end": 321,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 181,
-    "py_end": 225
+    "py_end": 225,
+    "py_function_name": "test_equals_identifies_matching_entities"
   },
   {
     "test_name": "13_equals_identifies_non_matching_entities",
@@ -2760,7 +3066,8 @@
     "ts_end": 360,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "1_creates_instance_with_default_values",
@@ -2769,7 +3076,8 @@
     "ts_end": 47,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 18,
-    "py_end": 46
+    "py_end": 46,
+    "py_function_name": "test_creates_instance_with_default_values"
   },
   {
     "test_name": "2_creates_instance_with_provided_api_object",
@@ -2778,7 +3086,8 @@
     "ts_end": 66,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 47,
-    "py_end": 89
+    "py_end": 89,
+    "py_function_name": "test_creates_instance_with_provided_api_object"
   },
   {
     "test_name": "3_getters_and_setters_work_correctly",
@@ -2787,7 +3096,8 @@
     "ts_end": 84,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 90,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_getters_and_setters_work_correctly"
   },
   {
     "test_name": "4_updateApi_does_nothing",
@@ -2796,7 +3106,8 @@
     "ts_end": 90,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 89,
-    "py_end": 103
+    "py_end": 103,
+    "py_function_name": "test_updateapi_does_nothing"
   },
   {
     "test_name": "5_get_id_throws_error",
@@ -2805,7 +3116,8 @@
     "ts_end": 96,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 104,
-    "py_end": 119
+    "py_end": 119,
+    "py_function_name": "test_get_id_throws_error"
   },
   {
     "test_name": "6_equals_checks_equality_correctly",
@@ -2814,7 +3126,8 @@
     "ts_end": 121,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 120,
-    "py_end": 149
+    "py_end": 149,
+    "py_function_name": "test_equals_checks_equality_correctly"
   },
   {
     "test_name": "7_mergeFind_finds_or_creates_entity",
@@ -2823,7 +3136,8 @@
     "ts_end": 142,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 150,
-    "py_end": 176
+    "py_end": 176,
+    "py_function_name": "test_mergefind_finds_or_creates_entity"
   },
   {
     "test_name": "8_mergeNew_inserts_entity",
@@ -2832,7 +3146,8 @@
     "ts_end": 170,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 177,
-    "py_end": 214
+    "py_end": 214,
+    "py_function_name": "test_mergenew_inserts_entity"
   },
   {
     "test_name": "9_mergeExisting_updates_entity",
@@ -2841,7 +3156,8 @@
     "ts_end": 209,
     "py_file": "storage/entities/test_tx_label_map.py",
     "py_start": 215,
-    "py_end": 260
+    "py_end": 260,
+    "py_function_name": "test_mergeexisting_updates_entity"
   },
   {
     "test_name": "1_creates_txLabel_with_default_values",
@@ -2850,7 +3166,8 @@
     "ts_end": 45,
     "py_file": "storage/entities/test_tx_label.py",
     "py_start": 15,
-    "py_end": 35
+    "py_end": 35,
+    "py_function_name": "test_creates_txlabel_with_default_values"
   },
   {
     "test_name": "2_creates_txLabel_with_provided_api_object",
@@ -2859,7 +3176,8 @@
     "ts_end": 67,
     "py_file": "storage/entities/test_tx_label.py",
     "py_start": 36,
-    "py_end": 66
+    "py_end": 66,
+    "py_function_name": "test_creates_txlabel_with_provided_api_object"
   },
   {
     "test_name": "3_getters_and_setters_work_correctly",
@@ -2868,7 +3186,8 @@
     "ts_end": 91,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 90,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_getters_and_setters_work_correctly"
   },
   {
     "test_name": "5_mergeExisting_does_not_update_txLabel_when_ei_updated_at_is_older",
@@ -2877,7 +3196,8 @@
     "ts_end": 125,
     "py_file": "storage/entities/test_tx_label.py",
     "py_start": 100,
-    "py_end": 141
+    "py_end": 141,
+    "py_function_name": "test_mergeexisting_does_not_update_txlabel_when_ei_updated_at_is_older"
   },
   {
     "test_name": "6_equals_identifies_matching_entities",
@@ -2886,7 +3206,8 @@
     "ts_end": 161,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 181,
-    "py_end": 225
+    "py_end": 225,
+    "py_function_name": "test_equals_identifies_matching_entities"
   },
   {
     "test_name": "7_equals_identifies_non_matching_entities",
@@ -2895,7 +3216,8 @@
     "ts_end": 197,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "0_appends_to_string_log",
@@ -2904,7 +3226,8 @@
     "ts_end": 29,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 16,
-    "py_end": 36
+    "py_end": 36,
+    "py_function_name": "test_appends_to_string_log"
   },
   {
     "test_name": "1_appends_to_object_log",
@@ -2913,7 +3236,8 @@
     "ts_end": 40,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 37,
-    "py_end": 57
+    "py_end": 57,
+    "py_function_name": "test_appends_to_object_log"
   },
   {
     "test_name": "2_returns_undefined_for_invalid_input",
@@ -2922,7 +3246,8 @@
     "ts_end": 48,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 58,
-    "py_end": 73
+    "py_end": 73,
+    "py_function_name": "test_returns_undefined_for_invalid_input"
   },
   {
     "test_name": "3_formats_valid_log_without_network",
@@ -2931,7 +3256,8 @@
     "ts_end": 59,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 74,
-    "py_end": 93
+    "py_end": 93,
+    "py_function_name": "test_formats_valid_log_without_network"
   },
   {
     "test_name": "4_formats_log_with_network_entries",
@@ -2940,7 +3266,8 @@
     "ts_end": 70,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 94,
-    "py_end": 119
+    "py_end": 119,
+    "py_function_name": "test_formats_log_with_network_entries"
   },
   {
     "test_name": "5_handles_invalid_log_entries_gracefully",
@@ -2949,7 +3276,8 @@
     "ts_end": 80,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 120,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_handles_invalid_log_entries_gracefully"
   },
   {
     "test_name": "6_handles_non-string_log_gracefully",
@@ -2958,7 +3286,8 @@
     "ts_end": 89,
     "py_file": "storage/entities/test_stamp_log.py",
     "py_start": 136,
-    "py_end": 151
+    "py_end": 151,
+    "py_function_name": "test_handles_non_string_log_gracefully"
   },
   {
     "test_name": "10_handles_empty_api_object",
@@ -2967,7 +3296,8 @@
     "ts_end": 196,
     "py_file": "storage/entities/test_users.py",
     "py_start": 211,
-    "py_end": 231
+    "py_end": 231,
+    "py_function_name": "test_handles_empty_api_object"
   },
   {
     "test_name": "11_id_getter_and_setter_work_correctly",
@@ -2976,7 +3306,8 @@
     "ts_end": 204,
     "py_file": "storage/entities/test_users.py",
     "py_start": 232,
-    "py_end": 249
+    "py_end": 249,
+    "py_function_name": "test_id_getter_and_setter_work_correctly"
   },
   {
     "test_name": "12_entityName_returns_User",
@@ -2985,7 +3316,8 @@
     "ts_end": 211,
     "py_file": "storage/entities/test_users.py",
     "py_start": 250,
-    "py_end": 264
+    "py_end": 264,
+    "py_function_name": "test_entityname_returns_user"
   },
   {
     "test_name": "13_entityTable_returns_users",
@@ -2994,7 +3326,8 @@
     "ts_end": 218,
     "py_file": "storage/entities/test_users.py",
     "py_start": 265,
-    "py_end": 279
+    "py_end": 279,
+    "py_function_name": "test_entitytable_returns_users"
   },
   {
     "test_name": "14_mergeExisting_updates_user_when_ei_updated_at_is_newer",
@@ -3003,7 +3336,8 @@
     "ts_end": 253,
     "py_file": "storage/entities/test_users.py",
     "py_start": 280,
-    "py_end": 327
+    "py_end": 327,
+    "py_function_name": "test_mergeexisting_updates_user_when_ei_updated_at_is_newer"
   },
   {
     "test_name": "15_mergeExisting_does_not_update_user_when_ei_updated_at_is_older",
@@ -3012,7 +3346,8 @@
     "ts_end": 286,
     "py_file": "storage/entities/test_users.py",
     "py_start": 328,
-    "py_end": 368
+    "py_end": 368,
+    "py_function_name": "test_mergeexisting_does_not_update_user_when_ei_updated_at_is_older"
   },
   {
     "test_name": "16_mergeExisting_updates_user_with_trx",
@@ -3021,7 +3356,8 @@
     "ts_end": 325,
     "py_file": "storage/entities/test_users.py",
     "py_start": 369,
-    "py_end": 419
+    "py_end": 419,
+    "py_function_name": "test_mergeexisting_updates_user_with_trx"
   },
   {
     "test_name": "17_mergeNew_always_throws_error",
@@ -3030,7 +3366,8 @@
     "ts_end": 339,
     "py_file": "storage/entities/test_users.py",
     "py_start": 420,
-    "py_end": 438
+    "py_end": 438,
+    "py_function_name": "test_mergenew_always_throws_error"
   },
   {
     "test_name": "1_creates_user_with_default_values",
@@ -3039,7 +3376,8 @@
     "ts_end": 42,
     "py_file": "storage/entities/test_users.py",
     "py_start": 18,
-    "py_end": 36
+    "py_end": 36,
+    "py_function_name": "test_creates_user_with_default_values"
   },
   {
     "test_name": "2_creates_user_with_provided_api_object",
@@ -3048,7 +3386,8 @@
     "ts_end": 61,
     "py_file": "storage/entities/test_users.py",
     "py_start": 37,
-    "py_end": 64
+    "py_end": 64,
+    "py_function_name": "test_creates_user_with_provided_api_object"
   },
   {
     "test_name": "3_getters_and_setters_work_correctly",
@@ -3057,7 +3396,8 @@
     "ts_end": 81,
     "py_file": "storage/entities/test_transaction.py",
     "py_start": 90,
-    "py_end": 134
+    "py_end": 134,
+    "py_function_name": "test_getters_and_setters_work_correctly"
   },
   {
     "test_name": "5_equals_identifies_matching_entities",
@@ -3066,7 +3406,8 @@
     "ts_end": 113,
     "py_file": "storage/entities/test_proven_tx_req.py",
     "py_start": 181,
-    "py_end": 225
+    "py_end": 225,
+    "py_function_name": "test_equals_identifies_matching_entities"
   },
   {
     "test_name": "6_equals_identifies_non_matching_entities",
@@ -3075,7 +3416,8 @@
     "ts_end": 145,
     "py_file": "storage/entities/test_output.py",
     "py_start": 60,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_equals_identifies_non_matching_entities"
   },
   {
     "test_name": "7_handles_edge_cases_in_constructor",
@@ -3084,7 +3426,8 @@
     "ts_end": 165,
     "py_file": "storage/entities/test_users.py",
     "py_start": 158,
-    "py_end": 181
+    "py_end": 181,
+    "py_function_name": "test_handles_edge_cases_in_constructor"
   },
   {
     "test_name": "8_handles_large_input_values",
@@ -3093,7 +3436,8 @@
     "ts_end": 184,
     "py_file": "storage/entities/test_users.py",
     "py_start": 182,
-    "py_end": 210
+    "py_end": 210,
+    "py_function_name": "test_handles_large_input_values"
   },
   {
     "test_name": "0 convert from Uint8Array",
@@ -3102,7 +3446,8 @@
     "ts_end": 29,
     "py_file": "utils/test_utility_helpers_no_buffer.py",
     "py_start": 26,
-    "py_end": 57
+    "py_end": 57,
+    "py_function_name": "test_convert_from_uint8array"
   },
   {
     "test_name": "1 convert from number[]",
@@ -3111,7 +3456,8 @@
     "ts_end": 54,
     "py_file": "utils/test_utility_helpers_no_buffer.py",
     "py_start": 59,
-    "py_end": 90
+    "py_end": 90,
+    "py_function_name": "test_convert_from_number_array"
   },
   {
     "test_name": "2 convert from hex string",
@@ -3120,7 +3466,8 @@
     "ts_end": 83,
     "py_file": "utils/test_utility_helpers_no_buffer.py",
     "py_start": 92,
-    "py_end": 127
+    "py_end": 127,
+    "py_function_name": "test_convert_from_hex_string"
   },
   {
     "test_name": "3 convert from utf8 string",
@@ -3129,7 +3476,8 @@
     "ts_end": 108,
     "py_file": "utils/test_utility_helpers_no_buffer.py",
     "py_start": 129,
-    "py_end": 159
+    "py_end": 159,
+    "py_function_name": "test_convert_from_utf8_string"
   },
   {
     "test_name": "00",
@@ -3138,7 +3486,8 @@
     "ts_end": 17,
     "py_file": "wallet/test_certificates.py",
     "py_start": 22,
-    "py_end": 31
+    "py_end": 31,
+    "py_function_name": "test_00"
   },
   {
     "test_name": "0 invalid params",
@@ -3147,7 +3496,8 @@
     "ts_end": 34,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "0_invalid_params",
@@ -3156,7 +3506,8 @@
     "ts_end": 68,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "1_repeatable txid",
@@ -3165,7 +3516,8 @@
     "ts_end": 94,
     "py_file": "wallet/test_wallet_create_action.py",
     "py_start": 70,
-    "py_end": 102
+    "py_end": 102,
+    "py_function_name": "test_repeatable_txid"
   },
   {
     "test_name": "2_signableTransaction",
@@ -3174,7 +3526,8 @@
     "ts_end": 235,
     "py_file": "wallet/test_wallet_create_action.py",
     "py_start": 103,
-    "py_end": 138
+    "py_end": 138,
+    "py_function_name": "test_signable_transaction"
   },
   {
     "test_name": "0 invalid params",
@@ -3183,7 +3536,8 @@
     "ts_end": 46,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "00",
@@ -3192,7 +3546,8 @@
     "ts_end": 15,
     "py_file": "wallet/test_certificates.py",
     "py_start": 22,
-    "py_end": 31
+    "py_end": 31,
+    "py_function_name": "test_00"
   },
   {
     "test_name": "1 invalid params",
@@ -3201,7 +3556,8 @@
     "ts_end": 42,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "2 acquireCertificate listCertificate proveCertificate",
@@ -3210,7 +3566,8 @@
     "ts_end": 141,
     "py_file": "wallet/test_certificates.py",
     "py_start": 49,
-    "py_end": 124
+    "py_end": 124,
+    "py_function_name": "test_acquirecertificate_listcertificate_provecertificate"
   },
   {
     "test_name": "3 privileged acquireCertificate listCertificate proveCertificate",
@@ -3219,7 +3576,8 @@
     "ts_end": 248,
     "py_file": "wallet/test_certificates.py",
     "py_start": 125,
-    "py_end": 208
+    "py_end": 208,
+    "py_function_name": "test_privileged_acquirecertificate_listcertificate_provecertificate"
   },
   {
     "test_name": "0 invalid params",
@@ -3228,7 +3586,8 @@
     "ts_end": 34,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "0 should return an empty array when no txids are provided",
@@ -3237,7 +3596,8 @@
     "ts_end": 31,
     "py_file": "unit/test_wallet_getknowntxids.py",
     "py_start": 23,
-    "py_end": 39
+    "py_end": 39,
+    "py_function_name": "test_returns_empty_array_when_no_txids_provided"
   },
   {
     "test_name": "2 should avoid duplicating txids",
@@ -3246,7 +3606,8 @@
     "ts_end": 59,
     "py_file": "unit/test_wallet_getknowntxids.py",
     "py_start": 64,
-    "py_end": 89
+    "py_end": 89,
+    "py_function_name": "test_avoids_duplicating_txids"
   },
   {
     "test_name": "4 should handle invalid txids gracefully",
@@ -3255,7 +3616,8 @@
     "ts_end": 85,
     "py_file": "unit/test_wallet_getknowntxids.py",
     "py_start": 114,
-    "py_end": 136
+    "py_end": 136,
+    "py_function_name": "test_handles_invalid_txids_gracefully"
   },
   {
     "test_name": "should return the correct wallet version",
@@ -3264,7 +3626,8 @@
     "ts_end": 26,
     "py_file": "unit/test_wallet_getversion.py",
     "py_start": 14,
-    "py_end": 29
+    "py_end": 29,
+    "py_function_name": "test_returns_correct_wallet_version"
   },
   {
     "test_name": "0 invalid params",
@@ -3273,7 +3636,8 @@
     "ts_end": 45,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "1 all actions",
@@ -3282,7 +3646,8 @@
     "ts_end": 65,
     "py_file": "wallet/test_list_actions.py",
     "py_start": 30,
-    "py_end": 55
+    "py_end": 55,
+    "py_function_name": "test_all_actions"
   },
   {
     "test_name": "2 non-existing label with any",
@@ -3291,7 +3656,8 @@
     "ts_end": 80,
     "py_file": "wallet/test_list_actions.py",
     "py_start": 56,
-    "py_end": 75
+    "py_end": 75,
+    "py_function_name": "test_non_existing_label_with_any"
   },
   {
     "test_name": "0 invalid params",
@@ -3300,7 +3666,8 @@
     "ts_end": 36,
     "py_file": "wallet/test_certificates.py",
     "py_start": 32,
-    "py_end": 48
+    "py_end": 48,
+    "py_function_name": "test_invalid_params"
   },
   {
     "test_name": "0 invalid params with originator",
@@ -3309,7 +3676,8 @@
     "ts_end": 73,
     "py_file": "wallet/test_list_outputs.py",
     "py_start": 106,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_valid_params_with_originator"
   },
   {
     "test_name": "1 valid params with originator",
@@ -3318,7 +3686,8 @@
     "ts_end": 97,
     "py_file": "wallet/test_list_outputs.py",
     "py_start": 106,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_valid_params_with_originator"
   },
   {
     "test_name": "00",
@@ -3327,7 +3696,8 @@
     "ts_end": 93,
     "py_file": "wallet/test_certificates.py",
     "py_start": 22,
-    "py_end": 31
+    "py_end": 31,
+    "py_function_name": "test_00"
   },
   {
     "test_name": "00",
@@ -3336,7 +3706,8 @@
     "ts_end": 14,
     "py_file": "wallet/test_certificates.py",
     "py_start": 22,
-    "py_end": 31
+    "py_end": 31,
+    "py_function_name": "test_00"
   },
   {
     "test_name": "1a setActive to backup and back to original without backup first",
@@ -3345,7 +3716,8 @@
     "ts_end": 71,
     "py_file": "wallet/test_sync.py",
     "py_start": 77,
-    "py_end": 114
+    "py_end": 114,
+    "py_function_name": "test_set_active_to_backup_and_back_without_backup_first"
   },
   {
     "test_name": "1b setActive to backup and back to original with backup first",
@@ -3354,7 +3726,8 @@
     "ts_end": 89,
     "py_file": "wallet/test_sync.py",
     "py_start": 115,
-    "py_end": 151
+    "py_end": 151,
+    "py_function_name": "test_set_active_to_backup_and_back_with_backup_first"
   },
   {
     "test_name": "0 get non-existent",
@@ -3363,7 +3736,8 @@
     "ts_end": 31,
     "py_file": "integration/test_local_kv_store.py",
     "py_start": 31,
-    "py_end": 49
+    "py_end": 49,
+    "py_function_name": "test_get_non_existent"
   },
   {
     "test_name": "1 set get",
@@ -3372,7 +3746,8 @@
     "ts_end": 41,
     "py_file": "integration/test_local_kv_store.py",
     "py_start": 52,
-    "py_end": 74
+    "py_end": 74,
+    "py_function_name": "test_set_get"
   },
   {
     "test_name": "3 set x 4 get",
@@ -3381,7 +3756,8 @@
     "ts_end": 57,
     "py_file": "integration/test_local_kv_store.py",
     "py_start": 77,
-    "py_end": 108
+    "py_end": 108,
+    "py_function_name": "test_set_x_4_get"
   },
   {
     "test_name": "5 set x 4 get set x 4 get",
@@ -3390,7 +3766,8 @@
     "ts_end": 101,
     "py_file": "integration/test_local_kv_store.py",
     "py_start": 111,
-    "py_end": 149
+    "py_end": 149,
+    "py_function_name": "test_set_x_4_get_set_x_4_get"
   },
   {
     "test_name": "0 TaskClock",
@@ -3399,7 +3776,8 @@
     "ts_end": 58,
     "py_file": "monitor/test_monitor.py",
     "py_start": 181,
-    "py_end": 213
+    "py_end": 213,
+    "py_function_name": "test_taskclock"
   },
   {
     "test_name": "1 TaskNewHeader",
@@ -3408,7 +3786,8 @@
     "ts_end": 81,
     "py_file": "monitor/test_monitor.py",
     "py_start": 215,
-    "py_end": 245
+    "py_end": 245,
+    "py_function_name": "test_tasknewheader"
   },
   {
     "test_name": "3 TaskSendWaiting success",
@@ -3417,7 +3796,8 @@
     "ts_end": 117,
     "py_file": "monitor/test_monitor.py",
     "py_start": 247,
-    "py_end": 311
+    "py_end": 311,
+    "py_function_name": "test_tasksendwaiting_success"
   },
   {
     "test_name": "5 TaskCheckForProofs success",
@@ -3426,7 +3806,8 @@
     "ts_end": 183,
     "py_file": "monitor/test_monitor.py",
     "py_start": 313,
-    "py_end": 384
+    "py_end": 384,
+    "py_function_name": "test_taskcheckforproofs_success"
   },
   {
     "test_name": "6 TaskCheckForProofs fail",
@@ -3435,7 +3816,8 @@
     "ts_end": 239,
     "py_file": "monitor/test_monitor.py",
     "py_start": 386,
-    "py_end": 443
+    "py_end": 443,
+    "py_function_name": "test_taskcheckforproofs_fail"
   },
   {
     "test_name": "7 TaskReviewStatus",
@@ -3444,7 +3826,8 @@
     "ts_end": 492,
     "py_file": "monitor/test_monitor.py",
     "py_start": 445,
-    "py_end": 475
+    "py_end": 475,
+    "py_function_name": "test_taskreviewstatus"
   },
   {
     "test_name": "8 ProcessProvenTransaction",
@@ -3453,7 +3836,8 @@
     "ts_end": 562,
     "py_file": "monitor/test_monitor.py",
     "py_start": 477,
-    "py_end": 562
+    "py_end": 562,
+    "py_function_name": "test_processproventransaction"
   },
   {
     "test_name": "9 ProcessBroadcastedTransactions",
@@ -3462,7 +3846,8 @@
     "ts_end": 614,
     "py_file": "monitor/test_monitor.py",
     "py_start": 564,
-    "py_end": 625
+    "py_end": 625,
+    "py_function_name": "test_processbroadcastedtransactions"
   },
   {
     "test_name": "4 getMerklePath",
@@ -3471,7 +3856,8 @@
     "ts_end": 210,
     "py_file": "services/test_get_merkle_path.py",
     "py_start": 30,
-    "py_end": 50
+    "py_end": 50,
+    "py_function_name": "test_get_merkle_path"
   },
   {
     "test_name": "5 getRawTx",
@@ -3480,7 +3866,8 @@
     "ts_end": 221,
     "py_file": "services/test_get_raw_tx.py",
     "py_start": 32,
-    "py_end": 61
+    "py_end": 61,
+    "py_function_name": "test_get_raw_tx"
   },
   {
     "test_name": "0 count ProvenTx",
@@ -3489,7 +3876,8 @@
     "ts_end": 53,
     "py_file": "storage/test_count.py",
     "py_start": 12,
-    "py_end": 29
+    "py_end": 29,
+    "py_function_name": "test_count_proventx"
   },
   {
     "test_name": "1 count ProvenTxReq",
@@ -3498,7 +3886,8 @@
     "ts_end": 59,
     "py_file": "storage/test_count.py",
     "py_start": 30,
-    "py_end": 47
+    "py_end": 47,
+    "py_function_name": "test_count_proventxreq"
   },
   {
     "test_name": "10 count OutputTagMap",
@@ -3507,7 +3896,8 @@
     "ts_end": 152,
     "py_file": "storage/test_count.py",
     "py_start": 212,
-    "py_end": 229
+    "py_end": 229,
+    "py_function_name": "test_count_outputtagmap"
   },
   {
     "test_name": "11 count TxLabel",
@@ -3516,7 +3906,8 @@
     "ts_end": 158,
     "py_file": "storage/test_count.py",
     "py_start": 230,
-    "py_end": 247
+    "py_end": 247,
+    "py_function_name": "test_count_txlabel"
   },
   {
     "test_name": "12 count TxLabelMap",
@@ -3525,7 +3916,8 @@
     "ts_end": 164,
     "py_file": "storage/test_count.py",
     "py_start": 248,
-    "py_end": 265
+    "py_end": 265,
+    "py_function_name": "test_count_txlabelmap"
   },
   {
     "test_name": "13 count MonitorEvent",
@@ -3534,7 +3926,8 @@
     "ts_end": 170,
     "py_file": "storage/test_count.py",
     "py_start": 266,
-    "py_end": 285
+    "py_end": 285,
+    "py_function_name": "test_count_monitorevent"
   },
   {
     "test_name": "14 count SyncState",
@@ -3543,7 +3936,8 @@
     "ts_end": 176,
     "py_file": "storage/test_count.py",
     "py_start": 286,
-    "py_end": 304
+    "py_end": 304,
+    "py_function_name": "test_count_syncstate"
   },
   {
     "test_name": "2 count User",
@@ -3552,7 +3946,8 @@
     "ts_end": 65,
     "py_file": "storage/test_count.py",
     "py_start": 48,
-    "py_end": 65
+    "py_end": 65,
+    "py_function_name": "test_count_user"
   },
   {
     "test_name": "3 count Certificate",
@@ -3561,7 +3956,8 @@
     "ts_end": 85,
     "py_file": "storage/test_count.py",
     "py_start": 66,
-    "py_end": 91
+    "py_end": 91,
+    "py_function_name": "test_count_certificate"
   },
   {
     "test_name": "4 count CertificateField",
@@ -3570,7 +3966,8 @@
     "ts_end": 109,
     "py_file": "storage/test_count.py",
     "py_start": 92,
-    "py_end": 117
+    "py_end": 117,
+    "py_function_name": "test_count_certificatefield"
   },
   {
     "test_name": "5 count OutputBasket",
@@ -3579,7 +3976,8 @@
     "ts_end": 122,
     "py_file": "storage/test_count.py",
     "py_start": 118,
-    "py_end": 139
+    "py_end": 139,
+    "py_function_name": "test_count_outputbasket"
   },
   {
     "test_name": "6 count Transaction",
@@ -3588,7 +3986,8 @@
     "ts_end": 128,
     "py_file": "storage/test_count.py",
     "py_start": 140,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_count_transaction"
   },
   {
     "test_name": "7 count Commission",
@@ -3597,7 +3996,8 @@
     "ts_end": 134,
     "py_file": "storage/test_count.py",
     "py_start": 158,
-    "py_end": 175
+    "py_end": 175,
+    "py_function_name": "test_count_commission"
   },
   {
     "test_name": "8 count Output",
@@ -3606,7 +4006,8 @@
     "ts_end": 140,
     "py_file": "storage/test_count.py",
     "py_start": 176,
-    "py_end": 193
+    "py_end": 193,
+    "py_function_name": "test_count_output"
   },
   {
     "test_name": "9 count OutputTag",
@@ -3615,7 +4016,8 @@
     "ts_end": 146,
     "py_file": "storage/test_count.py",
     "py_start": 194,
-    "py_end": 211
+    "py_end": 211,
+    "py_function_name": "test_count_outputtag"
   },
   {
     "test_name": "0 find ProvenTx",
@@ -3624,7 +4026,8 @@
     "ts_end": 53,
     "py_file": "storage/test_find.py",
     "py_start": 4,
-    "py_end": 10
+    "py_end": 10,
+    "py_function_name": "test_find_proventx"
   },
   {
     "test_name": "1 find ProvenTxReq",
@@ -3633,7 +4036,8 @@
     "ts_end": 59,
     "py_file": "storage/test_find.py",
     "py_start": 11,
-    "py_end": 23
+    "py_end": 23,
+    "py_function_name": "test_find_proventxreq"
   },
   {
     "test_name": "10 find OutputTagMap",
@@ -3642,7 +4046,8 @@
     "ts_end": 170,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 147,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_find_outputtagmap"
   },
   {
     "test_name": "11 find TxLabel",
@@ -3651,7 +4056,8 @@
     "ts_end": 176,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 158,
-    "py_end": 168
+    "py_end": 168,
+    "py_function_name": "test_find_txlabel"
   },
   {
     "test_name": "12 find TxLabelMap",
@@ -3660,7 +4066,8 @@
     "ts_end": 182,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 169,
-    "py_end": 179
+    "py_end": 179,
+    "py_function_name": "test_find_txlabelmap"
   },
   {
     "test_name": "13 find MonitorEvent",
@@ -3669,7 +4076,8 @@
     "ts_end": 188,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 180,
-    "py_end": 190
+    "py_end": 190,
+    "py_function_name": "test_find_monitorevent"
   },
   {
     "test_name": "14 find SyncState",
@@ -3678,7 +4086,8 @@
     "ts_end": 194,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 191,
-    "py_end": 200
+    "py_end": 200,
+    "py_function_name": "test_find_syncstate"
   },
   {
     "test_name": "2 find User",
@@ -3687,7 +4096,8 @@
     "ts_end": 65,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 42,
-    "py_end": 52
+    "py_end": 52,
+    "py_function_name": "test_find_user"
   },
   {
     "test_name": "3 find Certificate",
@@ -3696,7 +4106,8 @@
     "ts_end": 89,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 53,
-    "py_end": 63
+    "py_end": 63,
+    "py_function_name": "test_find_certificate"
   },
   {
     "test_name": "4 find CertificateField",
@@ -3705,7 +4116,8 @@
     "ts_end": 125,
     "py_file": "storage/test_find.py",
     "py_start": 47,
-    "py_end": 61
+    "py_end": 61,
+    "py_function_name": "test_find_certificate_fields"
   },
   {
     "test_name": "5 find OutputBasket",
@@ -3714,7 +4126,8 @@
     "ts_end": 140,
     "py_file": "storage/test_find.py",
     "py_start": 62,
-    "py_end": 85
+    "py_end": 85,
+    "py_function_name": "test_find_output_baskets"
   },
   {
     "test_name": "6 find Transaction",
@@ -3723,7 +4136,8 @@
     "ts_end": 146,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 86,
-    "py_end": 96
+    "py_end": 96,
+    "py_function_name": "test_find_transaction"
   },
   {
     "test_name": "7 find Commission",
@@ -3732,7 +4146,8 @@
     "ts_end": 152,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 97,
-    "py_end": 107
+    "py_end": 107,
+    "py_function_name": "test_find_commission"
   },
   {
     "test_name": "8 find Output",
@@ -3741,7 +4156,8 @@
     "ts_end": 158,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 108,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_find_output"
   },
   {
     "test_name": "9 find OutputTag",
@@ -3750,7 +4166,8 @@
     "ts_end": 164,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 136,
-    "py_end": 146
+    "py_end": 146,
+    "py_function_name": "test_find_outputtag"
   },
   {
     "test_name": "0 find ProvenTx",
@@ -3759,7 +4176,8 @@
     "ts_end": 23,
     "py_file": "storage/test_find.py",
     "py_start": 4,
-    "py_end": 10
+    "py_end": 10,
+    "py_function_name": "test_find_proventx"
   },
   {
     "test_name": "1 find ProvenTxReq",
@@ -3768,7 +4186,8 @@
     "ts_end": 28,
     "py_file": "storage/test_find.py",
     "py_start": 11,
-    "py_end": 23
+    "py_end": 23,
+    "py_function_name": "test_find_proventxreq"
   },
   {
     "test_name": "10 find OutputTagMap",
@@ -3777,7 +4196,8 @@
     "ts_end": 58,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 147,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_find_outputtagmap"
   },
   {
     "test_name": "11 find TxLabel",
@@ -3786,7 +4206,8 @@
     "ts_end": 60,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 158,
-    "py_end": 168
+    "py_end": 168,
+    "py_function_name": "test_find_txlabel"
   },
   {
     "test_name": "12 find TxLabelMap",
@@ -3795,7 +4216,8 @@
     "ts_end": 62,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 169,
-    "py_end": 179
+    "py_end": 179,
+    "py_function_name": "test_find_txlabelmap"
   },
   {
     "test_name": "13 find MonitorEvent",
@@ -3804,7 +4226,8 @@
     "ts_end": 64,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 180,
-    "py_end": 190
+    "py_end": 190,
+    "py_function_name": "test_find_monitorevent"
   },
   {
     "test_name": "14 find SyncState",
@@ -3813,7 +4236,8 @@
     "ts_end": 66,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 191,
-    "py_end": 200
+    "py_end": 200,
+    "py_function_name": "test_find_syncstate"
   },
   {
     "test_name": "2 find User",
@@ -3822,7 +4246,8 @@
     "ts_end": 30,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 42,
-    "py_end": 52
+    "py_end": 52,
+    "py_function_name": "test_find_user"
   },
   {
     "test_name": "3 find Certificate",
@@ -3831,7 +4256,8 @@
     "ts_end": 32,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 53,
-    "py_end": 63
+    "py_end": 63,
+    "py_function_name": "test_find_certificate"
   },
   {
     "test_name": "4 find CertificateField",
@@ -3840,7 +4266,8 @@
     "ts_end": 34,
     "py_file": "storage/test_find.py",
     "py_start": 47,
-    "py_end": 61
+    "py_end": 61,
+    "py_function_name": "test_find_certificate_fields"
   },
   {
     "test_name": "5 find OutputBasket",
@@ -3849,7 +4276,8 @@
     "ts_end": 36,
     "py_file": "storage/test_find.py",
     "py_start": 62,
-    "py_end": 85
+    "py_end": 85,
+    "py_function_name": "test_find_output_baskets"
   },
   {
     "test_name": "6 find Transaction",
@@ -3858,7 +4286,8 @@
     "ts_end": 38,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 86,
-    "py_end": 96
+    "py_end": 96,
+    "py_function_name": "test_find_transaction"
   },
   {
     "test_name": "7 find Commission",
@@ -3867,7 +4296,8 @@
     "ts_end": 40,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 97,
-    "py_end": 107
+    "py_end": 107,
+    "py_function_name": "test_find_commission"
   },
   {
     "test_name": "8 find Output",
@@ -3876,7 +4306,8 @@
     "ts_end": 54,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 108,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_find_output"
   },
   {
     "test_name": "9 find OutputTag",
@@ -3885,7 +4316,8 @@
     "ts_end": 56,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 136,
-    "py_end": 146
+    "py_end": 146,
+    "py_function_name": "test_find_outputtag"
   },
   {
     "test_name": "0 count ProvenTx",
@@ -3894,7 +4326,8 @@
     "ts_end": 34,
     "py_file": "storage/test_count.py",
     "py_start": 12,
-    "py_end": 29
+    "py_end": 29,
+    "py_function_name": "test_count_proventx"
   },
   {
     "test_name": "1 count ProvenTxReq",
@@ -3903,7 +4336,8 @@
     "ts_end": 40,
     "py_file": "storage/test_count.py",
     "py_start": 30,
-    "py_end": 47
+    "py_end": 47,
+    "py_function_name": "test_count_proventxreq"
   },
   {
     "test_name": "10 count OutputTagMap",
@@ -3912,7 +4346,8 @@
     "ts_end": 133,
     "py_file": "storage/test_count.py",
     "py_start": 212,
-    "py_end": 229
+    "py_end": 229,
+    "py_function_name": "test_count_outputtagmap"
   },
   {
     "test_name": "11 count TxLabel",
@@ -3921,7 +4356,8 @@
     "ts_end": 139,
     "py_file": "storage/test_count.py",
     "py_start": 230,
-    "py_end": 247
+    "py_end": 247,
+    "py_function_name": "test_count_txlabel"
   },
   {
     "test_name": "12 count TxLabelMap",
@@ -3930,7 +4366,8 @@
     "ts_end": 145,
     "py_file": "storage/test_count.py",
     "py_start": 248,
-    "py_end": 265
+    "py_end": 265,
+    "py_function_name": "test_count_txlabelmap"
   },
   {
     "test_name": "13 count MonitorEvent",
@@ -3939,7 +4376,8 @@
     "ts_end": 151,
     "py_file": "storage/test_count.py",
     "py_start": 266,
-    "py_end": 285
+    "py_end": 285,
+    "py_function_name": "test_count_monitorevent"
   },
   {
     "test_name": "14 count SyncState",
@@ -3948,7 +4386,8 @@
     "ts_end": 157,
     "py_file": "storage/test_count.py",
     "py_start": 286,
-    "py_end": 304
+    "py_end": 304,
+    "py_function_name": "test_count_syncstate"
   },
   {
     "test_name": "2 count User",
@@ -3957,7 +4396,8 @@
     "ts_end": 46,
     "py_file": "storage/test_count.py",
     "py_start": 48,
-    "py_end": 65
+    "py_end": 65,
+    "py_function_name": "test_count_user"
   },
   {
     "test_name": "3 count Certificate",
@@ -3966,7 +4406,8 @@
     "ts_end": 66,
     "py_file": "storage/test_count.py",
     "py_start": 66,
-    "py_end": 91
+    "py_end": 91,
+    "py_function_name": "test_count_certificate"
   },
   {
     "test_name": "4 count CertificateField",
@@ -3975,7 +4416,8 @@
     "ts_end": 90,
     "py_file": "storage/test_count.py",
     "py_start": 92,
-    "py_end": 117
+    "py_end": 117,
+    "py_function_name": "test_count_certificatefield"
   },
   {
     "test_name": "5 count OutputBasket",
@@ -3984,7 +4426,8 @@
     "ts_end": 103,
     "py_file": "storage/test_count.py",
     "py_start": 118,
-    "py_end": 139
+    "py_end": 139,
+    "py_function_name": "test_count_outputbasket"
   },
   {
     "test_name": "6 count Transaction",
@@ -3993,7 +4436,8 @@
     "ts_end": 109,
     "py_file": "storage/test_count.py",
     "py_start": 140,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_count_transaction"
   },
   {
     "test_name": "7 count Commission",
@@ -4002,7 +4446,8 @@
     "ts_end": 115,
     "py_file": "storage/test_count.py",
     "py_start": 158,
-    "py_end": 175
+    "py_end": 175,
+    "py_function_name": "test_count_commission"
   },
   {
     "test_name": "8 count Output",
@@ -4011,7 +4456,8 @@
     "ts_end": 121,
     "py_file": "storage/test_count.py",
     "py_start": 176,
-    "py_end": 193
+    "py_end": 193,
+    "py_function_name": "test_count_output"
   },
   {
     "test_name": "9 count OutputTag",
@@ -4020,7 +4466,8 @@
     "ts_end": 127,
     "py_file": "storage/test_count.py",
     "py_start": 194,
-    "py_end": 211
+    "py_end": 211,
+    "py_function_name": "test_count_outputtag"
   },
   {
     "test_name": "0 find ProvenTx",
@@ -4029,7 +4476,8 @@
     "ts_end": 35,
     "py_file": "storage/test_find.py",
     "py_start": 4,
-    "py_end": 10
+    "py_end": 10,
+    "py_function_name": "test_find_proventx"
   },
   {
     "test_name": "1 find ProvenTxReq",
@@ -4038,7 +4486,8 @@
     "ts_end": 41,
     "py_file": "storage/test_find.py",
     "py_start": 11,
-    "py_end": 23
+    "py_end": 23,
+    "py_function_name": "test_find_proventxreq"
   },
   {
     "test_name": "10 find OutputTagMap",
@@ -4047,7 +4496,8 @@
     "ts_end": 152,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 147,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_find_outputtagmap"
   },
   {
     "test_name": "11 find TxLabel",
@@ -4056,7 +4506,8 @@
     "ts_end": 158,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 158,
-    "py_end": 168
+    "py_end": 168,
+    "py_function_name": "test_find_txlabel"
   },
   {
     "test_name": "12 find TxLabelMap",
@@ -4065,7 +4516,8 @@
     "ts_end": 164,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 169,
-    "py_end": 179
+    "py_end": 179,
+    "py_function_name": "test_find_txlabelmap"
   },
   {
     "test_name": "13 find MonitorEvent",
@@ -4074,7 +4526,8 @@
     "ts_end": 170,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 180,
-    "py_end": 190
+    "py_end": 190,
+    "py_function_name": "test_find_monitorevent"
   },
   {
     "test_name": "14 find SyncState",
@@ -4083,7 +4536,8 @@
     "ts_end": 176,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 191,
-    "py_end": 200
+    "py_end": 200,
+    "py_function_name": "test_find_syncstate"
   },
   {
     "test_name": "2 find User",
@@ -4092,7 +4546,8 @@
     "ts_end": 47,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 42,
-    "py_end": 52
+    "py_end": 52,
+    "py_function_name": "test_find_user"
   },
   {
     "test_name": "3 find Certificate",
@@ -4101,7 +4556,8 @@
     "ts_end": 71,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 53,
-    "py_end": 63
+    "py_end": 63,
+    "py_function_name": "test_find_certificate"
   },
   {
     "test_name": "4 find CertificateField",
@@ -4110,7 +4566,8 @@
     "ts_end": 107,
     "py_file": "storage/test_find.py",
     "py_start": 47,
-    "py_end": 61
+    "py_end": 61,
+    "py_function_name": "test_find_certificate_fields"
   },
   {
     "test_name": "5 find OutputBasket",
@@ -4119,7 +4576,8 @@
     "ts_end": 122,
     "py_file": "storage/test_find.py",
     "py_start": 62,
-    "py_end": 85
+    "py_end": 85,
+    "py_function_name": "test_find_output_baskets"
   },
   {
     "test_name": "6 find Transaction",
@@ -4128,7 +4586,8 @@
     "ts_end": 128,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 86,
-    "py_end": 96
+    "py_end": 96,
+    "py_function_name": "test_find_transaction"
   },
   {
     "test_name": "7 find Commission",
@@ -4137,7 +4596,8 @@
     "ts_end": 134,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 97,
-    "py_end": 107
+    "py_end": 107,
+    "py_function_name": "test_find_commission"
   },
   {
     "test_name": "8 find Output",
@@ -4146,7 +4606,8 @@
     "ts_end": 140,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 108,
-    "py_end": 135
+    "py_end": 135,
+    "py_function_name": "test_find_output"
   },
   {
     "test_name": "9 find OutputTag",
@@ -4155,7 +4616,8 @@
     "ts_end": 146,
     "py_file": "storage/test_find_legacy.py",
     "py_start": 136,
-    "py_end": 146
+    "py_end": 146,
+    "py_function_name": "test_find_outputtag"
   },
   {
     "test_name": "0 insert ProvenTx",
@@ -4164,7 +4626,8 @@
     "ts_end": 53,
     "py_file": "storage/test_insert.py",
     "py_start": 34,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_insert_proventx"
   },
   {
     "test_name": "1 insert ProvenTxReq",
@@ -4173,7 +4636,8 @@
     "ts_end": 67,
     "py_file": "storage/test_insert.py",
     "py_start": 60,
-    "py_end": 83
+    "py_end": 83,
+    "py_function_name": "test_insert_proventxreq"
   },
   {
     "test_name": "10 insert OutputTagMap",
@@ -4182,7 +4646,8 @@
     "ts_end": 218,
     "py_file": "storage/test_insert.py",
     "py_start": 289,
-    "py_end": 339
+    "py_end": 339,
+    "py_function_name": "test_insert_outputtagmap"
   },
   {
     "test_name": "11 insert TxLabel",
@@ -4191,7 +4656,8 @@
     "ts_end": 236,
     "py_file": "storage/test_insert.py",
     "py_start": 340,
-    "py_end": 358
+    "py_end": 358,
+    "py_function_name": "test_insert_txlabel"
   },
   {
     "test_name": "12 insert TxLabelMap",
@@ -4200,7 +4666,8 @@
     "ts_end": 250,
     "py_file": "storage/test_insert.py",
     "py_start": 359,
-    "py_end": 397
+    "py_end": 397,
+    "py_function_name": "test_insert_txlabelmap"
   },
   {
     "test_name": "13 insert MonitorEvent",
@@ -4209,7 +4676,8 @@
     "ts_end": 258,
     "py_file": "storage/test_insert.py",
     "py_start": 398,
-    "py_end": 414
+    "py_end": 414,
+    "py_function_name": "test_insert_monitorevent"
   },
   {
     "test_name": "14 insert SyncState",
@@ -4218,7 +4686,8 @@
     "ts_end": 267,
     "py_file": "storage/test_insert.py",
     "py_start": 415,
-    "py_end": 433
+    "py_end": 433,
+    "py_function_name": "test_insert_syncstate"
   },
   {
     "test_name": "2 insert User",
@@ -4227,7 +4696,8 @@
     "ts_end": 83,
     "py_file": "storage/test_insert.py",
     "py_start": 84,
-    "py_end": 96
+    "py_end": 96,
+    "py_function_name": "test_insert_user"
   },
   {
     "test_name": "3 insert Certificate",
@@ -4236,7 +4706,8 @@
     "ts_end": 98,
     "py_file": "storage/test_insert.py",
     "py_start": 97,
-    "py_end": 121
+    "py_end": 121,
+    "py_function_name": "test_insert_certificate"
   },
   {
     "test_name": "4 insert CertificateField",
@@ -4245,7 +4716,8 @@
     "ts_end": 114,
     "py_file": "storage/test_insert.py",
     "py_start": 122,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_insert_certificatefield"
   },
   {
     "test_name": "5 insert OutputBasket",
@@ -4254,7 +4726,8 @@
     "ts_end": 130,
     "py_file": "storage/test_insert.py",
     "py_start": 158,
-    "py_end": 178
+    "py_end": 178,
+    "py_function_name": "test_insert_outputbasket"
   },
   {
     "test_name": "6 insert Transaction",
@@ -4263,7 +4736,8 @@
     "ts_end": 146,
     "py_file": "storage/test_insert.py",
     "py_start": 179,
-    "py_end": 201
+    "py_end": 201,
+    "py_function_name": "test_insert_transaction"
   },
   {
     "test_name": "7 insert Commission",
@@ -4272,7 +4746,8 @@
     "ts_end": 165,
     "py_file": "storage/test_insert.py",
     "py_start": 202,
-    "py_end": 235
+    "py_end": 235,
+    "py_function_name": "test_insert_commission"
   },
   {
     "test_name": "8 insert Output",
@@ -4281,7 +4756,8 @@
     "ts_end": 185,
     "py_file": "storage/test_insert.py",
     "py_start": 236,
-    "py_end": 269
+    "py_end": 269,
+    "py_function_name": "test_insert_output"
   },
   {
     "test_name": "9 insert OutputTag",
@@ -4290,7 +4766,8 @@
     "ts_end": 203,
     "py_file": "storage/test_insert.py",
     "py_start": 270,
-    "py_end": 288
+    "py_end": 288,
+    "py_function_name": "test_insert_outputtag"
   },
   {
     "test_name": "0_update ProvenTx",
@@ -4299,7 +4776,8 @@
     "ts_end": 70,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "10_update OutputTag",
@@ -4308,7 +4786,8 @@
     "ts_end": 714,
     "py_file": "storage/test_update.py",
     "py_start": 203,
-    "py_end": 217
+    "py_end": 217,
+    "py_function_name": "test_update_output_tag"
   },
   {
     "test_name": "11_update OutputTagMap",
@@ -4317,7 +4796,8 @@
     "ts_end": 772,
     "py_file": "storage/test_update.py",
     "py_start": 203,
-    "py_end": 217
+    "py_end": 217,
+    "py_function_name": "test_update_output_tag"
   },
   {
     "test_name": "12_update TxLabel",
@@ -4326,7 +4806,8 @@
     "ts_end": 830,
     "py_file": "storage/test_update.py",
     "py_start": 250,
-    "py_end": 262
+    "py_end": 262,
+    "py_function_name": "test_update_tx_label"
   },
   {
     "test_name": "13_update TxLabelMap",
@@ -4335,7 +4816,8 @@
     "ts_end": 891,
     "py_file": "storage/test_update.py",
     "py_start": 250,
-    "py_end": 262
+    "py_end": 262,
+    "py_function_name": "test_update_tx_label"
   },
   {
     "test_name": "14_update MonitorEvent",
@@ -4344,7 +4826,8 @@
     "ts_end": 931,
     "py_file": "storage/test_update.py",
     "py_start": 218,
-    "py_end": 232
+    "py_end": 232,
+    "py_function_name": "test_update_monitor_event"
   },
   {
     "test_name": "15_update SyncState",
@@ -4353,7 +4836,8 @@
     "ts_end": 998,
     "py_file": "storage/test_update.py",
     "py_start": 233,
-    "py_end": 249
+    "py_end": 249,
+    "py_function_name": "test_update_sync_state"
   },
   {
     "test_name": "1_update ProvenTx",
@@ -4362,7 +4846,8 @@
     "ts_end": 164,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "2_update ProvenTxReq",
@@ -4371,7 +4856,8 @@
     "ts_end": 227,
     "py_file": "storage/test_update.py",
     "py_start": 54,
-    "py_end": 75
+    "py_end": 75,
+    "py_function_name": "test_update_proventxreq"
   },
   {
     "test_name": "3_update User",
@@ -4380,7 +4866,8 @@
     "ts_end": 268,
     "py_file": "storage/test_update.py",
     "py_start": 76,
-    "py_end": 92
+    "py_end": 92,
+    "py_function_name": "test_update_user"
   },
   {
     "test_name": "4_update Certificate",
@@ -4389,7 +4876,8 @@
     "ts_end": 340,
     "py_file": "storage/test_update.py",
     "py_start": 93,
-    "py_end": 111
+    "py_end": 111,
+    "py_function_name": "test_update_certificate"
   },
   {
     "test_name": "5_update CertificateField",
@@ -4398,7 +4886,8 @@
     "ts_end": 394,
     "py_file": "storage/test_update.py",
     "py_start": 112,
-    "py_end": 130
+    "py_end": 130,
+    "py_function_name": "test_update_certificate_field"
   },
   {
     "test_name": "6_update OutputBasket",
@@ -4407,7 +4896,8 @@
     "ts_end": 450,
     "py_file": "storage/test_update.py",
     "py_start": 131,
-    "py_end": 149
+    "py_end": 149,
+    "py_function_name": "test_update_output_basket"
   },
   {
     "test_name": "7_update Transaction",
@@ -4416,7 +4906,8 @@
     "ts_end": 501,
     "py_file": "storage/test_update.py",
     "py_start": 150,
-    "py_end": 168
+    "py_end": 168,
+    "py_function_name": "test_update_transaction"
   },
   {
     "test_name": "8_update Commission",
@@ -4425,7 +4916,8 @@
     "ts_end": 573,
     "py_file": "storage/test_update.py",
     "py_start": 169,
-    "py_end": 185
+    "py_end": 185,
+    "py_function_name": "test_update_commission"
   },
   {
     "test_name": "9_update Output",
@@ -4434,7 +4926,8 @@
     "ts_end": 652,
     "py_file": "storage/test_update.py",
     "py_start": 186,
-    "py_end": 202
+    "py_end": 202,
+    "py_function_name": "test_update_output"
   },
   {
     "test_name": "0 insert ProvenTx",
@@ -4443,7 +4936,8 @@
     "ts_end": 59,
     "py_file": "storage/test_insert.py",
     "py_start": 34,
-    "py_end": 59
+    "py_end": 59,
+    "py_function_name": "test_insert_proventx"
   },
   {
     "test_name": "1 insert ProvenTxReq",
@@ -4452,7 +4946,8 @@
     "ts_end": 76,
     "py_file": "storage/test_insert.py",
     "py_start": 60,
-    "py_end": 83
+    "py_end": 83,
+    "py_function_name": "test_insert_proventxreq"
   },
   {
     "test_name": "10 insert OutputTagMap",
@@ -4461,7 +4956,8 @@
     "ts_end": 228,
     "py_file": "storage/test_insert.py",
     "py_start": 289,
-    "py_end": 339
+    "py_end": 339,
+    "py_function_name": "test_insert_outputtagmap"
   },
   {
     "test_name": "11 insert TxLabel",
@@ -4470,7 +4966,8 @@
     "ts_end": 246,
     "py_file": "storage/test_insert.py",
     "py_start": 340,
-    "py_end": 358
+    "py_end": 358,
+    "py_function_name": "test_insert_txlabel"
   },
   {
     "test_name": "12 insert TxLabelMap",
@@ -4479,7 +4976,8 @@
     "ts_end": 260,
     "py_file": "storage/test_insert.py",
     "py_start": 359,
-    "py_end": 397
+    "py_end": 397,
+    "py_function_name": "test_insert_txlabelmap"
   },
   {
     "test_name": "13 insert MonitorEvent",
@@ -4488,7 +4986,8 @@
     "ts_end": 268,
     "py_file": "storage/test_insert.py",
     "py_start": 398,
-    "py_end": 414
+    "py_end": 414,
+    "py_function_name": "test_insert_monitorevent"
   },
   {
     "test_name": "14 insert SyncState",
@@ -4497,7 +4996,8 @@
     "ts_end": 277,
     "py_file": "storage/test_insert.py",
     "py_start": 415,
-    "py_end": 433
+    "py_end": 433,
+    "py_function_name": "test_insert_syncstate"
   },
   {
     "test_name": "2 insert User",
@@ -4506,7 +5006,8 @@
     "ts_end": 92,
     "py_file": "storage/test_insert.py",
     "py_start": 84,
-    "py_end": 96
+    "py_end": 96,
+    "py_function_name": "test_insert_user"
   },
   {
     "test_name": "3 insert Certificate",
@@ -4515,7 +5016,8 @@
     "ts_end": 108,
     "py_file": "storage/test_insert.py",
     "py_start": 97,
-    "py_end": 121
+    "py_end": 121,
+    "py_function_name": "test_insert_certificate"
   },
   {
     "test_name": "4 insert CertificateField",
@@ -4524,7 +5026,8 @@
     "ts_end": 124,
     "py_file": "storage/test_insert.py",
     "py_start": 122,
-    "py_end": 157
+    "py_end": 157,
+    "py_function_name": "test_insert_certificatefield"
   },
   {
     "test_name": "5 insert OutputBasket",
@@ -4533,7 +5036,8 @@
     "ts_end": 140,
     "py_file": "storage/test_insert.py",
     "py_start": 158,
-    "py_end": 178
+    "py_end": 178,
+    "py_function_name": "test_insert_outputbasket"
   },
   {
     "test_name": "6 insert Transaction",
@@ -4542,7 +5046,8 @@
     "ts_end": 156,
     "py_file": "storage/test_insert.py",
     "py_start": 179,
-    "py_end": 201
+    "py_end": 201,
+    "py_function_name": "test_insert_transaction"
   },
   {
     "test_name": "7 insert Commission",
@@ -4551,7 +5056,8 @@
     "ts_end": 175,
     "py_file": "storage/test_insert.py",
     "py_start": 202,
-    "py_end": 235
+    "py_end": 235,
+    "py_function_name": "test_insert_commission"
   },
   {
     "test_name": "8 insert Output",
@@ -4560,7 +5066,8 @@
     "ts_end": 195,
     "py_file": "storage/test_insert.py",
     "py_start": 236,
-    "py_end": 269
+    "py_end": 269,
+    "py_function_name": "test_insert_output"
   },
   {
     "test_name": "9 insert OutputTag",
@@ -4569,7 +5076,8 @@
     "ts_end": 213,
     "py_file": "storage/test_insert.py",
     "py_start": 270,
-    "py_end": 288
+    "py_end": 288,
+    "py_function_name": "test_insert_outputtag"
   },
   {
     "test_name": "0_update ProvenTx",
@@ -4578,7 +5086,8 @@
     "ts_end": 91,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "10_update OutputTag",
@@ -4587,7 +5096,8 @@
     "ts_end": 736,
     "py_file": "storage/test_update.py",
     "py_start": 203,
-    "py_end": 217
+    "py_end": 217,
+    "py_function_name": "test_update_output_tag"
   },
   {
     "test_name": "11_update OutputTagMap",
@@ -4596,7 +5106,8 @@
     "ts_end": 794,
     "py_file": "storage/test_update.py",
     "py_start": 203,
-    "py_end": 217
+    "py_end": 217,
+    "py_function_name": "test_update_output_tag"
   },
   {
     "test_name": "12_update TxLabel",
@@ -4605,7 +5116,8 @@
     "ts_end": 852,
     "py_file": "storage/test_update.py",
     "py_start": 250,
-    "py_end": 262
+    "py_end": 262,
+    "py_function_name": "test_update_tx_label"
   },
   {
     "test_name": "13_update TxLabelMap",
@@ -4614,7 +5126,8 @@
     "ts_end": 913,
     "py_file": "storage/test_update.py",
     "py_start": 250,
-    "py_end": 262
+    "py_end": 262,
+    "py_function_name": "test_update_tx_label"
   },
   {
     "test_name": "14_update MonitorEvent",
@@ -4623,7 +5136,8 @@
     "ts_end": 953,
     "py_file": "storage/test_update.py",
     "py_start": 218,
-    "py_end": 232
+    "py_end": 232,
+    "py_function_name": "test_update_monitor_event"
   },
   {
     "test_name": "15_update SyncState",
@@ -4632,7 +5146,8 @@
     "ts_end": 1020,
     "py_file": "storage/test_update.py",
     "py_start": 233,
-    "py_end": 249
+    "py_end": 249,
+    "py_function_name": "test_update_sync_state"
   },
   {
     "test_name": "1_update ProvenTx",
@@ -4641,7 +5156,8 @@
     "ts_end": 185,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "2_update ProvenTxReq",
@@ -4650,7 +5166,8 @@
     "ts_end": 249,
     "py_file": "storage/test_update.py",
     "py_start": 54,
-    "py_end": 75
+    "py_end": 75,
+    "py_function_name": "test_update_proventxreq"
   },
   {
     "test_name": "3_update User",
@@ -4659,7 +5176,8 @@
     "ts_end": 290,
     "py_file": "storage/test_update.py",
     "py_start": 76,
-    "py_end": 92
+    "py_end": 92,
+    "py_function_name": "test_update_user"
   },
   {
     "test_name": "4_update Certificate",
@@ -4668,7 +5186,8 @@
     "ts_end": 362,
     "py_file": "storage/test_update.py",
     "py_start": 93,
-    "py_end": 111
+    "py_end": 111,
+    "py_function_name": "test_update_certificate"
   },
   {
     "test_name": "5_update CertificateField",
@@ -4677,7 +5196,8 @@
     "ts_end": 416,
     "py_file": "storage/test_update.py",
     "py_start": 112,
-    "py_end": 130
+    "py_end": 130,
+    "py_function_name": "test_update_certificate_field"
   },
   {
     "test_name": "6_update OutputBasket",
@@ -4686,7 +5206,8 @@
     "ts_end": 472,
     "py_file": "storage/test_update.py",
     "py_start": 131,
-    "py_end": 149
+    "py_end": 149,
+    "py_function_name": "test_update_output_basket"
   },
   {
     "test_name": "7_update Transaction",
@@ -4695,7 +5216,8 @@
     "ts_end": 523,
     "py_file": "storage/test_update.py",
     "py_start": 150,
-    "py_end": 168
+    "py_end": 168,
+    "py_function_name": "test_update_transaction"
   },
   {
     "test_name": "8_update Commission",
@@ -4704,7 +5226,8 @@
     "ts_end": 595,
     "py_file": "storage/test_update.py",
     "py_start": 169,
-    "py_end": 185
+    "py_end": 185,
+    "py_function_name": "test_update_commission"
   },
   {
     "test_name": "9_update Output",
@@ -4713,7 +5236,8 @@
     "ts_end": 674,
     "py_file": "storage/test_update.py",
     "py_start": 186,
-    "py_end": 202
+    "py_end": 202,
+    "py_function_name": "test_update_output"
   },
   {
     "test_name": "10_update User trigger DB unique constraint errors",
@@ -4722,7 +5246,8 @@
     "ts_end": 577,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 366,
-    "py_end": 383
+    "py_end": 383,
+    "py_function_name": "test_update_user_trigger_db_unique_constraint_errors"
   },
   {
     "test_name": "11_update User trigger DB foreign key constraint errors",
@@ -4731,7 +5256,8 @@
     "ts_end": 597,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 384,
-    "py_end": 401
+    "py_end": 401,
+    "py_function_name": "test_update_user_trigger_db_foreign_key_constraint_errors"
   },
   {
     "test_name": "12_update User table setting individual values",
@@ -4740,7 +5266,8 @@
     "ts_end": 674,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 402,
-    "py_end": 436
+    "py_end": 436,
+    "py_function_name": "test_update_user_table_setting_individual_values"
   },
   {
     "test_name": "13_update Certificate",
@@ -4749,7 +5276,8 @@
     "ts_end": 747,
     "py_file": "storage/test_update.py",
     "py_start": 93,
-    "py_end": 111
+    "py_end": 111,
+    "py_function_name": "test_update_certificate"
   },
   {
     "test_name": "14_update Certificate set created_at and updated_at time",
@@ -4758,7 +5286,8 @@
     "ts_end": 795,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 477,
-    "py_end": 518
+    "py_end": 518,
+    "py_function_name": "test_update_certificate_set_created_at_and_updated_at_time"
   },
   {
     "test_name": "15_update Certificate trigger DB unique constraint errors",
@@ -4767,7 +5296,8 @@
     "ts_end": 852,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 519,
-    "py_end": 536
+    "py_end": 536,
+    "py_function_name": "test_update_certificate_trigger_db_unique_constraint_errors"
   },
   {
     "test_name": "16_update Certificate trigger DB foreign key constraint errors",
@@ -4776,7 +5306,8 @@
     "ts_end": 896,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 537,
-    "py_end": 555
+    "py_end": 555,
+    "py_function_name": "test_update_certificate_trigger_db_foreign_key_constraint_errors"
   },
   {
     "test_name": "1_update ProvenTx",
@@ -4785,7 +5316,8 @@
     "ts_end": 103,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "2_update ProvenTx",
@@ -4794,7 +5326,8 @@
     "ts_end": 198,
     "py_file": "storage/test_update.py",
     "py_start": 10,
-    "py_end": 28
+    "py_end": 28,
+    "py_function_name": "test_update_proventx"
   },
   {
     "test_name": "3_update ProvenTx set created_at and updated_at time",
@@ -4803,7 +5336,8 @@
     "ts_end": 246,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 86,
-    "py_end": 128
+    "py_end": 128,
+    "py_function_name": "test_update_proventx_set_created_at_and_updated_at_time"
   },
   {
     "test_name": "4_update ProvenTx setting individual values",
@@ -4812,7 +5346,8 @@
     "ts_end": 291,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 129,
-    "py_end": 169
+    "py_end": 169,
+    "py_function_name": "test_update_proventx_setting_individual_values"
   },
   {
     "test_name": "5_update ProvenTxReq",
@@ -4821,7 +5356,8 @@
     "ts_end": 358,
     "py_file": "storage/test_update.py",
     "py_start": 54,
-    "py_end": 75
+    "py_end": 75,
+    "py_function_name": "test_update_proventxreq"
   },
   {
     "test_name": "6_update ProvenTxReq set created_at and updated_at time",
@@ -4830,7 +5366,8 @@
     "ts_end": 406,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 210,
-    "py_end": 251
+    "py_end": 251,
+    "py_function_name": "test_update_proventxreq_set_created_at_and_updated_at_time"
   },
   {
     "test_name": "7_update ProvenTxReq setting individual values",
@@ -4839,7 +5376,8 @@
     "ts_end": 464,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 252,
-    "py_end": 291
+    "py_end": 291,
+    "py_function_name": "test_update_proventxreq_setting_individual_values"
   },
   {
     "test_name": "8_update User",
@@ -4848,7 +5386,8 @@
     "ts_end": 506,
     "py_file": "storage/test_update.py",
     "py_start": 76,
-    "py_end": 92
+    "py_end": 92,
+    "py_function_name": "test_update_user"
   },
   {
     "test_name": "9_update User set created_at and updated_at time",
@@ -4857,6 +5396,7 @@
     "ts_end": 550,
     "py_file": "storage/test_update_advanced.py",
     "py_start": 327,
-    "py_end": 365
+    "py_end": 365,
+    "py_function_name": "test_update_user_set_created_at_and_updated_at_time"
   }
 ]

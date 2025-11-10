@@ -108,11 +108,16 @@ def parse_matching_tests(md_file: str, max_tests: int = 4) -> list:
             test_name = parts[0]
             ts_link = parts[1]
             py_link = parts[2]
+            py_function = parts[3] if len(parts) > 3 else None  # Python function name from table
 
             # Remove similarity percentage from test name if present (handles both formats)
             test_name = re.sub(r'\s*\(\d+%\)\s*$', '', test_name)  # (94%)
             test_name = re.sub(r'\s*\*\(\d+%\)\*\s*$', '', test_name)  # *(94%)*
             test_name = test_name.strip()
+
+            # Extract Python function name from markdown code block if present
+            if py_function:
+                py_function = re.sub(r'^`|`$', '', py_function).strip()  # Remove backticks
 
             # Parse TS file and line number
             # Format: [filename:line](file:///path#Lline)
@@ -133,6 +138,21 @@ def parse_matching_tests(md_file: str, max_tests: int = 4) -> list:
             ts_path = base_path / "wallet-toolbox" / ts_file
             py_path = base_path / "py-wallet-toolbox" / "tests" / py_file
 
+            # If Python function name not in table, extract it from the file
+            if not py_function:
+                try:
+                    with open(py_path, 'r', encoding='utf-8') as f:
+                        py_lines = f.readlines()
+                        # Look backwards from the line number to find the function definition
+                        for i in range(py_line - 1, max(-1, py_line - 50), -1):
+                            if i < len(py_lines):
+                                func_match = re.match(r'^\s*(?:async\s+)?def\s+(test_[a-zA-Z0-9_]+)\s*\(', py_lines[i])
+                                if func_match:
+                                    py_function = func_match.group(1)
+                                    break
+                except Exception:
+                    pass
+
             # Find full test ranges
             ts_start, ts_end = find_test_range(str(ts_path), ts_line)
             py_start, py_end = find_test_range(str(py_path), py_line)
@@ -144,12 +164,15 @@ def parse_matching_tests(md_file: str, max_tests: int = 4) -> list:
                 "ts_end": ts_end,
                 "py_file": py_file,
                 "py_start": py_start,
-                "py_end": py_end
+                "py_end": py_end,
+                "py_function_name": py_function or ""  # Add Python function name
             })
 
             print(f"Found test {len(entries)}: {test_name}")
             print(f"  TS: {ts_file}:{ts_start}-{ts_end}")
             print(f"  PY: {py_file}:{py_start}-{py_end}")
+            if py_function:
+                print(f"  PY Function: {py_function}")
 
     return entries
 
