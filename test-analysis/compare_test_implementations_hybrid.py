@@ -28,6 +28,48 @@ except ImportError:
     TREE_SITTER_AVAILABLE = False
 
 
+# ===========================
+# CONFIGURATION CONSTANTS
+# ===========================
+
+# Scoring Weights
+# These weights determine the relative importance of different similarity metrics.
+# The values were chosen based on empirical testing to balance structural exactness
+# with semantic equivalence across TypeScript and Python test implementations.
+STRUCTURAL_WEIGHT = 0.3  # Weight for exact sequence matching (30%)
+SEMANTIC_WEIGHT = 0.7    # Weight for intent-based matching (70%)
+
+# Semantic scoring sub-components
+INTENT_SEQUENCE_WEIGHT = 0.5      # Weight for intent sequence similarity
+INTENT_SET_WEIGHT = 0.3           # Weight for order-independent intent matching
+TYPE_DISTRIBUTION_WEIGHT = 0.2    # Weight for step type distribution similarity
+
+# Pass/Fail Thresholds
+DEFAULT_SIMILARITY_THRESHOLD = 0.70  # Default threshold for PASS (70%)
+SEMANTIC_FALLBACK_THRESHOLD = 0.40   # Semantic threshold for special cases (40%)
+TOTAL_FALLBACK_THRESHOLD = 0.30      # Total threshold for special cases (30%)
+FUZZY_MATCH_THRESHOLD = 0.70         # Threshold for fuzzy intent matching (70%)
+
+# Normalization Limits
+MAX_DICT_NORMALIZATION_ITERATIONS = 10  # Max iterations for nested dict normalization
+MAX_LINE_LENGTH = 2000  # Maximum line length before truncation
+
+# Test Framework Names
+TEST_FRAMEWORK_FUNCTIONS = ['test', 'describe', 'it', 'beforeEach', 'afterEach', 'pytest', 'fixture']
+
+# Mock/Callback Patterns
+# Use word boundaries to avoid false positives (e.g., 'subscribe' containing 'cb')
+MOCK_FUNCTION_PATTERNS = [r'\bmock_', r'\bcallback\b', r'\bcb\b', r'_cb\b',
+                          r'\bgood_?cb\b', r'\bbad_?cb\b', r'\bfinal_?cb\b']
+SETUP_FUNCTION_NAMES = ['type', 'mock', 'magicmock', 'patch', 'fixture', 'setup']
+SETUP_VARIABLE_PREFIXES = ['mock_', 'test_', 'fixture_', 'setup_', 'given_']
+
+# Default Directory Paths (can be overridden via environment variables or config)
+import os
+DEFAULT_TS_BASE_DIR = os.environ.get('TS_BASE_DIR', 'wallet-toolbox')
+DEFAULT_PY_BASE_DIR = os.environ.get('PY_BASE_DIR', 'py-wallet-toolbox/tests')
+
+
 @dataclass
 class TestStep:
     """Represents a single step in a test."""
@@ -333,9 +375,31 @@ class TypeScriptTestParser:
                 steps.extend(root_steps)
             
             return steps
+        except (AttributeError, IndexError, KeyError) as e:
+            # Specific errors from tree-sitter parsing
+            import warnings
+            warnings.warn(
+                f"Tree-sitter AST parsing failed with {type(e).__name__}: {e}. "
+                f"Falling back to regex parsing.",
+                RuntimeWarning
+            )
+            return self._parse_with_regex(code)
+        except UnicodeDecodeError as e:
+            # Unicode encoding issues
+            import warnings
+            warnings.warn(
+                f"Unicode decoding error: {e}. Falling back to regex parsing.",
+                RuntimeWarning
+            )
+            return self._parse_with_regex(code)
         except Exception as e:
-            # On error, use regex only for flow control, then parse with AST again
-            # This handles cases where AST parsing fails due to syntax issues
+            # Catch-all for unexpected errors, but log them
+            import warnings
+            warnings.warn(
+                f"Unexpected error in AST parsing: {type(e).__name__}: {e}. "
+                f"Falling back to regex parsing. This may indicate a bug.",
+                RuntimeWarning
+            )
             return self._parse_with_regex(code)
 
     def _parse_with_regex(self, code: str) -> List[TestStep]:
@@ -1065,19 +1129,26 @@ class TestComparator:
         """Normalize target for intent extraction (remove variable names)."""
         if not target:
             return 'value'
-        
+
         # Replace variable names with generic placeholders
         # e.g., "r.length" -> "array.length", "a.inputs" -> "object.property"
         target_lower = target.lower()
-        
-        # Common patterns - check these first
-        if '.length' in target_lower or 'len(' in target_lower:
+
+        # Common patterns - check these first with proper word boundaries
+        # Use regex for more precise matching
+        import re
+
+        # Check for .length property access or len() function
+        if re.search(r'\.length\b', target_lower) or re.search(r'\blen\(', target_lower):
             return 'array_length'
-        if 'every' in target_lower or 'all(' in target_lower:
+        # Check for .every() method or all() function
+        if re.search(r'\.every\(', target_lower) or re.search(r'\ball\(', target_lower):
             return 'array_all'
-        if 'undefined' in target_lower or 'none' in target_lower or 'not in' in target_lower:
+        # Check for undefined/none checks
+        if re.search(r'\bundefined\b', target_lower) or re.search(r'\bnone\b', target_lower) or 'not in' in target_lower:
             return 'undefined_check'
-        if 'isarray' in target_lower or 'is_array' in target_lower:
+        # Check for Array.isArray or is_array
+        if re.search(r'\bisarray\(', target_lower) or re.search(r'\bis_array\(', target_lower):
             return 'is_array'
         
         # Property access patterns (e.g., r.totalActions, result.totalActions -> object_total)
@@ -1250,44 +1321,64 @@ class TestComparator:
 
     def _normalize_assignment_assertion_patterns(self, steps: List[TestStep]) -> List[TestStep]:
         """Normalize assignment+assertion patterns to match direct function calls in assertions.
-        
+
         Converts:
         - assignment: count = func(args)
         - assertion: count == value
         Into:
         - assertion: func(args) == value
-        
+
         This makes Python's pattern match TypeScript's direct function call in expect().
+
+        Note: This function should be called AFTER normalize() so that variable names
+        are already normalized (camelCase -> snake_case).
         """
         normalized = []
         i = 0
         while i < len(steps):
+            # Validate index bounds
+            if i >= len(steps):
+                break
+
             current = steps[i]
-            
+
             # Check if this is an assignment followed by an assertion on the same variable
-            if (i + 1 < len(steps) and 
-                current.type == 'assignment' and 
-                current.target and 
+            # We need to check both exact match and normalized match
+            if (i + 1 < len(steps) and
+                current.type == 'assignment' and
+                current.target and
                 current.function and
                 steps[i + 1].type == 'assertion' and
-                steps[i + 1].target == current.target):
-                
-                # This is assignment+assertion pattern - normalize to direct function call assertion
+                steps[i + 1].target):
+
                 next_step = steps[i + 1]
-                
-                # Create a new assertion with the function call as the target
-                normalized_step = TestStep(
-                    type='assertion',
-                    target=f"{current.function}({','.join(current.args)})" if current.args else current.function,
-                    operator=next_step.operator,
-                    args=next_step.args
-                )
-                normalized.append(normalized_step)
-                i += 2  # Skip both steps
-            else:
-                normalized.append(current)
-                i += 1
-        
+
+                # Compare normalized targets (handle both exact and fuzzy matches)
+                # Normalize both for comparison
+                current_target_norm = current.target.lower().strip()
+                next_target_norm = next_step.target.lower().strip()
+
+                # Check if targets match (exact or normalized)
+                targets_match = (next_step.target == current.target or
+                               next_target_norm == current_target_norm)
+
+                if targets_match:
+                    # This is assignment+assertion pattern - normalize to direct function call assertion
+                    # Create a new assertion with the function call as the target
+                    normalized_step = TestStep(
+                        type='assertion',
+                        target=f"{current.function}({','.join(current.args)})" if current.args else current.function,
+                        operator=next_step.operator,
+                        args=next_step.args
+                    )
+                    normalized.append(normalized_step)
+                    i += 2  # Skip both steps
+                    continue
+
+            # If no pattern match, keep the current step as-is
+            normalized.append(current)
+            i += 1
+
         return normalized
 
     def _normalize_target(self, target: str) -> str:
@@ -1316,15 +1407,16 @@ class TestComparator:
             if re.search(r'["\']\w+["\']\s+(?:not\s+)?in', target):
                 return "is_undefined_check"
         
-        # Normalize r.length to len(r) for comparison
-        match = re.match(r'(\w+)\.length', target)
+        # Normalize r.length to len(r) for comparison (use word boundary)
+        match = re.match(r'(\w+)\.length\b', target)
         if match:
             return f"len({match.group(1)})"
-        
+
         # Normalize r.every((v, i) => v === a[i]) to all(elements_match)
         # and all(r[i] == a[i]) to all(elements_match)
         # Both represent "check all elements match"
-        if 'every' in target.lower() or target.startswith('all('):
+        # Use word boundaries to avoid matching 'everything' or 'gallery'
+        if re.search(r'\.every\(', target.lower()) or re.match(r'\ball\(', target):
             # Check if it's a comparison of array elements
             if '==' in target or '===' in target:
                 return "all(elements_match)"
@@ -1349,17 +1441,25 @@ class TestComparator:
         if '{' in target and '}' in target:
             # Remove all whitespace inside dictionaries (handles nested dicts)
             import re
+            import warnings
             # Recursively remove whitespace from dictionary contents
             # Match innermost dicts first, then work outward
-            max_iterations = 10  # Prevent infinite loops
             iteration = 0
-            while iteration < max_iterations:
+            while iteration < MAX_DICT_NORMALIZATION_ITERATIONS:
                 new_target = re.sub(r'\{([^{}]*)\}', lambda m: '{' + re.sub(r'\s+', '', m.group(1)) + '}', target)
                 if new_target == target:
                     break
                 target = new_target
                 iteration += 1
-        
+
+            # Warn if we hit the iteration limit (normalization may be incomplete)
+            if iteration >= MAX_DICT_NORMALIZATION_ITERATIONS:
+                warnings.warn(
+                    f"Dictionary normalization hit max iterations ({MAX_DICT_NORMALIZATION_ITERATIONS}) "
+                    f"for target: {target[:50]}... Normalization may be incomplete.",
+                    RuntimeWarning
+                )
+
         return target
 
     def _normalize_arg(self, arg: str) -> str:
@@ -1481,14 +1581,14 @@ class TestComparator:
         critical_issues = []
         # Initial status based on similarity threshold
         # Also check for functional equivalence patterns (e.g., callback verification)
-        status = "PASS" if similarity >= 0.70 else "FAIL"
-        
+        status = "PASS" if similarity >= DEFAULT_SIMILARITY_THRESHOLD else "FAIL"
+
         # Special case: If semantic score is high enough, consider it functionally equivalent
         # even if total similarity is below threshold
         # This handles cases like callback tests where verification methods differ
         # (e.g., toHaveBeenCalledTimes vs "callback" in call_order)
         # Lower threshold for callback tests (40% semantic is reasonable for functional equivalence)
-        if semantic_score >= 0.40 and similarity >= 0.30:
+        if semantic_score >= SEMANTIC_FALLBACK_THRESHOLD and similarity >= TOTAL_FALLBACK_THRESHOLD:
             # High semantic similarity indicates functional equivalence despite structural differences
             # Check if this looks like a callback test pattern
             ts_intents = self._extract_test_intents(ts_steps)
@@ -1502,17 +1602,39 @@ class TestComparator:
         # First, find all assertions in both test implementations (regardless of position)
         ts_assertions = [(i, step) for i, step in enumerate(ts_steps_detailed) if step.get('type') == 'assertion']
         py_assertions = [(i, step) for i, step in enumerate(py_steps_detailed) if step.get('type') == 'assertion']
-        
+
+        # Check for assertion count mismatch FIRST, before checking individual assertions
+        if len(ts_assertions) != len(py_assertions):
+            count_diff = abs(len(ts_assertions) - len(py_assertions))
+            if len(ts_assertions) > len(py_assertions):
+                critical_issues.append({
+                    'type': 'missing_assertions',
+                    'message': f"Missing {count_diff} assertion(s) in Python (TS has {len(ts_assertions)}, PY has {len(py_assertions)})",
+                    'ts_count': len(ts_assertions),
+                    'py_count': len(py_assertions)
+                })
+            else:
+                critical_issues.append({
+                    'type': 'extra_assertions',
+                    'message': f"Extra {count_diff} assertion(s) in Python (TS has {len(ts_assertions)}, PY has {len(py_assertions)})",
+                    'ts_count': len(ts_assertions),
+                    'py_count': len(py_assertions)
+                })
+
         # Match assertions by position (best effort - match first with first, etc.)
-        for idx, (ts_idx, ts_step) in enumerate(ts_assertions):
-            if idx < len(py_assertions):
+        # Check all assertions, even if counts don't match
+        max_assertions = max(len(ts_assertions), len(py_assertions))
+        for idx in range(max_assertions):
+            # Validate indices before accessing
+            if idx < len(ts_assertions) and idx < len(py_assertions):
+                ts_idx, ts_step = ts_assertions[idx]
                 py_idx, py_step = py_assertions[idx]
-                
+
                 ts_op = ts_step.get('operator', '')
                 py_op = py_step.get('operator', '')
                 ts_target = ts_step.get('target', '')
                 py_target = py_step.get('target', '')
-                
+
                 # Check for operator mismatch (critical)
                 if ts_op != py_op and not self._are_operators_equivalent(ts_op, py_op):
                     critical_issues.append({
@@ -1521,11 +1643,11 @@ class TestComparator:
                         'py_step': py_step,
                         'ts_index': ts_idx,
                         'py_index': py_idx,
-                        'message': f"Assertion operator mismatch: TS uses '{ts_op}' but PY uses '{py_op}'"
+                        'message': f"Assertion #{idx+1} operator mismatch: TS uses '{ts_op}' but PY uses '{py_op}'"
                     })
                     # Operator mismatch is always critical - fail the test
                     status = "FAIL"
-                
+
                 # Check for assertion value mismatch (only if values are truly different)
                 ts_args = ts_step.get('args', [])
                 py_args = py_step.get('args', [])
@@ -1539,11 +1661,21 @@ class TestComparator:
                             'py_step': py_step,
                             'ts_index': ts_idx,
                             'py_index': py_idx,
-                            'message': f"Assertion value mismatch: TS expects {ts_args} but PY expects {py_args}"
+                            'message': f"Assertion #{idx+1} value mismatch: TS expects {ts_args} but PY expects {py_args}"
                         })
                         # Only fail if similarity is already low OR this is a critical operator/value mismatch
-                        if similarity < 0.70:
+                        if similarity < DEFAULT_SIMILARITY_THRESHOLD:
                             status = "FAIL"
+            elif idx < len(ts_assertions):
+                # TS has more assertions - PY is missing this one
+                ts_idx, ts_step = ts_assertions[idx]
+                # Already reported in count mismatch above
+                pass
+            else:
+                # PY has more assertions - PY has extra
+                py_idx, py_step = py_assertions[idx]
+                # Already reported in count mismatch above
+                pass
         
         # Generate suggestions based on differences
         if differences:
@@ -1704,10 +1836,9 @@ class TestComparator:
                 elif step.target:
                     target_lower = step.target.lower()
                     # If it's assigned to a mock/callback variable, treat as mock
-                    # Check for various callback naming patterns
-                    callback_patterns = ['mock_', 'cb', 'callback', 'goodcb', 'badcb', 'finalcb', 
-                                        'good_cb', 'bad_cb', 'final_cb']
-                    if any(pattern in target_lower for pattern in callback_patterns):
+                    # Use word boundaries to avoid false positives (e.g., 'subscribe' containing 'cb')
+                    import re
+                    if any(re.search(pattern, target_lower) for pattern in MOCK_FUNCTION_PATTERNS):
                         step.function = 'mock_function'
             elif step.type == 'call' and step.function:
                 func_lower = step.function.lower()
@@ -1886,30 +2017,45 @@ def _generate_notes(analysis: Dict, ts_steps: int, py_steps: int,
 def _generate_detailed_report(test_data: List[Dict], comparator: 'TestComparator') -> None:
     """Generate a detailed report with code snippets, comparison results, and PASS/FAIL status."""
     from pathlib import Path
-    
-    # First pass: Run all comparisons to get statuses for summary
-    test_statuses = []
+
+    # Single pass: Run all comparisons once and store results
+    test_results = []
     for entry in test_data:
-        ts_file = f"wallet-toolbox/{entry['ts_file']}"
-        py_file = f"py-wallet-toolbox/tests/{entry['py_file']}"
+        # Use configurable base directories
+        ts_file = str(Path(DEFAULT_TS_BASE_DIR) / entry['ts_file'])
+        py_file = str(Path(DEFAULT_PY_BASE_DIR) / entry['py_file'])
+        result = None
         status = "UNKNOWN"
+        critical_issues = []
+        error_msg = None
+
         try:
             ts_range = f"{entry['ts_start']}-{entry['ts_end']}"
             py_range = f"{entry['py_start']}-{entry['py_end']}"
             result = comparator.compare_test_files(ts_file, ts_range, py_file, py_range)
             analysis = result.get('analysis', {})
             status = analysis.get('status', 'UNKNOWN')
+            critical_issues = analysis.get('critical_issues', [])
         except Exception as e:
-            pass
-        test_statuses.append(status)
-    
-    # Calculate summary statistics
-    total_tests = len(test_statuses)
-    pass_count = sum(1 for s in test_statuses if s == "PASS")
-    fail_count = sum(1 for s in test_statuses if s == "FAIL")
+            error_msg = str(e)
+
+        test_results.append({
+            'entry': entry,
+            'ts_file': ts_file,
+            'py_file': py_file,
+            'result': result,
+            'status': status,
+            'critical_issues': critical_issues,
+            'error_msg': error_msg
+        })
+
+    # Calculate summary statistics from stored results
+    total_tests = len(test_results)
+    pass_count = sum(1 for r in test_results if r['status'] == "PASS")
+    fail_count = sum(1 for r in test_results if r['status'] == "FAIL")
     pass_percentage = (pass_count / total_tests * 100) if total_tests > 0 else 0
     fail_percentage = (fail_count / total_tests * 100) if total_tests > 0 else 0
-    
+
     report_lines = [
         "# Test Comparison Detailed Report",
         "",
@@ -1925,24 +2071,19 @@ def _generate_detailed_report(test_data: List[Dict], comparator: 'TestComparator
         "---",
         ""
     ]
-    
-    for i, entry in enumerate(test_data, 1):
-        ts_file = f"wallet-toolbox/{entry['ts_file']}"
-        py_file = f"py-wallet-toolbox/tests/{entry['py_file']}"
-        
-        # Run comparison first to get status and results
-        result = None
-        status = "UNKNOWN"
-        critical_issues = []
-        try:
-            ts_range = f"{entry['ts_start']}-{entry['ts_end']}"
-            py_range = f"{entry['py_start']}-{entry['py_end']}"
-            result = comparator.compare_test_files(ts_file, ts_range, py_file, py_range)
-            analysis = result.get('analysis', {})
-            status = analysis.get('status', 'UNKNOWN')
-            critical_issues = analysis.get('critical_issues', [])
-        except Exception as e:
-            report_lines.append(f"*Error during comparison: {e}*")
+
+    # Use stored results to generate report
+    for i, test_result in enumerate(test_results, 1):
+        entry = test_result['entry']
+        ts_file = test_result['ts_file']
+        py_file = test_result['py_file']
+        result = test_result['result']
+        status = test_result['status']
+        critical_issues = test_result['critical_issues']
+        error_msg = test_result['error_msg']
+
+        if error_msg:
+            report_lines.append(f"*Error during comparison: {error_msg}*")
             report_lines.append("")
         
         # Create clickable links
@@ -2157,8 +2298,13 @@ def main():
             print(f"\nTest {i+1}: {entry['test_name']}")
             print("-"*80)
 
-            ts_file = f"wallet-toolbox/{entry['ts_file']}"
-            py_file = f"py-wallet-toolbox/tests/{entry['py_file']}"
+            # Use configurable base directories instead of hard-coded paths
+            ts_file = Path(DEFAULT_TS_BASE_DIR) / entry['ts_file']
+            py_file = Path(DEFAULT_PY_BASE_DIR) / entry['py_file']
+
+            # Convert to string for compatibility
+            ts_file = str(ts_file)
+            py_file = str(py_file)
 
             if 'ts_start' in entry and 'py_start' in entry:
                 ts_range = f"{entry['ts_start']}-{entry['ts_end']}"
