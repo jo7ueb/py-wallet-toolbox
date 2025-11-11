@@ -443,6 +443,7 @@ class TestCWIStyleWalletManagerSnapshot:
         await manager1.authenticate(presentation_key)
 
         snapshot = await manager1.save_snapshot()
+        assert len(snapshot) > 64  # 32 bytes + encrypted data
 
         manager2 = CWIStyleWalletManager(
             ump_token_interactor=mock_ump_interactor,

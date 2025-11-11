@@ -5,8 +5,8 @@ This report contains AI-analyzed comparisons between TypeScript and Python test 
 ## Summary
 
 - **Total Tests**: 540
-- **Passing**: 350 (64.8%)
-- **Failing**: 190 (35.2%)
+- **Passing**: 355 (65.7%)
+- **Failing**: 185 (34.3%)
 
 ---
 
@@ -31,10 +31,101 @@ This report contains AI-analyzed comparisons between TypeScript and Python test 
 
 ---
 
-## Test 4: Passes if user is authenticated and originator is not admin **PASS**
+## Test 4: Passes if user is authenticated and originator is not admin **FAIL**
 
-- TypeScript: `wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts`
-- Python: `py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py`
+### TypeScript Test: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+
+```typescript
+    test('Passes if user is authenticated and originator is not admin', async () => {
+      await manager.getPublicKey({ identityKey: true }, 'example.com')
+      expect(mockUnderlyingWallet.getPublicKey).toHaveBeenCalledTimes(1)
+    })
+```
+
+### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
+
+```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
+    async def test_passes_if_user_is_authenticated_and_originator_is_not_admin(self) -> None:
+        """Given: Authenticated manager with normal originator
+           When: Call proxy method
+           Then: Method is called on underlying wallet
+
+        Reference: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+                   test('Passes if user is authenticated and originator is not admin')
+        """
+        # Given
+        mock_ump_interactor = Mock()
+        mock_ump_interactor.find_by_presentation_key_hash = AsyncMock(return_value=None)
+        mock_ump_interactor.build_and_send = AsyncMock(return_value="txid.0")
+
+        mock_wallet_builder = AsyncMock()
+        mock_underlying_wallet = Mock()
+        mock_underlying_wallet.get_public_key = AsyncMock(return_value={"publicKey": "test"})
+        mock_wallet_builder.return_value = mock_underlying_wallet
+
+        mock_recovery_key_saver = AsyncMock(return_value=True)
+        mock_password_retriever = AsyncMock(return_value="test-password")
+
+        manager = CWIStyleWalletManager(
+            ump_token_interactor=mock_ump_interactor,
+            wallet_builder=mock_wallet_builder,
+            recovery_key_saver=mock_recovery_key_saver,
+            password_retriever=mock_password_retriever,
+            admin_originator="admin.test.com",
+        )
+
+        # Authenticate
+        presentation_key = bytes([0xA1] * 32)
+        await manager.provide_presentation_key(presentation_key)
+        await manager.provide_password("test-password")
+
+        # When
+        await manager.get_public_key({"identity_key": True}, originator="example.com")
+```
+
+### AI Analysis Results
+
+**Similarity Score**: 31.00%
+  - Structural: 20.00%
+  - Semantic: 28.00%
+  - Alignment: 43.33%
+
+**Critical Issues:**
+  - [HIGH] Test intent differs: TS verifies 'authentication verification method_call_verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
+  - [HIGH] Python test is missing verifications: mock_underlying_wallet.getPublicKey
+  - [HIGH] Python test is missing operations: manager.getPublicKey
+
+**Differences:**
+  - Operation count: TS has 1, PY has 3
+  - Verification count: TS has 1, PY has 0
+
+**Suggestions:**
+  - Align test intent: ensure PY test verifies 'authentication verification method_call_verification'
+  - Add verifications for: mock_underlying_wallet.getPublicKey
+  - Add operations: manager.getPublicKey
+
+**Explanation:**
+
+Overall Similarity: 31.0%
+  • Structural: 20.0% (sequence and structure)
+  • Semantic: 28.0% (test intent and meaning)
+  • Alignment: 43.3% (functional equivalence)
+
+Test Intent:
+  • TypeScript: authentication verification method_call_verification
+  • Python: key_save authentication password_provide password_operation token_operation key_operation
+
+Critical Issues (3):
+  • [HIGH] Test intent differs: TS verifies 'authentication verification method_call_verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
+  • [HIGH] Python test is missing verifications: mock_underlying_wallet.getPublicKey
+  • [HIGH] Python test is missing operations: manager.getPublicKey
+
+Key Differences:
+  • Operation count: TS has 1, PY has 3
+  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -82,6 +173,9 @@ This report contains AI-analyzed comparisons between TypeScript and Python test 
 ### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
 
 ```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
     async def test_prompts_to_save_the_new_key_updates_the_token(self) -> None:
         """Given: Authenticated manager
            When: Change recovery key
@@ -119,45 +213,43 @@ This report contains AI-analyzed comparisons between TypeScript and Python test 
         await manager.change_recovery_key()
 
         # Then
-        assert mock_recovery_key_saver.call_count == 2  # Initial + change
-        assert mock_ump_interactor.build_and_send.call_count == 2
 ```
 
 ### AI Analysis Results
 
-**Similarity Score**: 46.47%
+**Similarity Score**: 45.00%
   - Structural: 0.00%
-  - Semantic: 32.94%
+  - Semantic: 30.00%
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: manager.authenticated, mock_ump_token_interactor.buildAndSend
+  - [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticated
   - [HIGH] Python test is missing operations: manager.providePassword, manager.changeRecoveryKey, manager.providePresentationKey
 
 **Differences:**
-  - Verification count: TS has 3, PY has 2
+  - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: manager.authenticated, mock_ump_token_interactor.buildAndSend
+  - Add verifications for: mock_ump_token_interactor.buildAndSend, manager.authenticated
   - Add operations: manager.providePassword, manager.changeRecoveryKey, manager.providePresentationKey
 
 **Explanation:**
 
-Overall Similarity: 46.5%
+Overall Similarity: 45.0%
   • Structural: 0.0% (sequence and structure)
-  • Semantic: 32.9% (test intent and meaning)
+  • Semantic: 30.0% (test intent and meaning)
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication key_save token_operation key_change method_call_verification password_operation verification password_provide value_verification
-  • Python: authentication key_operation key_save token_operation key_change password_operation verification password_provide
+  • TypeScript: key_save value_verification authentication key_change password_provide password_operation token_operation verification method_call_verification
+  • Python: key_save authentication key_change password_provide password_operation token_operation key_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: manager.authenticated, mock_ump_token_interactor.buildAndSend
+  • [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticated
   • [HIGH] Python test is missing operations: manager.providePassword, manager.changeRecoveryKey, manager.providePresentationKey
 
 Key Differences:
-  • Verification count: TS has 3, PY has 2
+  • Verification count: TS has 3, PY has 0
 
 ---
 
@@ -195,6 +287,9 @@ Key Differences:
 ### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
 
 ```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
     async def test_requires_authentication_re_publishes_the_token_old_token_consumed(self) -> None:
         """Given: Authenticated manager
            When: Change presentation key
@@ -233,170 +328,50 @@ Key Differences:
         await manager.change_presentation_key(new_presentation_key)
 
         # Then
-        assert mock_ump_interactor.build_and_send.call_count == 2
 ```
 
 ### AI Analysis Results
 
-**Similarity Score**: 46.84%
+**Similarity Score**: 44.00%
   - Structural: 0.00%
-  - Semantic: 33.68%
+  - Semantic: 28.00%
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: manager.authenticated, mock_ump_token_interactor.buildAndSend
-  - [HIGH] Python test is missing operations: manager.providePassword, manager.changePresentationKey, manager.providePresentationKey
+  - [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticated
+  - [HIGH] Python test is missing operations: manager.providePassword, manager.providePresentationKey, manager.changePresentationKey
 
 **Differences:**
-  - Verification count: TS has 2, PY has 1
+  - Verification count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Add verifications for: manager.authenticated, mock_ump_token_interactor.buildAndSend
-  - Add operations: manager.providePassword, manager.changePresentationKey, manager.providePresentationKey
+  - Add verifications for: mock_ump_token_interactor.buildAndSend, manager.authenticated
+  - Add operations: manager.providePassword, manager.providePresentationKey, manager.changePresentationKey
 
 **Explanation:**
 
-Overall Similarity: 46.8%
+Overall Similarity: 44.0%
   • Structural: 0.0% (sequence and structure)
-  • Semantic: 33.7% (test intent and meaning)
+  • Semantic: 28.0% (test intent and meaning)
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication key_save token_operation key_change method_call_verification password_operation verification token_lifecycle password_provide value_verification
-  • Python: authentication key_operation key_save token_operation key_change password_operation verification token_lifecycle password_provide
+  • TypeScript: key_save value_verification authentication key_change password_provide password_operation token_operation token_lifecycle verification method_call_verification
+  • Python: key_save authentication key_change password_provide token_operation password_operation token_lifecycle key_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: manager.authenticated, mock_ump_token_interactor.buildAndSend
-  • [HIGH] Python test is missing operations: manager.providePassword, manager.changePresentationKey, manager.providePresentationKey
+  • [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticated
+  • [HIGH] Python test is missing operations: manager.providePassword, manager.providePresentationKey, manager.changePresentationKey
 
 Key Differences:
-  • Verification count: TS has 2, PY has 1
+  • Verification count: TS has 2, PY has 0
 
 ---
 
-## Test 10: Saves a snapshot and can load it into a fresh manager instance **FAIL**
+## Test 10: Saves a snapshot and can load it into a fresh manager instance **PASS**
 
-### TypeScript Test: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
-
-```typescript
-    test('Saves a snapshot and can load it into a fresh manager instance', async () => {
-      // We'll do a new user flow so that manager is authenticated with a real token.
-      ;(mockUMPTokenInteractor.findByPresentationKeyHash as any).mockResolvedValueOnce(undefined)
-      const presKey = Array.from({ length: 32 }, () => 0xa1)
-      await manager.providePresentationKey(presKey)
-      await manager.providePassword('mypassword') // triggers creation of new user
-
-      const snapshot = manager.saveSnapshot()
-      expect(Array.isArray(snapshot)).toBe(true)
-      expect(snapshot.length).toBeGreaterThan(64) // 32 bytes + encrypted data
-
-      // Now create a fresh manager:
-      const freshManager = new CWIStyleWalletManager(
-        'admin.walletvendor.com',
-        mockWalletBuilder,
-        mockUMPTokenInteractor,
-        mockRecoveryKeySaver,
-        mockPasswordRetriever
-      )
-
-      // Not authenticated yet
-      await expect(() => freshManager.getPublicKey({ identityKey: true })).rejects.toThrow('User is not authenticated')
-
-      // Load the snapshot
-      await freshManager.loadSnapshot(snapshot)
-
-      // The fresh manager is now authenticated (underlying wallet will be built).
-      await expect(freshManager.getPublicKey({ identityKey: true })).resolves.not.toThrow()
-
-      // It calls walletBuilder again
-      expect(mockWalletBuilder).toHaveBeenCalledTimes(2) // once for the old manager, once for the fresh
-    })
-```
-
-### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
-
-```python
-    async def test_saves_a_snapshot_and_can_load_it_into_a_fresh_manager_instance(self) -> None:
-        """Given: Authenticated manager with wallet
-           When: Save snapshot and load into new manager instance
-           Then: New manager has same state
-
-        Reference: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
-                   test('Saves a snapshot and can load it into a fresh manager instance')
-        """
-        presentation_key = os.urandom(32)
-        recovery_key = os.urandom(32)
-        password_salt = os.urandom(32)
-        password_key = hashlib.pbkdf2_hmac("sha512", b"test-password", password_salt, PBKDF2_NUM_ROUNDS, 32)
-        primary_key = os.urandom(32)
-        privileged_key = os.urandom(32)
-
-        existing_token = await create_mock_ump_token(
-            presentation_key, recovery_key, password_key, password_salt, PBKDF2_NUM_ROUNDS, primary_key, privileged_key
-        )
-
-        mock_underlying_wallet = MagicMock(spec=WalletInterface)
-        mock_wallet_builder = AsyncMock(return_value=mock_underlying_wallet)
-        mock_ump_interactor = MagicMock(spec=UMPTokenInteractor)
-        mock_ump_interactor.find_by_presentation_key_hash = AsyncMock(return_value=existing_token)
-        mock_recovery_key_saver = AsyncMock(return_value=True)
-        mock_password_retriever = AsyncMock(return_value="test-password")
-
-        manager1 = CWIStyleWalletManager(
-            ump_token_interactor=mock_ump_interactor,
-            wallet_builder=mock_wallet_builder,
-            recovery_key_saver=mock_recovery_key_saver,
-            password_retriever=mock_password_retriever,
-            admin_originator="admin.test.com",
-        )
-
-        await manager1.authenticate(presentation_key)
-
-        snapshot = await manager1.save_snapshot()
-
-        manager2 = CWIStyleWalletManager(
-            ump_token_interactor=mock_ump_interactor,
-            wallet_builder=mock_wallet_builder,
-            recovery_key_saver=mock_recovery_key_saver,
-            password_retriever=mock_password_retriever,
-            admin_originator="admin.test.com",
-        )
-
-        await manager2.load_snapshot(snapshot)
-
-        assert manager2.is_authenticated() is True
-        assert manager2.get_primary_key() == manager1.get_primary_key()
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 16.00%
-  - Structural: 0.00%
-  - Semantic: 32.00%
-  - Alignment: 0.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: snapshot.length
-  - [HIGH] Python test is missing operations: manager.providePassword, fresh_manager.loadSnapshot, manager.providePresentationKey
-
-**Suggestions:**
-  - Add verifications for: snapshot.length
-  - Add operations: manager.providePassword, fresh_manager.loadSnapshot, manager.providePresentationKey
-
-**Explanation:**
-
-Overall Similarity: 16.0%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 32.0% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: authentication key_save token_operation snapshot_save snapshot_load snapshot_operation password_operation password_provide verification value_verification encryption
-  • Python: authentication key_operation key_save token_operation snapshot_save snapshot_load snapshot_operation password_operation verification
-
-Critical Issues (2):
-  • [HIGH] Python test is missing verifications: snapshot.length
-  • [HIGH] Python test is missing operations: manager.providePassword, fresh_manager.loadSnapshot, manager.providePresentationKey
+- TypeScript: `wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts`
+- Python: `py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py`
 
 ---
 
@@ -445,6 +420,8 @@ Critical Issues (2):
 ### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
 
 ```python
+    @pytest.mark.skip(reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
     async def test_successfully_creates_a_new_token_and_calls_buildandsend(self) -> None:
         """Given: New user registration with presentation key and password
            When: Create new UMP token
@@ -474,7 +451,6 @@ Critical Issues (2):
         result = await manager.create_new_user(presentation_key)
 
         assert result["token"] is not None
-        assert mock_ump_interactor.build_and_send.call_count == 1
 ```
 
 ### AI Analysis Results
@@ -485,15 +461,15 @@ Critical Issues (2):
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: manager.authenticated, manager.authenticationFlow, mock_ump_token_interactor.buildAndSend
+  - [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticationFlow, manager.authenticated
   - [HIGH] Python test is missing operations: manager.providePassword, manager.providePresentationKey
 
 **Differences:**
   - Operation count: TS has 2, PY has 1
-  - Verification count: TS has 5, PY has 2
+  - Verification count: TS has 5, PY has 1
 
 **Suggestions:**
-  - Add verifications for: manager.authenticated, manager.authenticationFlow, mock_ump_token_interactor.buildAndSend
+  - Add verifications for: mock_ump_token_interactor.buildAndSend, manager.authenticationFlow, manager.authenticated
   - Add operations: manager.providePassword, manager.providePresentationKey
 
 **Explanation:**
@@ -504,16 +480,16 @@ Overall Similarity: 14.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication key_save token_operation method_call_verification password_operation verification password_provide value_verification
-  • Python: key_operation key_save token_operation password_operation verification
+  • TypeScript: key_save value_verification authentication password_provide password_operation token_operation verification method_call_verification
+  • Python: key_save password_operation token_operation key_operation verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: manager.authenticated, manager.authenticationFlow, mock_ump_token_interactor.buildAndSend
+  • [HIGH] Python test is missing verifications: mock_ump_token_interactor.buildAndSend, manager.authenticationFlow, manager.authenticated
   • [HIGH] Python test is missing operations: manager.providePassword, manager.providePresentationKey
 
 Key Differences:
   • Operation count: TS has 2, PY has 1
-  • Verification count: TS has 5, PY has 2
+  • Verification count: TS has 5, PY has 1
 
 ---
 
@@ -567,6 +543,9 @@ Key Differences:
 ### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
 
 ```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
     async def test_throws_if_originator_is_adminoriginator(self) -> None:
         """Given: Authenticated manager
            When: Call method with admin originator
@@ -601,8 +580,6 @@ Key Differences:
         await manager.provide_password("test-password")
 
         # When/Then
-        with pytest.raises(ValueError, match="External applications are not allowed to use the admin originator"):
-            await manager.get_public_key({"identity_key": True}, originator="admin.test.com")
 ```
 
 ### AI Analysis Results
@@ -613,10 +590,10 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'authentication key_operation key_save token_operation password_operation password_provide'
+  - [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
 
 **Differences:**
-  - Operation count: TS has 0, PY has 3
+  - Operation count: TS has 0, PY has 2
 
 **Suggestions:**
   - Align test intent: ensure PY test verifies 'verification'
@@ -630,13 +607,13 @@ Overall Similarity: 30.0%
 
 Test Intent:
   • TypeScript: verification
-  • Python: authentication key_operation key_save token_operation password_operation password_provide
+  • Python: key_save authentication password_provide password_operation token_operation key_operation
 
 Critical Issues (1):
-  • [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'authentication key_operation key_save token_operation password_operation password_provide'
+  • [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
 
 Key Differences:
-  • Operation count: TS has 0, PY has 3
+  • Operation count: TS has 0, PY has 2
 
 ---
 
@@ -647,71 +624,10 @@ Key Differences:
 
 ---
 
-## Test 19: Throws if snapshot is corrupt or cannot be decrypted **FAIL**
+## Test 19: Throws if snapshot is corrupt or cannot be decrypted **PASS**
 
-### TypeScript Test: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
-
-```typescript
-    test('Throws if snapshot is corrupt or cannot be decrypted', async () => {
-      // Attempt to load an invalid snapshot
-      await expect(() => manager.loadSnapshot([1, 2, 3])).rejects.toThrow('Failed to load snapshot')
-    })
-```
-
-### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
-
-```python
-    async def test_throws_if_snapshot_is_corrupt_or_cannot_be_decrypted(self) -> None:
-        """Given: Corrupted or invalid snapshot data
-           When: Try to load snapshot
-           Then: Raises decryption error
-
-        Reference: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
-                   test('Throws if snapshot is corrupt or cannot be decrypted')
-        """
-        mock_underlying_wallet = MagicMock(spec=WalletInterface)
-        mock_wallet_builder = AsyncMock(return_value=mock_underlying_wallet)
-        mock_ump_interactor = MagicMock(spec=UMPTokenInteractor)
-        mock_recovery_key_saver = AsyncMock(return_value=True)
-        mock_password_retriever = AsyncMock(return_value="test-password")
-
-        manager = CWIStyleWalletManager(
-            ump_token_interactor=mock_ump_interactor,
-            wallet_builder=mock_wallet_builder,
-            recovery_key_saver=mock_recovery_key_saver,
-            password_retriever=mock_password_retriever,
-            admin_originator="admin.test.com",
-        )
-
-        corrupted_snapshot = b"invalid data"
-
-        with pytest.raises(ValueError, match="decryption failed"):
-            await manager.load_snapshot(corrupted_snapshot)
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 42.00%
-  - Structural: 10.00%
-  - Semantic: 80.00%
-  - Alignment: 0.00%
-
-**Differences:**
-  - Operation count: TS has 0, PY has 1
-
-**Explanation:**
-
-Overall Similarity: 42.0%
-  • Structural: 10.0% (sequence and structure)
-  • Semantic: 80.0% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: decryption snapshot_load snapshot_operation verification
-  • Python: key_operation decryption key_save token_operation snapshot_save snapshot_load snapshot_operation password_operation
-
-Key Differences:
-  • Operation count: TS has 0, PY has 1
+- TypeScript: `wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts`
+- Python: `py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py`
 
 ---
 
@@ -729,10 +645,107 @@ Key Differences:
 
 ---
 
-## Test 22: Works with correct keys, sets mode as existing-user **PASS**
+## Test 22: Works with correct keys, sets mode as existing-user **FAIL**
 
-- TypeScript: `wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts`
-- Python: `py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py`
+### TypeScript Test: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+
+```typescript
+    test('Works with correct keys, sets mode as existing-user', async () => {
+      const mockToken = await createMockUMPToken()
+      ;(mockUMPTokenInteractor.findByRecoveryKeyHash as any).mockResolvedValueOnce(mockToken)
+
+      // Provide recovery key
+      await manager.provideRecoveryKey(recoveryKey)
+
+      // Provide password
+      await manager.providePassword('test-password')
+
+      expect(manager.authenticated).toBe(true)
+      expect(mockWalletBuilder).toHaveBeenCalledTimes(1)
+    })
+```
+
+### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
+
+```python
+    @pytest.mark.skip(reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
+    async def test_works_with_correct_keys_sets_mode_as_existing_user(self) -> None:
+        """Given: Correct presentation key and password
+           When: Authenticate existing user
+           Then: Mode is set to existing-user
+
+        Reference: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+                   test('Works with correct keys, sets mode as existing-user')
+        """
+        presentation_key = os.urandom(32)
+        recovery_key = os.urandom(32)
+        password_salt = os.urandom(32)
+        password_key = hashlib.pbkdf2_hmac("sha512", b"test-password", password_salt, PBKDF2_NUM_ROUNDS, 32)
+        primary_key = os.urandom(32)
+        privileged_key = os.urandom(32)
+
+        existing_token = await create_mock_ump_token(
+            presentation_key, recovery_key, password_key, password_salt, PBKDF2_NUM_ROUNDS, primary_key, privileged_key
+        )
+
+        mock_underlying_wallet = MagicMock(spec=WalletInterface)
+        mock_wallet_builder = AsyncMock(return_value=mock_underlying_wallet)
+        mock_ump_interactor = MagicMock(spec=UMPTokenInteractor)
+        mock_ump_interactor.find_by_presentation_key_hash = AsyncMock(return_value=existing_token)
+        mock_recovery_key_saver = AsyncMock(return_value=True)
+        mock_password_retriever = AsyncMock(return_value="test-password")
+
+        manager = CWIStyleWalletManager(
+            ump_token_interactor=mock_ump_interactor,
+            wallet_builder=mock_wallet_builder,
+            recovery_key_saver=mock_recovery_key_saver,
+            password_retriever=mock_password_retriever,
+            admin_originator="admin.test.com",
+        )
+
+        result = await manager.authenticate(presentation_key)
+
+        assert result["mode"] == "existing-user"
+```
+
+### AI Analysis Results
+
+**Similarity Score**: 14.00%
+  - Structural: 0.00%
+  - Semantic: 28.00%
+  - Alignment: 0.00%
+
+**Critical Issues:**
+  - [HIGH] Python test is missing verifications: manager.authenticated
+  - [HIGH] Python test is missing operations: manager.providePassword, manager.provideRecoveryKey
+
+**Differences:**
+  - Operation count: TS has 2, PY has 1
+  - Verification count: TS has 2, PY has 1
+
+**Suggestions:**
+  - Add verifications for: manager.authenticated
+  - Add operations: manager.providePassword, manager.provideRecoveryKey
+
+**Explanation:**
+
+Overall Similarity: 14.0%
+  • Structural: 0.0% (sequence and structure)
+  • Semantic: 28.0% (test intent and meaning)
+  • Alignment: 0.0% (functional equivalence)
+
+Test Intent:
+  • TypeScript: value_verification authentication password_provide password_operation token_operation verification
+  • Python: key_save authentication password_operation token_operation key_operation verification
+
+Critical Issues (2):
+  • [HIGH] Python test is missing verifications: manager.authenticated
+  • [HIGH] Python test is missing operations: manager.providePassword, manager.provideRecoveryKey
+
+Key Differences:
+  • Operation count: TS has 2, PY has 1
+  • Verification count: TS has 2, PY has 1
 
 ---
 
@@ -774,6 +787,9 @@ Key Differences:
 ### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
 
 ```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
     async def test_serializeumptoken_and_deserializeumptoken_correctly_round_trip_a_ump_token(self) -> None:
         """Given: UMP token
            When: Serialize and deserialize
@@ -816,50 +832,144 @@ Key Differences:
             serialized = serialize_fn(token)
             assert isinstance(serialized, bytes)
             assert len(serialized) > 0
-
-            deserialized = deserialize_fn(serialized)
-            assert deserialized == token
 ```
 
 ### AI Analysis Results
 
-**Similarity Score**: 42.00%
+**Similarity Score**: 57.00%
   - Structural: 0.00%
-  - Semantic: 24.00%
+  - Semantic: 54.00%
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: token.currentOutpoint, serialized.length
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification token_operation' but PY verifies 'key_save password_operation token_operation key_operation verification'
+  - [HIGH] Python test is missing verifications: token.currentOutpoint
 
 **Differences:**
-  - Verification count: TS has 2, PY has 0
+  - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: token.currentOutpoint, serialized.length
+  - Align test intent: ensure PY test verifies 'verification value_verification token_operation'
+  - Add verifications for: token.currentOutpoint
 
 **Explanation:**
 
-Overall Similarity: 42.0%
+Overall Similarity: 57.0%
   • Structural: 0.0% (sequence and structure)
-  • Semantic: 24.0% (test intent and meaning)
+  • Semantic: 54.0% (test intent and meaning)
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification
-  • Python: key_operation key_save token_operation password_operation verification
+  • TypeScript: verification value_verification token_operation
+  • Python: key_save password_operation token_operation key_operation verification
 
-Critical Issues (1):
-  • [HIGH] Python test is missing verifications: token.currentOutpoint, serialized.length
+Critical Issues (2):
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification token_operation' but PY verifies 'key_save password_operation token_operation key_operation verification'
+  • [HIGH] Python test is missing verifications: token.currentOutpoint
 
 Key Differences:
-  • Verification count: TS has 2, PY has 0
+  • Verification count: TS has 2, PY has 1
 
 ---
 
-## Test 26: waitForAuthentication() eventually resolves **PASS**
+## Test 26: waitForAuthentication() eventually resolves **FAIL**
 
-- TypeScript: `wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts`
-- Python: `py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py`
+### TypeScript Test: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+
+```typescript
+    test('waitForAuthentication() eventually resolves', async () => {
+      // Already authenticated from beforeEach. So it should immediately return.
+      await manager.waitForAuthentication({}, 'normal.com')
+      expect(mockUnderlyingWallet.waitForAuthentication).toHaveBeenCalledTimes(1)
+    })
+```
+
+### Python Test: py-wallet-toolbox/tests/integration/test_cwi_style_wallet_manager.py
+
+```python
+
+    @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Waiting for CWIStyleWalletManager implementation")
+    @pytest.mark.asyncio
+    async def test_waitforauthentication_eventually_resolves(self) -> None:
+        """Given: Authenticated manager
+           When: Call waitForAuthentication
+           Then: Resolves immediately
+
+        Reference: wallet-toolbox/src/__tests/CWIStyleWalletManager.test.ts
+                   test('waitForAuthentication() eventually resolves')
+        """
+        # Given
+        mock_ump_interactor = Mock()
+        mock_ump_interactor.find_by_presentation_key_hash = AsyncMock(return_value=None)
+        mock_ump_interactor.build_and_send = AsyncMock(return_value="txid.0")
+
+        mock_wallet_builder = AsyncMock()
+        mock_underlying_wallet = Mock()
+        mock_underlying_wallet.wait_for_authentication = AsyncMock()
+        mock_wallet_builder.return_value = mock_underlying_wallet
+
+        mock_recovery_key_saver = AsyncMock(return_value=True)
+        mock_password_retriever = AsyncMock(return_value="test-password")
+
+        manager = CWIStyleWalletManager(
+            ump_token_interactor=mock_ump_interactor,
+            wallet_builder=mock_wallet_builder,
+            recovery_key_saver=mock_recovery_key_saver,
+            password_retriever=mock_password_retriever,
+            admin_originator="admin.test.com",
+        )
+
+        # Authenticate
+        presentation_key = bytes([0xA1] * 32)
+        await manager.provide_presentation_key(presentation_key)
+        await manager.provide_password("test-password")
+
+        # When
+        await manager.wait_for_authentication({}, originator="normal.com")
+
+        # Then
+```
+
+### AI Analysis Results
+
+**Similarity Score**: 31.00%
+  - Structural: 20.00%
+  - Semantic: 28.00%
+  - Alignment: 43.33%
+
+**Critical Issues:**
+  - [HIGH] Test intent differs: TS verifies 'authentication verification method_call_verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
+  - [HIGH] Python test is missing verifications: mock_underlying_wallet.waitForAuthentication
+  - [HIGH] Python test is missing operations: manager.waitForAuthentication
+
+**Differences:**
+  - Operation count: TS has 1, PY has 3
+  - Verification count: TS has 1, PY has 0
+
+**Suggestions:**
+  - Align test intent: ensure PY test verifies 'authentication verification method_call_verification'
+  - Add verifications for: mock_underlying_wallet.waitForAuthentication
+  - Add operations: manager.waitForAuthentication
+
+**Explanation:**
+
+Overall Similarity: 31.0%
+  • Structural: 20.0% (sequence and structure)
+  • Semantic: 28.0% (test intent and meaning)
+  • Alignment: 43.3% (functional equivalence)
+
+Test Intent:
+  • TypeScript: authentication verification method_call_verification
+  • Python: key_save authentication password_provide password_operation token_operation key_operation
+
+Critical Issues (3):
+  • [HIGH] Test intent differs: TS verifies 'authentication verification method_call_verification' but PY verifies 'key_save authentication password_provide password_operation token_operation key_operation'
+  • [HIGH] Python test is missing verifications: mock_underlying_wallet.waitForAuthentication
+  • [HIGH] Python test is missing operations: manager.waitForAuthentication
+
+Key Differences:
+  • Operation count: TS has 1, PY has 3
+  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -1106,13 +1216,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: call_arg.requestID, call_arg.originator, call_arg.type
+  - [HIGH] Python test is missing verifications: call_arg.type, call_arg.originator, call_arg.requestID
 
 **Differences:**
   - Verification count: TS has 4, PY has 2
 
 **Suggestions:**
-  - Add verifications for: call_arg.requestID, call_arg.originator, call_arg.type
+  - Add verifications for: call_arg.type, call_arg.originator, call_arg.requestID
 
 **Explanation:**
 
@@ -1122,11 +1232,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: call_arg.requestID, call_arg.originator, call_arg.type
+  • [HIGH] Python test is missing verifications: call_arg.type, call_arg.originator, call_arg.requestID
 
 Key Differences:
   • Verification count: TS has 4, PY has 2
@@ -1358,8 +1468,8 @@ Overall Similarity: 50.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.abortAction
@@ -1516,8 +1626,8 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
-  • Python: token_operation verification
+  • TypeScript: verification method_call_verification token_operation
+  • Python: verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.proveCertificate
@@ -1613,8 +1723,8 @@ Overall Similarity: 50.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: verification method_call_verification encryption
-  • Python: verification method_call_verification encryption
+  • TypeScript: encryption method_call_verification verification
+  • Python: encryption method_call_verification verification
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.encrypt
@@ -1721,8 +1831,8 @@ Overall Similarity: 20.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createSignature
@@ -2299,8 +2409,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, active_requests.size
@@ -2516,14 +2626,14 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.createAction
-  - [HIGH] Python test is missing operations: manager.createAction, manager.grantPermission
+  - [HIGH] Python test is missing operations: manager.grantPermission, manager.createAction
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
 
 **Suggestions:**
   - Add verifications for: underlying.createAction
-  - Add operations: manager.createAction, manager.grantPermission
+  - Add operations: manager.grantPermission, manager.createAction
 
 **Explanation:**
 
@@ -2538,7 +2648,7 @@ Test Intent:
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction
-  • [HIGH] Python test is missing operations: manager.createAction, manager.grantPermission
+  • [HIGH] Python test is missing operations: manager.grantPermission, manager.createAction
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -2644,8 +2754,8 @@ Overall Similarity: 20.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createSignature
@@ -2850,14 +2960,14 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.proveCertificate, req.renewal
+  - [HIGH] Python test is missing verifications: req.renewal, underlying.proveCertificate
   - [HIGH] Python test is missing operations: manager.grantPermission, manager.proveCertificate
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Add verifications for: underlying.proveCertificate, req.renewal
+  - Add verifications for: req.renewal, underlying.proveCertificate
   - Add operations: manager.grantPermission, manager.proveCertificate
 
 **Explanation:**
@@ -2868,11 +2978,11 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.proveCertificate, req.renewal
+  • [HIGH] Python test is missing verifications: req.renewal, underlying.proveCertificate
   • [HIGH] Python test is missing operations: manager.grantPermission, manager.proveCertificate
 
 Key Differences:
@@ -2989,15 +3099,15 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: req.renewal, req.previousToken, underlying.createSignature
-  - [HIGH] Python test is missing operations: manager.createSignature, manager.grantPermission
+  - [HIGH] Python test is missing verifications: req.previousToken, req.renewal, underlying.createSignature
+  - [HIGH] Python test is missing operations: manager.grantPermission, manager.createSignature
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Add verifications for: req.renewal, req.previousToken, underlying.createSignature
-  - Add operations: manager.createSignature, manager.grantPermission
+  - Add verifications for: req.previousToken, req.renewal, underlying.createSignature
+  - Add operations: manager.grantPermission, manager.createSignature
 
 **Explanation:**
 
@@ -3007,12 +3117,12 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: req.renewal, req.previousToken, underlying.createSignature
-  • [HIGH] Python test is missing operations: manager.createSignature, manager.grantPermission
+  • [HIGH] Python test is missing verifications: req.previousToken, req.renewal, underlying.createSignature
+  • [HIGH] Python test is missing operations: manager.grantPermission, manager.createSignature
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -3099,7 +3209,7 @@ Overall Similarity: 40.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
   • Python: token_operation
 
 Critical Issues (1):
@@ -3211,8 +3321,8 @@ Overall Similarity: 20.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.proveCertificate
@@ -3330,8 +3440,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication token_operation verification method_call_verification
-  • Python: token_operation verification method_call_verification
+  • TypeScript: authentication verification method_call_verification token_operation
+  • Python: verification method_call_verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction
@@ -3428,7 +3538,7 @@ Overall Similarity: 46.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification
+  • TypeScript: verification method_call_verification token_operation
   • Python: verification method_call_verification
 
 Critical Issues (1):
@@ -3510,7 +3620,6 @@ Critical Issues (1):
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
   - Add verifications for: underlying.createAction, active_requests.size
@@ -3524,7 +3633,7 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification method_call_verification
 
 Critical Issues (2):
@@ -3533,7 +3642,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 2, PY has 1
 
 ---
 
@@ -3632,7 +3740,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.createAction, active_requests.size
-  - [HIGH] Python test is missing operations: manager.createAction, manager.grantPermission
+  - [HIGH] Python test is missing operations: manager.grantPermission, manager.createAction
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
@@ -3640,7 +3748,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: underlying.createAction, active_requests.size
-  - Add operations: manager.createAction, manager.grantPermission
+  - Add operations: manager.grantPermission, manager.createAction
 
 **Explanation:**
 
@@ -3650,12 +3758,12 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification method_call_verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, active_requests.size
-  • [HIGH] Python test is missing operations: manager.createAction, manager.grantPermission
+  • [HIGH] Python test is missing operations: manager.grantPermission, manager.createAction
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -3731,7 +3839,7 @@ Overall Similarity: 46.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification method_call_verification
 
 Critical Issues (1):
@@ -3816,13 +3924,10 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.createSignature, active_requests.size
-
-**Differences:**
-  - Verification count: TS has 2, PY has 1
+  - [HIGH] Python test is missing verifications: active_requests.size, underlying.createSignature
 
 **Suggestions:**
-  - Add verifications for: underlying.createSignature, active_requests.size
+  - Add verifications for: active_requests.size, underlying.createSignature
 
 **Explanation:**
 
@@ -3832,14 +3937,11 @@ Overall Similarity: 46.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification method_call_verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: underlying.createSignature, active_requests.size
-
-Key Differences:
-  • Verification count: TS has 2, PY has 1
+  • [HIGH] Python test is missing verifications: active_requests.size, underlying.createSignature
 
 ---
 
@@ -3871,10 +3973,238 @@ Key Differences:
 
 ---
 
-## Test 65: should encrypt metadata fields in createAction when encryptWalletMetadata=true, then decrypt them in listActions **PASS**
+## Test 65: should encrypt metadata fields in createAction when encryptWalletMetadata=true, then decrypt them in listActions **FAIL**
 
-- TypeScript: `wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts`
-- Python: `py-wallet-toolbox/tests/permissions/test_wallet_permissions_manager_encryption.py`
+### TypeScript Test: wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts
+
+```typescript
+    it('should encrypt metadata fields in createAction when encryptWalletMetadata=true, then decrypt them in listActions', async () => {
+      const manager = new WalletPermissionsManager(underlying, 'admin.domain.com', {
+        encryptWalletMetadata: true
+      })
+      manager.bindCallback('onSpendingAuthorizationRequested', x => {
+        manager.grantPermission({ requestID: x.requestID, ephemeral: true })
+      })
+
+      // We prepare an action with multiple metadata fields
+      const actionDescription = 'User Action #1: Doing something important'
+      const inputDesc = 'Some input desc'
+      const outputDesc = 'Some output desc'
+      const customInstr = 'Some custom instructions'
+
+      // Our createAction call
+      await manager.createAction(
+        {
+          description: actionDescription,
+          inputs: [
+            {
+              outpoint: '0231.0',
+              unlockingScriptLength: 73,
+              inputDescription: inputDesc
+            }
+          ],
+          outputs: [
+            {
+              lockingScript: '561234',
+              satoshis: 500,
+              outputDescription: outputDesc,
+              customInstructions: customInstr
+            }
+          ]
+        },
+        'nonadmin.com'
+      )
+
+      // 1) Confirm underlying.encrypt() was called for each field that is non-empty:
+      //    - description
+      //    - inputDescription
+      //    - outputDescription
+      //    - customInstructions
+      // (We can't be certain how many times exactly, but we can check that it was at least 4.)
+      expect(underlying.encrypt).toHaveBeenCalledTimes(4)
+
+      // 2) Now we simulate listing actions. We'll have the manager call underlying.listActions.
+      //    Our mock underlying wallet returns an empty array by default, so let's override it
+      //    to return the "encrypted" data that the manager gave it.
+      //    But the manager doesn't store that data in the underlying wallet mock automatically.
+      //    We'll just pretend that the wallet returns some data, and ensure the manager tries to decrypt it.
+      ;(underlying.listActions as any).mockResolvedValueOnce({
+        totalActions: 1,
+        actions: [
+          {
+            description: Utils.toBase64(Utils.toArray('fake-encrypted-string-for-description')),
+            inputs: [
+              {
+                outpoint: 'txid1.0',
+                inputDescription: Utils.toBase64(Utils.toArray('fake-encrypted-string-for-inputDesc'))
+              }
+            ],
+            outputs: [
+              {
+                lockingScript: 'OP_RETURN 1234',
+                satoshis: 500,
+                outputDescription: Utils.toBase64(Utils.toArray('fake-encrypted-string-for-outputDesc')),
+                customInstructions: Utils.toBase64(Utils.toArray('fake-encrypted-string-for-customInstr'))
+              }
+            ]
+          }
+        ]
+      })
+
+      // Also mock decrypt calls to simulate a correct round-trip
+      const decryptMock = underlying.decrypt as any
+      decryptMock.mockResolvedValueOnce({
+        plaintext: Array.from(actionDescription).map(c => c.charCodeAt(0))
+      })
+      decryptMock.mockResolvedValueOnce({
+        plaintext: Array.from(inputDesc).map(c => c.charCodeAt(0))
+      })
+      decryptMock.mockResolvedValueOnce({
+        plaintext: Array.from(outputDesc).map(c => c.charCodeAt(0))
+      })
+      decryptMock.mockResolvedValueOnce({
+        plaintext: Array.from(customInstr).map(c => c.charCodeAt(0))
+      })
+
+      const result = await (manager as any).listActions({}, 'nonadmin.com')
+
+      // We should get exactly 1 action
+      expect(result.actions.length).toBe(1)
+      const action = result.actions[0]
+
+      // The manager is expected to have decrypted each field
+      expect(action.description).toBe(actionDescription)
+      expect(action.inputs[0].inputDescription).toBe(inputDesc)
+      expect(action.outputs[0].outputDescription).toBe(outputDesc)
+      expect(action.outputs[0].customInstructions).toBe(customInstr)
+    })
+```
+
+### Python Test: py-wallet-toolbox/tests/permissions/test_wallet_permissions_manager_encryption.py
+
+```python
+    def test_should_encrypt_metadata_fields_in_createaction_when_encryptwalletmetadata_true_then_decrypt_them_in_listactions(
+        self,
+    ) -> None:
+        """Given: WalletPermissionsManager with encryptWalletMetadata=True
+           When: Call createAction() with metadata fields, then listActions()
+           Then: Metadata is encrypted on create and decrypted on list
+
+        Reference: wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts
+                   test('should encrypt metadata fields in createAction when encryptWalletMetadata=true, then decrypt them in listActions')
+        """
+        underlying = create_mock_underlying_wallet()
+        manager = WalletPermissionsManager(underlying, "admin.domain.com", encrypt_wallet_metadata=True)
+        manager.bind_callback(
+            "onSpendingAuthorizationRequested",
+            lambda x: manager.grant_permission({"requestID": x["requestID"], "ephemeral": True}),
+        )
+
+        action_description = "User Action #1: Doing something important"
+        input_desc = "Some input desc"
+        output_desc = "Some output desc"
+        custom_instr = "Some custom instructions"
+
+        manager.create_action(
+            {
+                "description": action_description,
+                "inputs": [{"outpoint": "0231.0", "unlockingScriptLength": 73, "inputDescription": input_desc}],
+                "outputs": [
+                    {
+                        "lockingScript": "561234",
+                        "satoshis": 500,
+                        "outputDescription": output_desc,
+                        "customInstructions": custom_instr,
+                    }
+                ],
+            },
+            "nonadmin.com",
+        )
+
+        assert underlying.encrypt.call_count == 4
+
+        underlying.list_actions = AsyncMock(
+            return_value={
+                "totalActions": 1,
+                "actions": [
+                    {
+                        "description": base64.b64encode(b"fake-encrypted-string-for-description").decode(),
+                        "inputs": [
+                            {
+                                "outpoint": "txid1.0",
+                                "inputDescription": base64.b64encode(b"fake-encrypted-string-for-inputDesc").decode(),
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "lockingScript": "OP_RETURN 1234",
+                                "satoshis": 500,
+                                "outputDescription": base64.b64encode(b"fake-encrypted-string-for-outputDesc").decode(),
+                                "customInstructions": base64.b64encode(
+                                    b"fake-encrypted-string-for-customInstr"
+                                ).decode(),
+                            }
+                        ],
+                    }
+                ],
+            }
+        )
+
+        decrypt_responses = [
+            {"plaintext": [ord(c) for c in action_description]},
+            {"plaintext": [ord(c) for c in input_desc]},
+            {"plaintext": [ord(c) for c in output_desc]},
+            {"plaintext": [ord(c) for c in custom_instr]},
+        ]
+        underlying.decrypt = AsyncMock(side_effect=decrypt_responses)
+
+        result = manager.list_actions({}, "nonadmin.com")
+
+        assert len(result["actions"]) == 1
+        action = result["actions"][0]
+        assert action["description"] == action_description
+        assert action["inputs"][0]["inputDescription"] == input_desc
+        assert action["outputs"][0]["outputDescription"] == output_desc
+        assert action["outputs"][0]["customInstructions"] == custom_instr
+```
+
+### AI Analysis Results
+
+**Similarity Score**: 42.00%
+  - Structural: 0.00%
+  - Semantic: 84.00%
+  - Alignment: 0.00%
+
+**Critical Issues:**
+  - [HIGH] Python test is missing verifications: action.description
+  - [HIGH] Python test is missing operations: manager.createAction
+
+**Differences:**
+  - Operation count: TS has 1, PY has 0
+  - Verification count: TS has 2, PY has 6
+
+**Suggestions:**
+  - Add verifications for: action.description
+  - Add operations: manager.createAction
+
+**Explanation:**
+
+Overall Similarity: 42.0%
+  • Structural: 0.0% (sequence and structure)
+  • Semantic: 84.0% (test intent and meaning)
+  • Alignment: 0.0% (functional equivalence)
+
+Test Intent:
+  • TypeScript: encryption value_verification decryption verification method_call_verification
+  • Python: decryption encryption verification
+
+Critical Issues (2):
+  • [HIGH] Python test is missing verifications: action.description
+  • [HIGH] Python test is missing operations: manager.createAction
+
+Key Differences:
+  • Operation count: TS has 1, PY has 0
+  • Verification count: TS has 2, PY has 6
 
 ---
 
@@ -3892,10 +4222,205 @@ Key Differences:
 
 ---
 
-## Test 68: should not encrypt metadata if encryptWalletMetadata=false, storing and retrieving plaintext **PASS**
+## Test 68: should not encrypt metadata if encryptWalletMetadata=false, storing and retrieving plaintext **FAIL**
 
-- TypeScript: `wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts`
-- Python: `py-wallet-toolbox/tests/permissions/test_wallet_permissions_manager_encryption.py`
+### TypeScript Test: wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts
+
+```typescript
+    it('should not encrypt metadata if encryptWalletMetadata=false, storing and retrieving plaintext', async () => {
+      const manager = new WalletPermissionsManager(underlying, 'admin.domain.com', {
+        encryptWalletMetadata: false
+      })
+      manager.bindCallback('onSpendingAuthorizationRequested', x => {
+        manager.grantPermission({ requestID: x.requestID, ephemeral: true })
+      })
+
+      const actionDescription = 'Plaintext action description'
+      const inputDesc = 'Plaintext input desc'
+      const outputDesc = 'Plaintext output desc'
+      const customInstr = 'Plaintext instructions'
+      await manager.createAction(
+        {
+          description: actionDescription,
+          inputs: [
+            {
+              outpoint: '9876.0',
+              unlockingScriptLength: 73,
+              inputDescription: inputDesc
+            }
+          ],
+          outputs: [
+            {
+              lockingScript: 'ABCD',
+              satoshis: 123,
+              outputDescription: outputDesc,
+              customInstructions: customInstr
+            }
+          ]
+        },
+        'nonadmin.com'
+      )
+
+      // Because encryption is disabled, underlying.encrypt() is not called
+      expect(underlying.encrypt).not.toHaveBeenCalled()
+
+      // Simulate that the wallet actually stored them in plaintext and is returning them as-is
+      ;(underlying.listActions as any).mockResolvedValue({
+        totalActions: 1,
+        actions: [
+          {
+            description: actionDescription,
+            inputs: [
+              {
+                outpoint: '0123.0',
+                inputDescription: inputDesc
+              }
+            ],
+            outputs: [
+              {
+                lockingScript: 'ABCD',
+                satoshis: 123,
+                outputDescription: outputDesc,
+                customInstructions: customInstr
+              }
+            ]
+          }
+        ]
+      })
+
+      // Decrypt is still called, because we try to decrypt regardless of whether encryption is enabled.
+      // This allows us to disable it on a wallet that had it in the past. The result is that when not encrypted,
+      // the plaintext is returned if decryption fails. If it was encrypted from metadata encryption being enabled in
+      // the past (even when not enabled now), we will still decrypt and see the correct plaintext rather than garbage.
+      // To simulate, we make decryption pass through.
+      underlying.decrypt.mockImplementation(x => x)
+      const listResult = await (manager as any).listActions({}, 'nonadmin.com')
+      expect(underlying.decrypt).toHaveBeenCalledTimes(3)
+
+      // Confirm the returned data is the same as originally provided (plaintext)
+      const [first] = listResult.actions
+      expect(first.description).toBe(actionDescription)
+      expect(first.inputs[0].inputDescription).toBe(inputDesc)
+      expect(first.outputs[0].outputDescription).toBe(outputDesc)
+      expect(first.outputs[0].customInstructions).toBe(customInstr)
+    })
+```
+
+### Python Test: py-wallet-toolbox/tests/permissions/test_wallet_permissions_manager_encryption.py
+
+```python
+    def test_should_not_encrypt_metadata_if_encryptwalletmetadata_false_storing_and_retrieving_plaintext(
+        self,
+    ) -> None:
+        """Given: WalletPermissionsManager with encryptWalletMetadata=False
+           When: Call createAction() and listActions()
+           Then: Metadata is stored and retrieved in plaintext without encryption
+
+        Reference: wallet-toolbox/src/__tests/WalletPermissionsManager.encryption.test.ts
+                   test('should not encrypt metadata if encryptWalletMetadata=false, storing and retrieving plaintext')
+        """
+        underlying = create_mock_underlying_wallet()
+        manager = WalletPermissionsManager(underlying, "admin.domain.com", encrypt_wallet_metadata=False)
+        manager.bind_callback(
+            "onSpendingAuthorizationRequested",
+            lambda x: manager.grant_permission({"requestID": x["requestID"], "ephemeral": True}),
+        )
+
+        action_description = "Plaintext action description"
+        input_desc = "Plaintext input desc"
+        output_desc = "Plaintext output desc"
+        custom_instr = "Plaintext instructions"
+
+        manager.create_action(
+            {
+                "description": action_description,
+                "inputs": [{"outpoint": "9876.0", "unlockingScriptLength": 73, "inputDescription": input_desc}],
+                "outputs": [
+                    {
+                        "lockingScript": "ABCD",
+                        "satoshis": 123,
+                        "outputDescription": output_desc,
+                        "customInstructions": custom_instr,
+                    }
+                ],
+            },
+            "nonadmin.com",
+        )
+
+        assert underlying.encrypt.call_count == 0
+
+        underlying.list_actions = AsyncMock(
+            return_value={
+                "totalActions": 1,
+                "actions": [
+                    {
+                        "description": action_description,
+                        "inputs": [{"outpoint": "0123.0", "inputDescription": input_desc}],
+                        "outputs": [
+                            {
+                                "lockingScript": "ABCD",
+                                "satoshis": 123,
+                                "outputDescription": output_desc,
+                                "customInstructions": custom_instr,
+                            }
+                        ],
+                    }
+                ],
+            }
+        )
+
+        underlying.decrypt = AsyncMock(side_effect=lambda x: x)
+
+        list_result = manager.list_actions({}, "nonadmin.com")
+
+        assert underlying.decrypt.call_count == 3
+        first = list_result["actions"][0]
+        assert first["description"] == action_description
+        assert first["inputs"][0]["inputDescription"] == input_desc
+        assert first["outputs"][0]["outputDescription"] == output_desc
+        assert first["outputs"][0]["customInstructions"] == custom_instr
+```
+
+### AI Analysis Results
+
+**Similarity Score**: 42.00%
+  - Structural: 0.00%
+  - Semantic: 84.00%
+  - Alignment: 0.00%
+
+**Critical Issues:**
+  - [HIGH] Test intent differs: TS verifies 'encryption value_verification decryption authentication verification method_call_verification' but PY verifies 'decryption encryption verification'
+  - [HIGH] Python test is missing verifications: first.description
+  - [HIGH] Python test is missing operations: manager.createAction
+
+**Differences:**
+  - Operation count: TS has 1, PY has 0
+  - Verification count: TS has 2, PY has 6
+
+**Suggestions:**
+  - Align test intent: ensure PY test verifies 'encryption value_verification decryption authentication verification method_call_verification'
+  - Add verifications for: first.description
+  - Add operations: manager.createAction
+
+**Explanation:**
+
+Overall Similarity: 42.0%
+  • Structural: 0.0% (sequence and structure)
+  • Semantic: 84.0% (test intent and meaning)
+  • Alignment: 0.0% (functional equivalence)
+
+Test Intent:
+  • TypeScript: encryption value_verification decryption authentication verification method_call_verification
+  • Python: decryption encryption verification
+
+Critical Issues (3):
+  • [HIGH] Test intent differs: TS verifies 'encryption value_verification decryption authentication verification method_call_verification' but PY verifies 'decryption encryption verification'
+  • [HIGH] Python test is missing verifications: first.description
+  • [HIGH] Python test is missing operations: manager.createAction
+
+Key Differences:
+  • Operation count: TS has 1, PY has 0
+  • Verification count: TS has 2, PY has 6
 
 ---
 
@@ -4053,7 +4578,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
   - Add verifications for: active_requests.size
@@ -4067,8 +4591,8 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification
-  • Python: token_operation verification
+  • TypeScript: verification value_verification token_operation
+  • Python: verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: active_requests.size
@@ -4076,7 +4600,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 2, PY has 1
 
 ---
 
@@ -4241,7 +4764,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
-  - Verification count: TS has 3, PY has 2
 
 **Suggestions:**
   - Add verifications for: active_requests.size
@@ -4255,8 +4777,8 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification
-  • Python: token_operation verification
+  • TypeScript: verification value_verification token_operation
+  • Python: verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: active_requests.size
@@ -4264,7 +4786,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
-  • Verification count: TS has 3, PY has 2
 
 ---
 
@@ -4416,8 +4937,8 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification encryption
-  • Python: token_operation verification
+  • TypeScript: encryption value_verification verification token_operation
+  • Python: verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: previous_token.txid
@@ -4573,7 +5094,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
-  - Verification count: TS has 3, PY has 1
 
 **Suggestions:**
   - Add verifications for: active_requests.size
@@ -4587,8 +5107,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption value_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: active_requests.size
@@ -4596,7 +5116,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
-  • Verification count: TS has 3, PY has 1
 
 ---
 
@@ -4746,7 +5265,7 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 3, PY has 1
+  - Verification count: TS has 3, PY has 2
 
 **Suggestions:**
   - Add verifications for: active_requests.size
@@ -4760,8 +5279,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption value_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: active_requests.size
@@ -4769,7 +5288,7 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 3, PY has 1
+  • Verification count: TS has 3, PY has 2
 
 ---
 
@@ -4868,7 +5387,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
   - Add verifications for: underlying.createAction, active_requests.size
@@ -4882,7 +5400,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -4891,7 +5409,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 2, PY has 1
 
 ---
 
@@ -4994,9 +5511,6 @@ Key Differences:
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: active_requests.size
 
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
 **Suggestions:**
   - Add verifications for: active_requests.size
 
@@ -5008,14 +5522,11 @@ Overall Similarity: 42.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
-  • Python: token_operation verification
+  • TypeScript: verification value_verification
+  • Python: verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: active_requests.size
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -5087,10 +5598,10 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: internal_config.seekPermissionsForIdentityKeyRevelation, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata, internal_config.seekProtocolPermissionsForEncrypting
+  - [HIGH] Python test is missing verifications: internal_config.seekProtocolPermissionsForSigning, internal_config.seekProtocolPermissionsForEncrypting, internal_config.encryptWalletMetadata, internal_config.seekPermissionsForIdentityKeyRevelation
 
 **Suggestions:**
-  - Add verifications for: internal_config.seekPermissionsForIdentityKeyRevelation, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata
+  - Add verifications for: internal_config.seekProtocolPermissionsForSigning, internal_config.seekProtocolPermissionsForEncrypting, internal_config.encryptWalletMetadata
 
 **Explanation:**
 
@@ -5100,11 +5611,11 @@ Overall Similarity: 47.1%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification encryption
-  • Python: authentication verification encryption
+  • TypeScript: authentication encryption verification value_verification
+  • Python: authentication encryption verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: internal_config.seekPermissionsForIdentityKeyRevelation, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata, internal_config.seekProtocolPermissionsForEncrypting
+  • [HIGH] Python test is missing verifications: internal_config.seekProtocolPermissionsForSigning, internal_config.seekProtocolPermissionsForEncrypting, internal_config.encryptWalletMetadata, internal_config.seekPermissionsForIdentityKeyRevelation
 
 ---
 
@@ -5175,10 +5686,10 @@ Critical Issues (1):
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata, internal_config.seekBasketInsertionPermissions
+  - [HIGH] Python test is missing verifications: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.seekBasketInsertionPermissions, internal_config.encryptWalletMetadata
 
 **Suggestions:**
-  - Add verifications for: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata
+  - Add verifications for: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.seekBasketInsertionPermissions
 
 **Explanation:**
 
@@ -5188,11 +5699,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification encryption
-  • Python: authentication verification encryption
+  • TypeScript: encryption verification value_verification
+  • Python: authentication encryption verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.encryptWalletMetadata, internal_config.seekBasketInsertionPermissions
+  • [HIGH] Python test is missing verifications: internal_config.seekSpendingPermissions, internal_config.seekProtocolPermissionsForSigning, internal_config.seekBasketInsertionPermissions, internal_config.encryptWalletMetadata
 
 ---
 
@@ -5298,9 +5809,6 @@ Critical Issues (1):
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: active_requests.size
 
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
 **Suggestions:**
   - Add verifications for: active_requests.size
 
@@ -5312,14 +5820,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: active_requests.size
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -5401,13 +5906,10 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.createSignature, active_requests.size
-
-**Differences:**
-  - Verification count: TS has 2, PY has 1
+  - [HIGH] Python test is missing verifications: active_requests.size, underlying.createSignature
 
 **Suggestions:**
-  - Add verifications for: underlying.createSignature, active_requests.size
+  - Add verifications for: active_requests.size, underlying.createSignature
 
 **Explanation:**
 
@@ -5417,14 +5919,11 @@ Overall Similarity: 42.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: underlying.createSignature, active_requests.size
-
-Key Differences:
-  • Verification count: TS has 2, PY has 1
+  • [HIGH] Python test is missing verifications: active_requests.size, underlying.createSignature
 
 ---
 
@@ -5661,7 +6160,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -5923,7 +6422,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -6046,8 +6545,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: decryption verification method_call_verification encryption
-  • Python: decryption verification encryption
+  • TypeScript: decryption encryption method_call_verification verification
+  • Python: decryption encryption verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.listActions
@@ -6139,7 +6638,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -6217,7 +6716,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.keyringForVerifier, underlying.proveCertificate
+  - [HIGH] Python test is missing verifications: underlying.proveCertificate, result.keyringForVerifier
   - [HIGH] Python test is missing operations: manager.proveCertificate
 
 **Differences:**
@@ -6225,7 +6724,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: result.keyringForVerifier, underlying.proveCertificate
+  - Add verifications for: underlying.proveCertificate, result.keyringForVerifier
   - Add operations: manager.proveCertificate
 
 **Explanation:**
@@ -6236,11 +6735,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.keyringForVerifier, underlying.proveCertificate
+  • [HIGH] Python test is missing verifications: underlying.proveCertificate, result.keyringForVerifier
   • [HIGH] Python test is missing operations: manager.proveCertificate
 
 Key Differences:
@@ -6429,7 +6928,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -6537,7 +7036,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -6666,8 +7165,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: decryption verification method_call_verification encryption
-  • Python: decryption verification encryption
+  • TypeScript: decryption encryption method_call_verification verification
+  • Python: decryption encryption verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.listOutputs
@@ -6961,8 +7460,8 @@ Overall Similarity: 27.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication method_call_verification verification value_verification encryption
-  • Python: verification encryption
+  • TypeScript: encryption value_verification authentication verification method_call_verification
+  • Python: encryption verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, call_args.labels
@@ -7075,8 +7574,8 @@ Overall Similarity: 16.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: verification method_call_verification encryption
-  • Python: verification encryption
+  • TypeScript: encryption method_call_verification verification
+  • Python: encryption verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.internalizeAction
@@ -7249,7 +7748,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -7324,7 +7823,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.signature, underlying.createSignature
+  - [HIGH] Python test is missing verifications: underlying.createSignature, result.signature
   - [HIGH] Python test is missing operations: manager.createSignature
 
 **Differences:**
@@ -7332,7 +7831,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: result.signature, underlying.createSignature
+  - Add verifications for: underlying.createSignature, result.signature
   - Add operations: manager.createSignature
 
 **Explanation:**
@@ -7343,11 +7842,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.signature, underlying.createSignature
+  • [HIGH] Python test is missing verifications: underlying.createSignature, result.signature
   • [HIGH] Python test is missing operations: manager.createSignature
 
 Key Differences:
@@ -7415,7 +7914,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.decrypt, result.plaintext
+  - [HIGH] Python test is missing verifications: result.plaintext, underlying.decrypt
   - [HIGH] Python test is missing operations: manager.decrypt
 
 **Differences:**
@@ -7423,7 +7922,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: underlying.decrypt, result.plaintext
+  - Add verifications for: result.plaintext, underlying.decrypt
   - Add operations: manager.decrypt
 
 **Explanation:**
@@ -7434,11 +7933,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification decryption verification method_call_verification
-  • Python: decryption verification encryption
+  • TypeScript: decryption verification method_call_verification value_verification
+  • Python: decryption encryption verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.decrypt, result.plaintext
+  • [HIGH] Python test is missing verifications: result.plaintext, underlying.decrypt
   • [HIGH] Python test is missing operations: manager.decrypt
 
 Key Differences:
@@ -7507,7 +8006,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.ciphertext, underlying.encrypt
+  - [HIGH] Python test is missing verifications: underlying.encrypt, result.ciphertext
   - [HIGH] Python test is missing operations: manager.encrypt
 
 **Differences:**
@@ -7515,7 +8014,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: result.ciphertext, underlying.encrypt
+  - Add verifications for: underlying.encrypt, result.ciphertext
   - Add operations: manager.encrypt
 
 **Explanation:**
@@ -7526,11 +8025,11 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification encryption
-  • Python: verification encryption
+  • TypeScript: encryption method_call_verification verification value_verification
+  • Python: encryption verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.ciphertext, underlying.encrypt
+  • [HIGH] Python test is missing verifications: underlying.encrypt, result.ciphertext
   • [HIGH] Python test is missing operations: manager.encrypt
 
 Key Differences:
@@ -7659,7 +8158,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.height, underlying.getHeight
+  - [HIGH] Python test is missing verifications: underlying.getHeight, result.height
   - [HIGH] Python test is missing operations: manager.getHeight
 
 **Differences:**
@@ -7667,7 +8166,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: result.height, underlying.getHeight
+  - Add verifications for: underlying.getHeight, result.height
   - Add operations: manager.getHeight
 
 **Explanation:**
@@ -7678,11 +8177,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.height, underlying.getHeight
+  • [HIGH] Python test is missing verifications: underlying.getHeight, result.height
   • [HIGH] Python test is missing operations: manager.getHeight
 
 Key Differences:
@@ -7735,7 +8234,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.getNetwork, result.network
+  - [HIGH] Python test is missing verifications: result.network, underlying.getNetwork
   - [HIGH] Python test is missing operations: manager.getNetwork
 
 **Differences:**
@@ -7743,7 +8242,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: underlying.getNetwork, result.network
+  - Add verifications for: result.network, underlying.getNetwork
   - Add operations: manager.getNetwork
 
 **Explanation:**
@@ -7754,11 +8253,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.getNetwork, result.network
+  • [HIGH] Python test is missing verifications: result.network, underlying.getNetwork
   • [HIGH] Python test is missing operations: manager.getNetwork
 
 Key Differences:
@@ -7830,7 +8329,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -7887,7 +8386,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.authenticated, underlying.isAuthenticated
+  - [HIGH] Python test is missing verifications: underlying.isAuthenticated, result.authenticated
   - [HIGH] Python test is missing operations: manager.isAuthenticated
 
 **Differences:**
@@ -7895,7 +8394,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: result.authenticated, underlying.isAuthenticated
+  - Add verifications for: underlying.isAuthenticated, result.authenticated
   - Add operations: manager.isAuthenticated
 
 **Explanation:**
@@ -7906,11 +8405,11 @@ Overall Similarity: 14.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification method_call_verification
+  • TypeScript: authentication verification method_call_verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.authenticated, underlying.isAuthenticated
+  • [HIGH] Python test is missing verifications: underlying.isAuthenticated, result.authenticated
   • [HIGH] Python test is missing operations: manager.isAuthenticated
 
 Key Differences:
@@ -8008,7 +8507,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -8072,7 +8571,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.verifyHmac, result.valid
+  - [HIGH] Python test is missing verifications: result.valid, underlying.verifyHmac
   - [HIGH] Python test is missing operations: manager.verifyHmac
 
 **Differences:**
@@ -8080,7 +8579,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Add verifications for: underlying.verifyHmac, result.valid
+  - Add verifications for: result.valid, underlying.verifyHmac
   - Add operations: manager.verifyHmac
 
 **Explanation:**
@@ -8091,11 +8590,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.verifyHmac, result.valid
+  • [HIGH] Python test is missing verifications: result.valid, underlying.verifyHmac
   • [HIGH] Python test is missing operations: manager.verifyHmac
 
 Key Differences:
@@ -8174,7 +8673,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification method_call_verification
+  • TypeScript: verification method_call_verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -8250,7 +8749,7 @@ Overall Similarity: 14.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification method_call_verification
+  • TypeScript: authentication verification method_call_verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -8387,8 +8886,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.encrypt
@@ -8462,6 +8961,9 @@ Key Differences:
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.encrypt
 
+**Differences:**
+  - Verification count: TS has 1, PY has 2
+
 **Suggestions:**
   - Add verifications for: underlying.encrypt
 
@@ -8473,11 +8975,14 @@ Overall Similarity: 47.1%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.encrypt
+
+Key Differences:
+  • Verification count: TS has 1, PY has 2
 
 ---
 
@@ -8561,6 +9066,9 @@ Critical Issues (1):
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.encrypt
 
+**Differences:**
+  - Verification count: TS has 1, PY has 2
+
 **Suggestions:**
   - Add verifications for: underlying.encrypt
 
@@ -8572,11 +9080,14 @@ Overall Similarity: 47.1%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.encrypt
+
+Key Differences:
+  • Verification count: TS has 1, PY has 2
 
 ---
 
@@ -8686,6 +9197,9 @@ Critical Issues (1):
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.encrypt
 
+**Differences:**
+  - Verification count: TS has 1, PY has 2
+
 **Suggestions:**
   - Add verifications for: underlying.encrypt
 
@@ -8697,11 +9211,14 @@ Overall Similarity: 47.1%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.encrypt
+
+Key Differences:
+  • Verification count: TS has 1, PY has 2
 
 ---
 
@@ -8778,6 +9295,9 @@ Critical Issues (1):
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: underlying.encrypt
 
+**Differences:**
+  - Verification count: TS has 1, PY has 2
+
 **Suggestions:**
   - Add verifications for: underlying.encrypt
 
@@ -8789,11 +9309,14 @@ Overall Similarity: 47.1%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (1):
   • [HIGH] Python test is missing verifications: underlying.encrypt
+
+Key Differences:
+  • Verification count: TS has 1, PY has 2
 
 ---
 
@@ -8892,8 +9415,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, underlying.encrypt
@@ -9012,8 +9535,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, underlying.encrypt
@@ -9136,7 +9659,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.createAction, action_args.outputs, underlying.encrypt
+  - [HIGH] Python test is missing verifications: underlying.createAction, underlying.encrypt, action_args.outputs
   - [HIGH] Python test is missing operations: manager.grantPermission
 
 **Differences:**
@@ -9144,7 +9667,7 @@ Key Differences:
   - Verification count: TS has 3, PY has 4
 
 **Suggestions:**
-  - Add verifications for: underlying.createAction, action_args.outputs, underlying.encrypt
+  - Add verifications for: underlying.createAction, underlying.encrypt, action_args.outputs
   - Add operations: manager.grantPermission
 
 **Explanation:**
@@ -9155,11 +9678,11 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.createAction, action_args.outputs, underlying.encrypt
+  • [HIGH] Python test is missing verifications: underlying.createAction, underlying.encrypt, action_args.outputs
   • [HIGH] Python test is missing operations: manager.grantPermission
 
 Key Differences:
@@ -9264,8 +9787,8 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: underlying.createAction, underlying.encrypt
@@ -9358,13 +9881,13 @@ Key Differences:
 
 ### AI Analysis Results
 
-**Similarity Score**: 15.00%
+**Similarity Score**: 12.00%
   - Structural: 0.00%
-  - Semantic: 30.00%
+  - Semantic: 24.00%
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.signAction, sign_args.spends, sign_args.reference, create_args.inputs, underlying.createAction
+  - [HIGH] Python test is missing verifications: underlying.createAction, create_args.inputs, sign_args.spends, sign_args.reference, underlying.signAction
   - [HIGH] Python test is missing operations: manager.revokePermission
 
 **Differences:**
@@ -9372,22 +9895,22 @@ Key Differences:
   - Verification count: TS has 5, PY has 4
 
 **Suggestions:**
-  - Add verifications for: underlying.signAction, sign_args.spends, sign_args.reference
+  - Add verifications for: underlying.createAction, create_args.inputs, sign_args.spends
   - Add operations: manager.revokePermission
 
 **Explanation:**
 
-Overall Similarity: 15.0%
+Overall Similarity: 12.0%
   • Structural: 0.0% (sequence and structure)
-  • Semantic: 30.0% (test intent and meaning)
+  • Semantic: 24.0% (test intent and meaning)
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation method_call_verification verification token_lifecycle value_verification
-  • Python: token_operation verification token_lifecycle
+  • TypeScript: value_verification token_operation token_lifecycle verification method_call_verification
+  • Python: token_lifecycle verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.signAction, sign_args.spends, sign_args.reference, create_args.inputs, underlying.createAction
+  • [HIGH] Python test is missing verifications: underlying.createAction, create_args.inputs, sign_args.spends, sign_args.reference, underlying.signAction
   • [HIGH] Python test is missing operations: manager.revokePermission
 
 Key Differences:
@@ -9519,7 +10042,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: underlying.createAction, create_args.outputs, create_args.inputs, underlying.encrypt
+  - [HIGH] Python test is missing verifications: underlying.createAction, create_args.outputs, underlying.encrypt, create_args.inputs
   - [HIGH] Python test is missing operations: manager.grantPermission
 
 **Differences:**
@@ -9527,7 +10050,7 @@ Key Differences:
   - Verification count: TS has 4, PY has 3
 
 **Suggestions:**
-  - Add verifications for: underlying.createAction, create_args.outputs, create_args.inputs
+  - Add verifications for: underlying.createAction, create_args.outputs, underlying.encrypt
   - Add operations: manager.grantPermission
 
 **Explanation:**
@@ -9538,11 +10061,11 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: token_operation verification method_call_verification encryption
-  • Python: token_operation verification encryption
+  • TypeScript: encryption method_call_verification verification token_operation
+  • Python: encryption verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: underlying.createAction, create_args.outputs, create_args.inputs, underlying.encrypt
+  • [HIGH] Python test is missing verifications: underlying.createAction, create_args.outputs, underlying.encrypt, create_args.inputs
   • [HIGH] Python test is missing operations: manager.grantPermission
 
 Key Differences:
@@ -9647,14 +10170,14 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: hmac.length
-  - [HIGH] Python test is missing operations: user.destroyKey, counterparty.destroyKey, counterparty.verifyHmac, user.createHmac
+  - [HIGH] Python test is missing operations: user.createHmac, counterparty.destroyKey, user.destroyKey, counterparty.verifyHmac
 
 **Differences:**
   - Verification count: TS has 1, PY has 2
 
 **Suggestions:**
   - Add verifications for: hmac.length
-  - Add operations: user.destroyKey, counterparty.destroyKey, counterparty.verifyHmac
+  - Add operations: user.createHmac, counterparty.destroyKey, user.destroyKey
 
 **Explanation:**
 
@@ -9664,12 +10187,12 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: hmac.length
-  • [HIGH] Python test is missing operations: user.destroyKey, counterparty.destroyKey, counterparty.verifyHmac, user.createHmac
+  • [HIGH] Python test is missing operations: user.createHmac, counterparty.destroyKey, user.destroyKey, counterparty.verifyHmac
 
 Key Differences:
   • Verification count: TS has 1, PY has 2
@@ -9789,8 +10312,8 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'general_test'
-  - [HIGH] Python test is missing verifications: chunks.length, chunk.length, reassembled.length
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'general_test'
+  - [HIGH] Python test is missing verifications: chunk.length, reassembled.length, chunks.length
   - [HIGH] Python test is missing operations: km.destroyKey
 
 **Differences:**
@@ -9798,8 +10321,8 @@ Key Differences:
   - Verification count: TS has 4, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
-  - Add verifications for: chunks.length, chunk.length, reassembled.length
+  - Align test intent: ensure PY test verifies 'verification value_verification'
+  - Add verifications for: chunk.length, reassembled.length, chunks.length
   - Add operations: km.destroyKey
 
 **Explanation:**
@@ -9810,12 +10333,12 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: general_test
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'general_test'
-  • [HIGH] Python test is missing verifications: chunks.length, chunk.length, reassembled.length
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'general_test'
+  • [HIGH] Python test is missing verifications: chunk.length, reassembled.length, chunks.length
   • [HIGH] Python test is missing operations: km.destroyKey
 
 Key Differences:
@@ -10013,36 +10536,36 @@ Key Differences:
 
 ### AI Analysis Results
 
-**Similarity Score**: 21.64%
+**Similarity Score**: 20.64%
   - Structural: 0.00%
-  - Semantic: 30.00%
+  - Semantic: 28.00%
   - Alignment: 22.12%
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: hmac.length
-  - [HIGH] Python test is missing operations: user.createSignature, user.encrypt, user.verifySignature, user.verifyHmac, user.getPublicKey, anyone.verifySignature, anyone.destroyKey, user.createHmac, user.destroyKey, user.decrypt
+  - [HIGH] Python test is missing operations: user.createHmac, user.verifyHmac, user.decrypt, user.getPublicKey, anyone.verifySignature, user.verifySignature, user.createSignature, anyone.destroyKey, user.encrypt, user.destroyKey
 
 **Differences:**
   - Operation count: TS has 15, PY has 2
 
 **Suggestions:**
   - Add verifications for: hmac.length
-  - Add operations: user.createSignature, user.encrypt, user.verifySignature
+  - Add operations: user.createHmac, user.verifyHmac, user.decrypt
 
 **Explanation:**
 
-Overall Similarity: 21.6%
+Overall Similarity: 20.6%
   • Structural: 0.0% (sequence and structure)
-  • Semantic: 30.0% (test intent and meaning)
+  • Semantic: 28.0% (test intent and meaning)
   • Alignment: 22.1% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication decryption verification value_verification encryption
-  • Python: authentication verification encryption
+  • TypeScript: encryption value_verification decryption authentication verification
+  • Python: authentication encryption verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: hmac.length
-  • [HIGH] Python test is missing operations: user.createSignature, user.encrypt, user.verifySignature, user.verifyHmac, user.getPublicKey, anyone.verifySignature, anyone.destroyKey, user.createHmac, user.destroyKey, user.decrypt
+  • [HIGH] Python test is missing operations: user.createHmac, user.verifyHmac, user.decrypt, user.getPublicKey, anyone.verifySignature, user.verifySignature, user.createSignature, anyone.destroyKey, user.encrypt, user.destroyKey
 
 Key Differences:
   • Operation count: TS has 15, PY has 2
@@ -10148,13 +10671,13 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey, prover_wallet.destroyKey
+  - [HIGH] Python test is missing operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey, verifier_wallet.destroyKey
 
 **Differences:**
   - Operation count: TS has 4, PY has 2
 
 **Suggestions:**
-  - Add operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey
+  - Add operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey
 
 **Explanation:**
 
@@ -10164,11 +10687,11 @@ Overall Similarity: 42.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: decryption verification encryption
+  • TypeScript: decryption encryption verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey, prover_wallet.destroyKey
+  • [HIGH] Python test is missing operations: prover_wallet.revealCounterpartyKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey, verifier_wallet.destroyKey
 
 Key Differences:
   • Operation count: TS has 4, PY has 2
@@ -10296,13 +10819,13 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey, prover_wallet.destroyKey
+  - [HIGH] Python test is missing operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey, verifier_wallet.destroyKey
 
 **Differences:**
   - Operation count: TS has 4, PY has 2
 
 **Suggestions:**
-  - Add operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey
+  - Add operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey
 
 **Explanation:**
 
@@ -10312,11 +10835,11 @@ Overall Similarity: 42.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: decryption verification encryption
+  • TypeScript: decryption encryption verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, verifier_wallet.destroyKey, prover_wallet.destroyKey
+  • [HIGH] Python test is missing operations: prover_wallet.revealSpecificKeyLinkage, verifier_wallet.decrypt, prover_wallet.destroyKey, verifier_wallet.destroyKey
 
 Key Differences:
   • Operation count: TS has 4, PY has 2
@@ -10400,90 +10923,10 @@ Key Differences:
 
 ---
 
-## Test 160: 4 get header byte file links **FAIL**
+## Test 160: 4 get header byte file links **PASS**
 
-### TypeScript Test: wallet-toolbox/src/services/chaintracker/chaintracks/Ingest/__tests/WhatsOnChainServices.test.ts
-
-```typescript
-  test('4 get header byte file links', async () => {
-    const fetch = new ChaintracksFetch()
-    const woc = new WhatsOnChainServices(WhatsOnChainServices.createWhatsOnChainServicesOptions('main'))
-    const files = await woc.getHeaderByteFileLinks(new HeightRange(907123, 911000))
-    expect(files.length).toBe(3)
-    expect(files[0].range.minHeight).toBe(906001)
-    expect(files[0].range.maxHeight).toBe(908000)
-    expect(files[1].range.minHeight).toBe(908001)
-    expect(files[1].range.maxHeight).toBe(910000)
-    expect(files[2].range.minHeight).toBe(910001)
-    expect(files[2].range.maxHeight).toBeGreaterThan(910001)
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/services/test_services.py
-
-```python
-    def test_get_header_byte_file_links(self) -> None:
-        """Given: WhatsOnChainServices instance
-           When: Get header byte file links for height range 907123-911000
-           Then: Returns 3 files with correct height ranges
-
-        Reference: wallet-toolbox/src/services/chaintracker/chaintracks/Ingest/__tests/WhatsOnChainServices.test.ts
-                   test('4 get header byte file links')
-        """
-        # Given
-        ChaintracksFetch()
-        woc = WhatsOnChainServices(WhatsOnChainServices.create_whats_on_chain_services_options("main"))
-
-        # When
-        files = woc.get_header_byte_file_links(HeightRange(907123, 911000))
-
-        # Then
-        assert len(files) == 3
-        assert files[0].range.min_height == 906001
-        assert files[0].range.max_height == 908000
-        assert files[1].range.min_height == 908001
-        assert files[1].range.max_height == 910000
-        assert files[2].range.min_height == 910001
-        assert files[2].range.max_height > 910001
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 13.33%
-  - Structural: 0.00%
-  - Semantic: 26.67%
-  - Alignment: 0.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: files.length
-  - [HIGH] Python test is missing operations: woc.getHeaderByteFileLinks
-
-**Differences:**
-  - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 6
-
-**Suggestions:**
-  - Add verifications for: files.length
-  - Add operations: woc.getHeaderByteFileLinks
-
-**Explanation:**
-
-Overall Similarity: 13.3%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 26.7% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification verification
-  • Python: verification
-
-Critical Issues (2):
-  • [HIGH] Python test is missing verifications: files.length
-  • [HIGH] Python test is missing operations: woc.getHeaderByteFileLinks
-
-Key Differences:
-  • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 6
+- TypeScript: `wallet-toolbox/src/services/chaintracker/chaintracks/Ingest/__tests/WhatsOnChainServices.test.ts`
+- Python: `py-wallet-toolbox/tests/services/test_services.py`
 
 ---
 
@@ -10603,15 +11046,15 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: part_headers.length, both_headers.length, bulk_headers.length, live_headers.length
+  - [HIGH] Python test is missing verifications: bulk_headers.length, both_headers.length, part_headers.length, live_headers.length
   - [HIGH] Python test is missing operations: client.getInfo, client.getHeaders
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
-  - Verification count: TS has 4, PY has 0
+  - Verification count: TS has 4, PY has 1
 
 **Suggestions:**
-  - Add verifications for: part_headers.length, both_headers.length, bulk_headers.length
+  - Add verifications for: bulk_headers.length, both_headers.length, part_headers.length
   - Add operations: client.getInfo, client.getHeaders
 
 **Explanation:**
@@ -10622,16 +11065,16 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification token_operation verification
+  • TypeScript: verification value_verification token_operation
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: part_headers.length, both_headers.length, bulk_headers.length, live_headers.length
+  • [HIGH] Python test is missing verifications: bulk_headers.length, both_headers.length, part_headers.length, live_headers.length
   • [HIGH] Python test is missing operations: client.getInfo, client.getHeaders
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
-  • Verification count: TS has 4, PY has 0
+  • Verification count: TS has 4, PY has 1
 
 ---
 
@@ -10849,246 +11292,24 @@ Key Differences:
 
 ---
 
-## Test 179: 1 download **FAIL**
+## Test 179: 1 download **PASS**
 
-### TypeScript Test: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-
-```typescript
-  test('1 download', async () => {
-    const fetch = new ChaintracksFetch()
-    const cdnUrl = 'https://cdn.projectbabbage.com/blockheaders/'
-    const url = `${cdnUrl}/testNet_0.headers`
-    const data = await fetch.download(url)
-    expect(data.length).toBe(8000000)
-    const fileHash = asString(Hash.sha256(asArray(data)), 'base64')
-    expect(validBulkHeaderFilesByFileHash()[fileHash]).toBeDefined()
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/chaintracks/test_fetch.py
-
-```python
-    def test_download(self) -> None:
-        """Given: ChaintracksFetch instance and CDN URL
-           When: Download testNet_0.headers file
-           Then: Returns 8000000 bytes with valid hash
-
-        Reference: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-                   test('1 download')
-        """
-        # Given
-        fetch = ChaintracksFetch()
-        cdn_url = "https://cdn.projectbabbage.com/blockheaders/"
-        url = f"{cdn_url}/testNet_0.headers"
-
-        # When
-        data = fetch.download(url)
-
-        # Then
-        assert len(data) == 8000000
-        file_hash = as_string(sha256(as_array(data)), "base64")
-        assert valid_bulk_header_files_by_file_hash()[file_hash] is not None
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 16.00%
-  - Structural: 0.00%
-  - Semantic: 32.00%
-  - Alignment: 0.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: data.length
-  - [HIGH] Python test is missing operations: fetch.download
-
-**Differences:**
-  - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: data.length
-  - Add operations: fetch.download
-
-**Explanation:**
-
-Overall Similarity: 16.0%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 32.0% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification snapshot_load verification
-  • Python: snapshot_load verification
-
-Critical Issues (2):
-  • [HIGH] Python test is missing verifications: data.length
-  • [HIGH] Python test is missing operations: fetch.download
-
-Key Differences:
-  • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts`
+- Python: `py-wallet-toolbox/tests/chaintracks/test_fetch.py`
 
 ---
 
-## Test 180: 3 download **FAIL**
+## Test 180: 3 download **PASS**
 
-### TypeScript Test: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-
-```typescript
-  test('3 download', async () => {
-    const fetch = new ChaintracksFetch()
-    const cdnUrl = 'https://cdn.projectbabbage.com/blockheaders/'
-    const url = `${cdnUrl}/testNet_4.headers`
-    const data = await fetch.download(url)
-    expect(data.length).toBe(80 * 100000)
-    const fileHash = asString(Hash.sha256(asArray(data)), 'base64')
-    expect(validBulkHeaderFilesByFileHash()[fileHash]).toBeDefined()
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/chaintracks/test_fetch.py
-
-```python
-    def test_download(self) -> None:
-        """Given: ChaintracksFetch instance and CDN URL
-           When: Download testNet_0.headers file
-           Then: Returns 8000000 bytes with valid hash
-
-        Reference: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-                   test('1 download')
-        """
-        # Given
-        fetch = ChaintracksFetch()
-        cdn_url = "https://cdn.projectbabbage.com/blockheaders/"
-        url = f"{cdn_url}/testNet_0.headers"
-
-        # When
-        data = fetch.download(url)
-
-        # Then
-        assert len(data) == 8000000
-        file_hash = as_string(sha256(as_array(data)), "base64")
-        assert valid_bulk_header_files_by_file_hash()[file_hash] is not None
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 16.00%
-  - Structural: 0.00%
-  - Semantic: 32.00%
-  - Alignment: 0.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: data.length
-  - [HIGH] Python test is missing operations: fetch.download
-
-**Differences:**
-  - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: data.length
-  - Add operations: fetch.download
-
-**Explanation:**
-
-Overall Similarity: 16.0%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 32.0% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification snapshot_load verification
-  • Python: snapshot_load verification
-
-Critical Issues (2):
-  • [HIGH] Python test is missing verifications: data.length
-  • [HIGH] Python test is missing operations: fetch.download
-
-Key Differences:
-  • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts`
+- Python: `py-wallet-toolbox/tests/chaintracks/test_fetch.py`
 
 ---
 
-## Test 181: 4 download **FAIL**
+## Test 181: 4 download **PASS**
 
-### TypeScript Test: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-
-```typescript
-  test('4 download', async () => {
-    const fetch = new ChaintracksFetch()
-    const cdnUrl = 'https://cdn.projectbabbage.com/blockheaders/'
-    const url = `${cdnUrl}/mainNet_2.headers`
-    const data = await fetch.download(url)
-    expect(data.length).toBe(80 * 100000)
-    const fileHash = asString(Hash.sha256(asArray(data)), 'base64')
-    expect(validBulkHeaderFilesByFileHash()[fileHash]).toBeDefined()
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/chaintracks/test_fetch.py
-
-```python
-    def test_download(self) -> None:
-        """Given: ChaintracksFetch instance and CDN URL
-           When: Download testNet_0.headers file
-           Then: Returns 8000000 bytes with valid hash
-
-        Reference: wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts
-                   test('1 download')
-        """
-        # Given
-        fetch = ChaintracksFetch()
-        cdn_url = "https://cdn.projectbabbage.com/blockheaders/"
-        url = f"{cdn_url}/testNet_0.headers"
-
-        # When
-        data = fetch.download(url)
-
-        # Then
-        assert len(data) == 8000000
-        file_hash = as_string(sha256(as_array(data)), "base64")
-        assert valid_bulk_header_files_by_file_hash()[file_hash] is not None
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 16.00%
-  - Structural: 0.00%
-  - Semantic: 32.00%
-  - Alignment: 0.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: data.length
-  - [HIGH] Python test is missing operations: fetch.download
-
-**Differences:**
-  - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: data.length
-  - Add operations: fetch.download
-
-**Explanation:**
-
-Overall Similarity: 16.0%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 32.0% (test intent and meaning)
-  • Alignment: 0.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification snapshot_load verification
-  • Python: snapshot_load verification
-
-Critical Issues (2):
-  • [HIGH] Python test is missing verifications: data.length
-  • [HIGH] Python test is missing operations: fetch.download
-
-Key Differences:
-  • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/services/chaintracker/chaintracks/util/__tests/ChaintracksFetch.test.ts`
+- Python: `py-wallet-toolbox/tests/chaintracks/test_fetch.py`
 
 ---
 
@@ -11209,7 +11430,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication verification key_change'
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication key_change verification'
   - [HIGH] Python test is missing verifications: r.timestamp, r.base, r.rate
   - [HIGH] Python test is missing operations: woc_main.updateBsvExchangeRate
 
@@ -11217,7 +11438,7 @@ Key Differences:
   - Operation count: TS has 1, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
+  - Align test intent: ensure PY test verifies 'verification value_verification'
   - Add verifications for: r.timestamp, r.base, r.rate
   - Add operations: woc_main.updateBsvExchangeRate
 
@@ -11229,11 +11450,11 @@ Overall Similarity: 42.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
-  • Python: authentication verification key_change
+  • TypeScript: verification value_verification
+  • Python: authentication key_change verification
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication verification key_change'
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication key_change verification'
   • [HIGH] Python test is missing verifications: r.timestamp, r.base, r.rate
   • [HIGH] Python test is missing operations: woc_main.updateBsvExchangeRate
 
@@ -11594,16 +11815,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: entity.fieldValue, unchanged_record.length, entity.masterKey
-  - [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate, active_storage.insertCertificateField
+  - [HIGH] Python test is missing verifications: entity.masterKey, entity.fieldValue, unchanged_record.length
+  - [HIGH] Python test is missing operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
   - Verification count: TS has 3, PY has 2
 
 **Suggestions:**
-  - Add verifications for: entity.fieldValue, unchanged_record.length, entity.masterKey
-  - Add operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate
+  - Add verifications for: entity.masterKey, entity.fieldValue, unchanged_record.length
+  - Add operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields
 
 **Explanation:**
 
@@ -11613,12 +11834,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification key_change
+  • TypeScript: key_change verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: entity.fieldValue, unchanged_record.length, entity.masterKey
-  • [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate, active_storage.insertCertificateField
+  • [HIGH] Python test is missing verifications: entity.masterKey, entity.fieldValue, unchanged_record.length
+  • [HIGH] Python test is missing operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -11777,16 +11998,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: entity.fieldValue, entity.masterKey, updated_record.length
-  - [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate, active_storage.insertCertificateField
+  - [HIGH] Python test is missing verifications: entity.masterKey, updated_record.length, entity.fieldValue
+  - [HIGH] Python test is missing operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
   - Verification count: TS has 3, PY has 7
 
 **Suggestions:**
-  - Add verifications for: entity.fieldValue, entity.masterKey, updated_record.length
-  - Add operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate
+  - Add verifications for: entity.masterKey, updated_record.length, entity.fieldValue
+  - Add operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields
 
 **Explanation:**
 
@@ -11796,12 +12017,12 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: entity.fieldValue, entity.masterKey, updated_record.length
-  • [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.findCertificateFields, active_storage.insertCertificate, active_storage.insertCertificateField
+  • [HIGH] Python test is missing verifications: entity.masterKey, updated_record.length, entity.fieldValue
+  • [HIGH] Python test is missing operations: active_storage.insertCertificateField, active_storage.insertCertificate, active_storage.findCertificateFields, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -11979,16 +12200,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: entity.serialNumber, entity.subject, entity.isDeleted, entity.signature, entity.type, entity.verifier, entity.revocationOutpoint, updated_record.length
-  - [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  - [HIGH] Python test is missing verifications: entity.verifier, entity.signature, updated_record.length, entity.subject, entity.revocationOutpoint, entity.serialNumber, entity.type, entity.isDeleted
+  - [HIGH] Python test is missing operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 8, PY has 7
 
 **Suggestions:**
-  - Add verifications for: entity.serialNumber, entity.subject, entity.isDeleted
-  - Add operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  - Add verifications for: entity.verifier, entity.signature, updated_record.length
+  - Add operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 **Explanation:**
 
@@ -11998,12 +12219,12 @@ Overall Similarity: 39.6%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: entity.serialNumber, entity.subject, entity.isDeleted, entity.signature, entity.type, entity.verifier, entity.revocationOutpoint, updated_record.length
-  • [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  • [HIGH] Python test is missing verifications: entity.verifier, entity.signature, updated_record.length, entity.subject, entity.revocationOutpoint, entity.serialNumber, entity.type, entity.isDeleted
+  • [HIGH] Python test is missing operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -12157,16 +12378,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: entity.type, entity.serialNumber, entity.subject, unchanged_record.length, entity.isDeleted, entity.revocationOutpoint, entity.signature
-  - [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  - [HIGH] Python test is missing verifications: entity.revocationOutpoint, entity.serialNumber, entity.signature, entity.type, entity.isDeleted, entity.subject, unchanged_record.length
+  - [HIGH] Python test is missing operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 7, PY has 2
 
 **Suggestions:**
-  - Add verifications for: entity.type, entity.serialNumber, entity.subject
-  - Add operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  - Add verifications for: entity.revocationOutpoint, entity.serialNumber, entity.signature
+  - Add operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 **Explanation:**
 
@@ -12176,12 +12397,12 @@ Overall Similarity: 20.6%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification key_change
+  • TypeScript: key_change verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: entity.type, entity.serialNumber, entity.subject, unchanged_record.length, entity.isDeleted, entity.revocationOutpoint, entity.signature
-  • [HIGH] Python test is missing operations: entity.mergeExisting, active_storage.insertCertificate, active_storage.findCertificates
+  • [HIGH] Python test is missing verifications: entity.revocationOutpoint, entity.serialNumber, entity.signature, entity.type, entity.isDeleted, entity.subject, unchanged_record.length
+  • [HIGH] Python test is missing operations: active_storage.insertCertificate, active_storage.findCertificates, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -12363,7 +12584,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: entity.isRedeemed, updated_record.length
-  - [HIGH] Python test is missing operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission, entity.mergeExisting
+  - [HIGH] Python test is missing operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
@@ -12371,7 +12592,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: entity.isRedeemed, updated_record.length
-  - Add operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission
+  - Add operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction
 
 **Explanation:**
 
@@ -12381,12 +12602,12 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: entity.isRedeemed, updated_record.length
-  • [HIGH] Python test is missing operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission, entity.mergeExisting
+  • [HIGH] Python test is missing operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -12527,7 +12748,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: entity.isRedeemed, record.length
-  - [HIGH] Python test is missing operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission, entity.mergeExisting
+  - [HIGH] Python test is missing operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction, entity.mergeExisting
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
@@ -12535,7 +12756,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: entity.isRedeemed, record.length
-  - Add operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission
+  - Add operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction
 
 **Explanation:**
 
@@ -12545,12 +12766,12 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: entity.isRedeemed, record.length
-  • [HIGH] Python test is missing operations: active_storage.insertTransaction, active_storage.findCommissions, active_storage.insertCommission, entity.mergeExisting
+  • [HIGH] Python test is missing operations: active_storage.findCommissions, active_storage.insertCommission, active_storage.insertTransaction, entity.mergeExisting
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -12690,7 +12911,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue, entity.isDeleted
+  - [HIGH] Python test is missing verifications: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length, entity.minimumDesiredUTXOValue
   - [HIGH] Python test is missing operations: entity.mergeExisting
 
 **Differences:**
@@ -12698,7 +12919,7 @@ Key Differences:
   - Verification count: TS has 4, PY has 3
 
 **Suggestions:**
-  - Add verifications for: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue
+  - Add verifications for: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length
   - Add operations: entity.mergeExisting
 
 **Explanation:**
@@ -12709,11 +12930,11 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue, entity.isDeleted
+  • [HIGH] Python test is missing verifications: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length, entity.minimumDesiredUTXOValue
   • [HIGH] Python test is missing operations: entity.mergeExisting
 
 Key Differences:
@@ -12845,7 +13066,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue, entity.isDeleted
+  - [HIGH] Python test is missing verifications: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length, entity.minimumDesiredUTXOValue
   - [HIGH] Python test is missing operations: entity.mergeExisting
 
 **Differences:**
@@ -12853,7 +13074,7 @@ Key Differences:
   - Verification count: TS has 4, PY has 3
 
 **Suggestions:**
-  - Add verifications for: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue
+  - Add verifications for: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length
   - Add operations: entity.mergeExisting
 
 **Explanation:**
@@ -12864,11 +13085,11 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: updated_record.length, entity.numberOfDesiredUTXOs, entity.minimumDesiredUTXOValue, entity.isDeleted
+  • [HIGH] Python test is missing verifications: entity.numberOfDesiredUTXOs, entity.isDeleted, updated_record.length, entity.minimumDesiredUTXOValue
   • [HIGH] Python test is missing operations: entity.mergeExisting
 
 Key Differences:
@@ -13093,7 +13314,7 @@ Overall Similarity: 27.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification key_change
+  • TypeScript: key_change verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -13238,7 +13459,7 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -13387,7 +13608,7 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -13533,7 +13754,7 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -13797,8 +14018,8 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'authentication value_verification verification key_change' but PY verifies 'verification'
-  - [HIGH] Python test is missing verifications: entity.senderIdentityKey, entity.purpose, entity.customInstructions, entity.lockingScript, entity.spentBy, entity.scriptLength, entity.outputDescription, entity.scriptOffset, entity.type, entity.spendingDescription, entity.change, entity.spendable, entity.providedBy, updated_record.length
+  - [HIGH] Test intent differs: TS verifies 'authentication key_change verification value_verification' but PY verifies 'verification'
+  - [HIGH] Python test is missing verifications: entity.scriptOffset, entity.senderIdentityKey, entity.purpose, entity.customInstructions, entity.change, entity.scriptLength, entity.outputDescription, updated_record.length, entity.providedBy, entity.spendingDescription, entity.type, entity.spentBy, entity.lockingScript, entity.spendable
   - [HIGH] Python test is missing operations: entity.mergeExisting
 
 **Differences:**
@@ -13806,8 +14027,8 @@ Key Differences:
   - Verification count: TS has 14, PY has 7
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'authentication value_verification verification key_change'
-  - Add verifications for: entity.senderIdentityKey, entity.purpose, entity.customInstructions
+  - Align test intent: ensure PY test verifies 'authentication key_change verification value_verification'
+  - Add verifications for: entity.scriptOffset, entity.senderIdentityKey, entity.purpose
   - Add operations: entity.mergeExisting
 
 **Explanation:**
@@ -13818,12 +14039,12 @@ Overall Similarity: 14.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification key_change
+  • TypeScript: authentication key_change verification value_verification
   • Python: verification
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'authentication value_verification verification key_change' but PY verifies 'verification'
-  • [HIGH] Python test is missing verifications: entity.senderIdentityKey, entity.purpose, entity.customInstructions, entity.lockingScript, entity.spentBy, entity.scriptLength, entity.outputDescription, entity.scriptOffset, entity.type, entity.spendingDescription, entity.change, entity.spendable, entity.providedBy, updated_record.length
+  • [HIGH] Test intent differs: TS verifies 'authentication key_change verification value_verification' but PY verifies 'verification'
+  • [HIGH] Python test is missing verifications: entity.scriptOffset, entity.senderIdentityKey, entity.purpose, entity.customInstructions, entity.change, entity.scriptLength, entity.outputDescription, updated_record.length, entity.providedBy, entity.spendingDescription, entity.type, entity.spentBy, entity.lockingScript, entity.spendable
   • [HIGH] Python test is missing operations: entity.mergeExisting
 
 Key Differences:
@@ -13955,7 +14176,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'authentication value_verification verification key_change' but PY verifies 'verification'
+  - [HIGH] Test intent differs: TS verifies 'authentication key_change verification value_verification' but PY verifies 'verification'
   - [HIGH] Python test is missing verifications: entity.spendable, unchanged_record.length
   - [HIGH] Python test is missing operations: entity.mergeExisting
 
@@ -13964,7 +14185,7 @@ Key Differences:
   - Verification count: TS has 2, PY has 1
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'authentication value_verification verification key_change'
+  - Align test intent: ensure PY test verifies 'authentication key_change verification value_verification'
   - Add verifications for: entity.spendable, unchanged_record.length
   - Add operations: entity.mergeExisting
 
@@ -13976,11 +14197,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification key_change
+  • TypeScript: authentication key_change verification value_verification
   • Python: verification
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'authentication value_verification verification key_change' but PY verifies 'verification'
+  • [HIGH] Test intent differs: TS verifies 'authentication key_change verification value_verification' but PY verifies 'verification'
   • [HIGH] Python test is missing verifications: entity.spendable, unchanged_record.length
   • [HIGH] Python test is missing operations: entity.mergeExisting
 
@@ -14219,13 +14440,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: entity.vout, entity.basketId, entity.entityName, entity.spentBy, entity.outputDescription, entity.derivationPrefix, entity.id, entity.entityTable, entity.transactionId, entity.userId, entity.spendingDescription, entity.change, entity.spendable, entity.satoshis, entity.providedBy, entity.lockingScript, entity.purpose, entity.customInstructions, entity.senderIdentityKey, entity.derivationSuffix, entity.updated_at, entity.scriptOffset, entity.outputId, entity.type, entity.txid, entity.scriptLength, entity.created_at
+  - [HIGH] Python test is missing verifications: entity.created_at, entity.purpose, entity.derivationSuffix, entity.outputId, entity.change, entity.scriptLength, entity.updated_at, entity.entityName, entity.satoshis, entity.txid, entity.spendingDescription, entity.type, entity.spentBy, entity.transactionId, entity.lockingScript, entity.scriptOffset, entity.vout, entity.id, entity.basketId, entity.userId, entity.entityTable, entity.customInstructions, entity.derivationPrefix, entity.outputDescription, entity.providedBy, entity.senderIdentityKey, entity.spendable
 
 **Differences:**
   - Verification count: TS has 52, PY has 16
 
 **Suggestions:**
-  - Add verifications for: entity.vout, entity.basketId, entity.entityName
+  - Add verifications for: entity.created_at, entity.purpose, entity.derivationSuffix
 
 **Explanation:**
 
@@ -14235,11 +14456,11 @@ Overall Similarity: 60.5%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification key_change
-  • Python: authentication verification key_change
+  • TypeScript: authentication key_change verification value_verification
+  • Python: authentication key_change verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: entity.vout, entity.basketId, entity.entityName, entity.spentBy, entity.outputDescription, entity.derivationPrefix, entity.id, entity.entityTable, entity.transactionId, entity.userId, entity.spendingDescription, entity.change, entity.spendable, entity.satoshis, entity.providedBy, entity.lockingScript, entity.purpose, entity.customInstructions, entity.senderIdentityKey, entity.derivationSuffix, entity.updated_at, entity.scriptOffset, entity.outputId, entity.type, entity.txid, entity.scriptLength, entity.created_at
+  • [HIGH] Python test is missing verifications: entity.created_at, entity.purpose, entity.derivationSuffix, entity.outputId, entity.change, entity.scriptLength, entity.updated_at, entity.entityName, entity.satoshis, entity.txid, entity.spendingDescription, entity.type, entity.spentBy, entity.transactionId, entity.lockingScript, entity.scriptOffset, entity.vout, entity.id, entity.basketId, entity.userId, entity.entityTable, entity.customInstructions, entity.derivationPrefix, entity.outputDescription, entity.providedBy, entity.senderIdentityKey, entity.spendable
 
 Key Differences:
   • Verification count: TS has 52, PY has 16
@@ -14386,7 +14607,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 0
 
 **Suggestions:**
   - Add verifications for: fetched_proven_tx_reqs.length
@@ -14400,7 +14620,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -14409,7 +14629,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -14569,13 +14788,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: proven_tx_req.attempts, proven_tx_req.entityTable, proven_tx_req.provenTxReqId, proven_tx_req.rawTx, proven_tx_req.batch, proven_tx_req.notified, proven_tx_req.inputBEEF, proven_tx_req.created_at, proven_tx_req.entityName, proven_tx_req.provenTxId, proven_tx_req.updated_at, proven_tx_req.id, proven_tx_req.txid
+  - [HIGH] Python test is missing verifications: proven_tx_req.id, proven_tx_req.entityTable, proven_tx_req.notified, proven_tx_req.created_at, proven_tx_req.updated_at, proven_tx_req.provenTxId, proven_tx_req.batch, proven_tx_req.rawTx, proven_tx_req.inputBEEF, proven_tx_req.provenTxReqId, proven_tx_req.txid, proven_tx_req.entityName, proven_tx_req.attempts
 
 **Differences:**
   - Verification count: TS has 13, PY has 12
 
 **Suggestions:**
-  - Add verifications for: proven_tx_req.attempts, proven_tx_req.entityTable, proven_tx_req.provenTxReqId
+  - Add verifications for: proven_tx_req.id, proven_tx_req.entityTable, proven_tx_req.notified
 
 **Explanation:**
 
@@ -14585,11 +14804,11 @@ Overall Similarity: 57.2%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: proven_tx_req.attempts, proven_tx_req.entityTable, proven_tx_req.provenTxReqId, proven_tx_req.rawTx, proven_tx_req.batch, proven_tx_req.notified, proven_tx_req.inputBEEF, proven_tx_req.created_at, proven_tx_req.entityName, proven_tx_req.provenTxId, proven_tx_req.updated_at, proven_tx_req.id, proven_tx_req.txid
+  • [HIGH] Python test is missing verifications: proven_tx_req.id, proven_tx_req.entityTable, proven_tx_req.notified, proven_tx_req.created_at, proven_tx_req.updated_at, proven_tx_req.provenTxId, proven_tx_req.batch, proven_tx_req.rawTx, proven_tx_req.inputBEEF, proven_tx_req.provenTxReqId, proven_tx_req.txid, proven_tx_req.entityName, proven_tx_req.attempts
 
 Key Differences:
   • Verification count: TS has 13, PY has 12
@@ -14815,7 +15034,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.rawTx, proven_tx_record.length, result.proven
+  - [HIGH] Python test is missing verifications: result.proven, result.rawTx, proven_tx_record.length
   - [HIGH] Python test is missing operations: entity_proven_tx.fromTxid
 
 **Differences:**
@@ -14823,7 +15042,7 @@ Key Differences:
   - Verification count: TS has 3, PY has 6
 
 **Suggestions:**
-  - Add verifications for: result.rawTx, proven_tx_record.length, result.proven
+  - Add verifications for: result.proven, result.rawTx, proven_tx_record.length
   - Add operations: entity_proven_tx.fromTxid
 
 **Explanation:**
@@ -14834,11 +15053,11 @@ Overall Similarity: 22.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification
+  • TypeScript: authentication verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.rawTx, proven_tx_record.length, result.proven
+  • [HIGH] Python test is missing verifications: result.proven, result.rawTx, proven_tx_record.length
   • [HIGH] Python test is missing operations: entity_proven_tx.fromTxid
 
 Key Differences:
@@ -14911,14 +15130,14 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.rawTx, result.proven
+  - [HIGH] Python test is missing verifications: result.proven, result.rawTx
   - [HIGH] Python test is missing operations: entity_proven_tx.fromTxid
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
 
 **Suggestions:**
-  - Add verifications for: result.rawTx, result.proven
+  - Add verifications for: result.proven, result.rawTx
   - Add operations: entity_proven_tx.fromTxid
 
 **Explanation:**
@@ -14929,11 +15148,11 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.rawTx, result.proven
+  • [HIGH] Python test is missing verifications: result.proven, result.rawTx
   • [HIGH] Python test is missing operations: entity_proven_tx.fromTxid
 
 Key Differences:
@@ -15012,15 +15231,15 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: result.rawTx, result.proven
-  - [HIGH] Python test is missing operations: services.getMerklePath, entity_proven_tx.fromTxid, services.getRawTx
+  - [HIGH] Python test is missing verifications: result.proven, result.rawTx
+  - [HIGH] Python test is missing operations: services.getRawTx, services.getMerklePath, entity_proven_tx.fromTxid
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: result.rawTx, result.proven
-  - Add operations: services.getMerklePath, entity_proven_tx.fromTxid, services.getRawTx
+  - Add verifications for: result.proven, result.rawTx
+  - Add operations: services.getRawTx, services.getMerklePath, entity_proven_tx.fromTxid
 
 **Explanation:**
 
@@ -15030,12 +15249,12 @@ Overall Similarity: 28.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: result.rawTx, result.proven
-  • [HIGH] Python test is missing operations: services.getMerklePath, entity_proven_tx.fromTxid, services.getRawTx
+  • [HIGH] Python test is missing verifications: result.proven, result.rawTx
+  • [HIGH] Python test is missing operations: services.getRawTx, services.getMerklePath, entity_proven_tx.fromTxid
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -15185,13 +15404,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: proven_tx.entityName, proven_tx.updated_at, proven_tx.provenTxId, proven_tx.merkleRoot, proven_tx.blockHash, proven_tx.height, proven_tx.entityTable, proven_tx.index, proven_tx.rawTx, proven_tx.id, proven_tx.txid, proven_tx.merklePath, proven_tx.created_at
+  - [HIGH] Python test is missing verifications: proven_tx.id, proven_tx.entityName, proven_tx.txid, proven_tx.height, proven_tx.merklePath, proven_tx.updated_at, proven_tx.rawTx, proven_tx.blockHash, proven_tx.created_at, proven_tx.provenTxId, proven_tx.index, proven_tx.merkleRoot, proven_tx.entityTable
 
 **Differences:**
   - Verification count: TS has 24, PY has 15
 
 **Suggestions:**
-  - Add verifications for: proven_tx.entityName, proven_tx.updated_at, proven_tx.provenTxId
+  - Add verifications for: proven_tx.id, proven_tx.entityName, proven_tx.txid
 
 **Explanation:**
 
@@ -15201,11 +15420,11 @@ Overall Similarity: 68.7%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: proven_tx.entityName, proven_tx.updated_at, proven_tx.provenTxId, proven_tx.merkleRoot, proven_tx.blockHash, proven_tx.height, proven_tx.entityTable, proven_tx.index, proven_tx.rawTx, proven_tx.id, proven_tx.txid, proven_tx.merklePath, proven_tx.created_at
+  • [HIGH] Python test is missing verifications: proven_tx.id, proven_tx.entityName, proven_tx.txid, proven_tx.height, proven_tx.merklePath, proven_tx.updated_at, proven_tx.rawTx, proven_tx.blockHash, proven_tx.created_at, proven_tx.provenTxId, proven_tx.index, proven_tx.merkleRoot, proven_tx.entityTable
 
 Key Differences:
   • Verification count: TS has 24, PY has 15
@@ -15373,13 +15592,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: sync_state.storageIdentityKey, sync_state.updated_at, sync_state.refNum, sync_state.satoshis, sync_state.status, sync_state.when, sync_state.userId, sync_state.created_at, sync_state.init, sync_state.storageName
+  - [HIGH] Python test is missing verifications: sync_state.refNum, sync_state.userId, sync_state.status, sync_state.satoshis, sync_state.storageName, sync_state.updated_at, sync_state.init, sync_state.created_at, sync_state.storageIdentityKey, sync_state.when
 
 **Differences:**
   - Verification count: TS has 10, PY has 12
 
 **Suggestions:**
-  - Add verifications for: sync_state.storageIdentityKey, sync_state.updated_at, sync_state.refNum
+  - Add verifications for: sync_state.refNum, sync_state.userId, sync_state.status
 
 **Explanation:**
 
@@ -15389,11 +15608,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: sync_state.storageIdentityKey, sync_state.updated_at, sync_state.refNum, sync_state.satoshis, sync_state.status, sync_state.when, sync_state.userId, sync_state.created_at, sync_state.init, sync_state.storageName
+  • [HIGH] Python test is missing verifications: sync_state.refNum, sync_state.userId, sync_state.status, sync_state.satoshis, sync_state.storageName, sync_state.updated_at, sync_state.init, sync_state.created_at, sync_state.storageIdentityKey, sync_state.when
 
 Key Differences:
   • Verification count: TS has 10, PY has 12
@@ -15649,13 +15868,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  - [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 **Differences:**
   - Verification count: TS has 5, PY has 14
 
 **Suggestions:**
-  - Add verifications for: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId
+  - Add verifications for: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at
 
 **Explanation:**
 
@@ -15665,11 +15884,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  • [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 Key Differences:
   • Verification count: TS has 5, PY has 14
@@ -15755,13 +15974,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  - [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 **Differences:**
   - Verification count: TS has 5, PY has 12
 
 **Suggestions:**
-  - Add verifications for: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId
+  - Add verifications for: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at
 
 **Explanation:**
 
@@ -15771,11 +15990,11 @@ Overall Similarity: 46.0%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication value_verification verification
+  • TypeScript: authentication verification value_verification
   • Python: authentication verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  • [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 Key Differences:
   • Verification count: TS has 5, PY has 12
@@ -15862,13 +16081,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  - [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 **Differences:**
   - Verification count: TS has 5, PY has 14
 
 **Suggestions:**
-  - Add verifications for: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId
+  - Add verifications for: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at
 
 **Explanation:**
 
@@ -15878,11 +16097,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: tx_label_map.updated_at, tx_label_map.isDeleted, tx_label_map.transactionId, tx_label_map.txLabelId, tx_label_map.created_at
+  • [HIGH] Python test is missing verifications: tx_label_map.transactionId, tx_label_map.isDeleted, tx_label_map.created_at, tx_label_map.txLabelId, tx_label_map.updated_at
 
 Key Differences:
   • Verification count: TS has 5, PY has 14
@@ -16264,13 +16483,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: tx_label.label, tx_label.id, tx_label.updated_at, tx_label.txLabelId, tx_label.isDeleted, tx_label.entityTable, tx_label.userId, tx_label.entityName, tx_label.created_at
+  - [HIGH] Python test is missing verifications: tx_label.userId, tx_label.entityName, tx_label.txLabelId, tx_label.isDeleted, tx_label.id, tx_label.created_at, tx_label.updated_at, tx_label.label, tx_label.entityTable
 
 **Differences:**
   - Verification count: TS has 9, PY has 14
 
 **Suggestions:**
-  - Add verifications for: tx_label.label, tx_label.id, tx_label.updated_at
+  - Add verifications for: tx_label.userId, tx_label.entityName, tx_label.txLabelId
 
 **Explanation:**
 
@@ -16280,11 +16499,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: tx_label.label, tx_label.id, tx_label.updated_at, tx_label.txLabelId, tx_label.isDeleted, tx_label.entityTable, tx_label.userId, tx_label.entityName, tx_label.created_at
+  • [HIGH] Python test is missing verifications: tx_label.userId, tx_label.entityName, tx_label.txLabelId, tx_label.isDeleted, tx_label.id, tx_label.created_at, tx_label.updated_at, tx_label.label, tx_label.entityTable
 
 Key Differences:
   • Verification count: TS has 9, PY has 14
@@ -16489,14 +16708,14 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: user.activeStorage, data.updated_at, data.activeStorage
+  - [HIGH] Python test is missing verifications: data.updated_at, data.activeStorage, user.activeStorage
   - [HIGH] Python test is missing operations: user.mergeExisting
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
 
 **Suggestions:**
-  - Add verifications for: user.activeStorage, data.updated_at, data.activeStorage
+  - Add verifications for: data.updated_at, data.activeStorage, user.activeStorage
   - Add operations: user.mergeExisting
 
 **Explanation:**
@@ -16507,11 +16726,11 @@ Overall Similarity: 33.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: user.activeStorage, data.updated_at, data.activeStorage
+  • [HIGH] Python test is missing verifications: data.updated_at, data.activeStorage, user.activeStorage
   • [HIGH] Python test is missing operations: user.mergeExisting
 
 Key Differences:
@@ -16633,14 +16852,14 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: user.activeStorage, data.updated_at, data.activeStorage
+  - [HIGH] Python test is missing verifications: data.updated_at, data.activeStorage, user.activeStorage
   - [HIGH] Python test is missing operations: user.mergeExisting
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
 
 **Suggestions:**
-  - Add verifications for: user.activeStorage, data.updated_at, data.activeStorage
+  - Add verifications for: data.updated_at, data.activeStorage, user.activeStorage
   - Add operations: user.mergeExisting
 
 **Explanation:**
@@ -16651,11 +16870,11 @@ Overall Similarity: 32.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
-  • Python: token_operation verification
+  • TypeScript: verification value_verification
+  • Python: verification token_operation
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: user.activeStorage, data.updated_at, data.activeStorage
+  • [HIGH] Python test is missing verifications: data.updated_at, data.activeStorage, user.activeStorage
   • [HIGH] Python test is missing operations: user.mergeExisting
 
 Key Differences:
@@ -16766,13 +16985,13 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: user.userId, user.activeStorage, user.identityKey, user.created_at, user.updated_at
+  - [HIGH] Python test is missing verifications: user.identityKey, user.userId, user.updated_at, user.created_at, user.activeStorage
 
 **Differences:**
   - Verification count: TS has 5, PY has 14
 
 **Suggestions:**
-  - Add verifications for: user.userId, user.activeStorage, user.identityKey
+  - Add verifications for: user.identityKey, user.userId, user.updated_at
 
 **Explanation:**
 
@@ -16782,11 +17001,11 @@ Overall Similarity: 43.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: user.userId, user.activeStorage, user.identityKey, user.created_at, user.updated_at
+  • [HIGH] Python test is missing verifications: user.identityKey, user.userId, user.updated_at, user.created_at, user.activeStorage
 
 Key Differences:
   • Verification count: TS has 5, PY has 14
@@ -16821,419 +17040,31 @@ Key Differences:
 
 ---
 
-## Test 345: 0 convert from Uint8Array **FAIL**
+## Test 345: 0 convert from Uint8Array **PASS**
 
-### TypeScript Test: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-
-```typescript
-  test('0 convert from Uint8Array', async () => {
-    const a = new Uint8Array([1, 2, 3, 4])
-    {
-      const r = asUint8Array(a)
-      expect(r.length).toBe(4)
-      expect(r.every((v, i) => v === a[i])).toBe(true)
-    }
-    {
-      const r = asString(a)
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'hex')
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'utf8')
-      expect(r).toBe('\x01\x02\x03\x04')
-    }
-    {
-      const r = asString(a, 'base64')
-      expect(r).toBe('AQIDBA==')
-    }
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py
-
-```python
-    def test_convert_from_uint8array(self) -> None:
-        """Given: Uint8Array [1, 2, 3, 4]
-           When: Convert using asUint8Array and asString with various encodings
-           Then: Returns correct conversions for each encoding
-
-        Reference: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-                   test('0 convert from Uint8Array')
-        """
-        # Given
-        a = bytes([1, 2, 3, 4])
-
-        # When/Then - asUint8Array
-        r = as_uint8_array(a)
-        assert len(r) == 4
-        assert all(r[i] == a[i] for i in range(len(a)))
-
-        # When/Then - asString (default hex)
-        r = as_string(a)
-        assert r == "01020304"
-
-        # When/Then - asString with 'hex'
-        r = as_string(a, "hex")
-        assert r == "01020304"
-
-        # When/Then - asString with 'utf8'
-        r = as_string(a, "utf8")
-        assert r == "\x01\x02\x03\x04"
-
-        # When/Then - asString with 'base64'
-        r = as_string(a, "base64")
-        assert r == "AQIDBA=="
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 43.33%
-  - Structural: 0.00%
-  - Semantic: 26.67%
-  - Alignment: 100.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.length
-
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: r.length
-
-**Explanation:**
-
-Overall Similarity: 43.3%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 26.7% (test intent and meaning)
-  • Alignment: 100.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification verification
-  • Python: verification
-
-Critical Issues (1):
-  • [HIGH] Python test is missing verifications: r.length
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts`
+- Python: `py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py`
 
 ---
 
-## Test 346: 1 convert from number[] **FAIL**
+## Test 346: 1 convert from number[] **PASS**
 
-### TypeScript Test: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-
-```typescript
-  test('1 convert from number[]', async () => {
-    const a = [1, 2, 3, 4]
-    {
-      const r = asUint8Array(a)
-      expect(r.length).toBe(4)
-      expect(r.every((v, i) => v === a[i])).toBe(true)
-    }
-    {
-      const r = asString(a)
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'hex')
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'utf8')
-      expect(r).toBe('\x01\x02\x03\x04')
-    }
-    {
-      const r = asString(a, 'base64')
-      expect(r).toBe('AQIDBA==')
-    }
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py
-
-```python
-    def test_convert_from_number_array(self) -> None:
-        """Given: number[] [1, 2, 3, 4]
-           When: Convert using asUint8Array and asString with various encodings
-           Then: Returns correct conversions for each encoding
-
-        Reference: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-                   test('1 convert from number[]')
-        """
-        # Given
-        a = [1, 2, 3, 4]
-
-        # When/Then - asUint8Array
-        r = as_uint8_array(a)
-        assert len(r) == 4
-        assert all(r[i] == a[i] for i in range(len(a)))
-
-        # When/Then - asString (default hex)
-        r = as_string(a)
-        assert r == "01020304"
-
-        # When/Then - asString with 'hex'
-        r = as_string(a, "hex")
-        assert r == "01020304"
-
-        # When/Then - asString with 'utf8'
-        r = as_string(a, "utf8")
-        assert r == "\x01\x02\x03\x04"
-
-        # When/Then - asString with 'base64'
-        r = as_string(a, "base64")
-        assert r == "AQIDBA=="
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 43.33%
-  - Structural: 0.00%
-  - Semantic: 26.67%
-  - Alignment: 100.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.length
-
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: r.length
-
-**Explanation:**
-
-Overall Similarity: 43.3%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 26.7% (test intent and meaning)
-  • Alignment: 100.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification verification
-  • Python: verification
-
-Critical Issues (1):
-  • [HIGH] Python test is missing verifications: r.length
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts`
+- Python: `py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py`
 
 ---
 
-## Test 347: 2 convert from hex string **FAIL**
+## Test 347: 2 convert from hex string **PASS**
 
-### TypeScript Test: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-
-```typescript
-  test('2 convert from hex string', async () => {
-    const a = '01020304'
-    {
-      const r = asUint8Array(a)
-      expect(r.length).toBe(4)
-      expect(r.every((v, i) => v === parseInt(a.slice(i * 2, i * 2 + 2), 16))).toBe(true)
-    }
-    {
-      const r = asString(a)
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'hex')
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'hex', 'hex')
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'hex', 'utf8')
-      expect(r).toBe('\x01\x02\x03\x04')
-    }
-    {
-      const r = asString(a, 'hex', 'base64')
-      expect(r).toBe('AQIDBA==')
-    }
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py
-
-```python
-    def test_convert_from_hex_string(self) -> None:
-        """Given: hex string '01020304'
-           When: Convert using asUint8Array and asString with various input/output encodings
-           Then: Returns correct conversions for each encoding combination
-
-        Reference: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-                   test('2 convert from hex string')
-        """
-        # Given
-        a = "01020304"
-
-        # When/Then - asUint8Array
-        r = as_uint8_array(a)
-        assert len(r) == 4
-        assert all(r[i] == int(a[i * 2 : i * 2 + 2], 16) for i in range(len(r)))
-
-        # When/Then - asString (default hex)
-        r = as_string(a)
-        assert r == "01020304"
-
-        # When/Then - asString with 'hex'
-        r = as_string(a, "hex")
-        assert r == "01020304"
-
-        # When/Then - asString with 'hex' input and 'hex' output
-        r = as_string(a, "hex", "hex")
-        assert r == "01020304"
-
-        # When/Then - asString with 'hex' input and 'utf8' output
-        r = as_string(a, "hex", "utf8")
-        assert r == "\x01\x02\x03\x04"
-
-        # When/Then - asString with 'hex' input and 'base64' output
-        r = as_string(a, "hex", "base64")
-        assert r == "AQIDBA=="
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 43.33%
-  - Structural: 0.00%
-  - Semantic: 26.67%
-  - Alignment: 100.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.length
-
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: r.length
-
-**Explanation:**
-
-Overall Similarity: 43.3%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 26.7% (test intent and meaning)
-  • Alignment: 100.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification verification
-  • Python: verification
-
-Critical Issues (1):
-  • [HIGH] Python test is missing verifications: r.length
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts`
+- Python: `py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py`
 
 ---
 
-## Test 348: 3 convert from utf8 string **FAIL**
+## Test 348: 3 convert from utf8 string **PASS**
 
-### TypeScript Test: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-
-```typescript
-  test('3 convert from utf8 string', async () => {
-    const a = '\x01\x02\x03\x04'
-    {
-      const r = asUint8Array(a, 'utf8')
-      expect(r.length).toBe(4)
-      expect(r.every((v, i) => v === i + 1)).toBe(true)
-    }
-    {
-      const r = asString(a, 'utf8', 'hex')
-      expect(r).toBe('01020304')
-    }
-    {
-      const r = asString(a, 'utf8')
-      expect(r).toBe('\x01\x02\x03\x04')
-    }
-    {
-      const r = asString(a, 'utf8', 'utf8')
-      expect(r).toBe('\x01\x02\x03\x04')
-    }
-    {
-      const r = asString(a, 'utf8', 'base64')
-      expect(r).toBe('AQIDBA==')
-    }
-  })
-```
-
-### Python Test: py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py
-
-```python
-    def test_convert_from_utf8_string(self) -> None:
-        """Given: utf8 string '\x01\x02\x03\x04'
-           When: Convert using asUint8Array and asString with various output encodings
-           Then: Returns correct conversions for each encoding
-
-        Reference: wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts
-                   test('3 convert from utf8 string')
-        """
-        # Given
-        a = "\x01\x02\x03\x04"
-
-        # When/Then - asUint8Array with 'utf8' input
-        r = as_uint8_array(a, "utf8")
-        assert len(r) == 4
-        assert all(r[i] == i + 1 for i in range(len(r)))
-
-        # When/Then - asString with 'utf8' input and 'hex' output
-        r = as_string(a, "utf8", "hex")
-        assert r == "01020304"
-
-        # When/Then - asString with 'utf8' input (default utf8 output)
-        r = as_string(a, "utf8")
-        assert r == "\x01\x02\x03\x04"
-
-        # When/Then - asString with 'utf8' input and 'utf8' output
-        r = as_string(a, "utf8", "utf8")
-        assert r == "\x01\x02\x03\x04"
-
-        # When/Then - asString with 'utf8' input and 'base64' output
-        r = as_string(a, "utf8", "base64")
-        assert r == "AQIDBA=="
-```
-
-### AI Analysis Results
-
-**Similarity Score**: 43.33%
-  - Structural: 0.00%
-  - Semantic: 26.67%
-  - Alignment: 100.00%
-
-**Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.length
-
-**Differences:**
-  - Verification count: TS has 1, PY has 0
-
-**Suggestions:**
-  - Add verifications for: r.length
-
-**Explanation:**
-
-Overall Similarity: 43.3%
-  • Structural: 0.0% (sequence and structure)
-  • Semantic: 26.7% (test intent and meaning)
-  • Alignment: 100.0% (functional equivalence)
-
-Test Intent:
-  • TypeScript: value_verification verification
-  • Python: verification
-
-Critical Issues (1):
-  • [HIGH] Python test is missing verifications: r.length
-
-Key Differences:
-  • Verification count: TS has 1, PY has 0
+- TypeScript: `wallet-toolbox/src/utility/__tests/utilityHelpers.noBuffer.test.ts`
+- Python: `py-wallet-toolbox/tests/utils/test_utility_helpers_no_buffer.py`
 
 ---
 
@@ -17302,14 +17133,14 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'general_test'
-  - [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, _tu.createLegacyWalletMySQLCopy
+  - [HIGH] Python test is missing operations: _tu.createLegacyWalletMySQLCopy, _tu.createLegacyWalletSQLiteCopy
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
 
 **Suggestions:**
   - Align test intent: ensure PY test verifies 'verification'
-  - Add operations: _tu.createLegacyWalletSQLiteCopy, _tu.createLegacyWalletMySQLCopy
+  - Add operations: _tu.createLegacyWalletMySQLCopy, _tu.createLegacyWalletSQLiteCopy
 
 **Explanation:**
 
@@ -17324,7 +17155,7 @@ Test Intent:
 
 Critical Issues (2):
   • [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'general_test'
-  • [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, _tu.createLegacyWalletMySQLCopy
+  • [HIGH] Python test is missing operations: _tu.createLegacyWalletMySQLCopy, _tu.createLegacyWalletSQLiteCopy
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -17540,16 +17371,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: st.reference, swr2.txid, cr.sendWithResults, cr.signableTransaction, cr.tx, cr.txid, swr1.txid, cr.noSendChange
-  - [HIGH] Python test is missing operations: tx.sign, wallet.createAction, wallet.signAction, unlock.estimateLength
+  - [HIGH] Python test is missing verifications: cr.tx, swr1.txid, cr.noSendChange, cr.signableTransaction, cr.sendWithResults, swr2.txid, cr.txid, st.reference
+  - [HIGH] Python test is missing operations: unlock.estimateLength, wallet.createAction, wallet.signAction, tx.sign
 
 **Differences:**
   - Operation count: TS has 7, PY has 0
   - Verification count: TS has 14, PY has 7
 
 **Suggestions:**
-  - Add verifications for: st.reference, swr2.txid, cr.sendWithResults
-  - Add operations: tx.sign, wallet.createAction, wallet.signAction
+  - Add verifications for: cr.tx, swr1.txid, cr.noSendChange
+  - Add operations: unlock.estimateLength, wallet.createAction, wallet.signAction
 
 **Explanation:**
 
@@ -17559,12 +17390,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification key_change
+  • TypeScript: key_change verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: st.reference, swr2.txid, cr.sendWithResults, cr.signableTransaction, cr.tx, cr.txid, swr1.txid, cr.noSendChange
-  • [HIGH] Python test is missing operations: tx.sign, wallet.createAction, wallet.signAction, unlock.estimateLength
+  • [HIGH] Python test is missing verifications: cr.tx, swr1.txid, cr.noSendChange, cr.signableTransaction, cr.sendWithResults, swr2.txid, cr.txid, st.reference
+  • [HIGH] Python test is missing operations: unlock.estimateLength, wallet.createAction, wallet.signAction, tx.sign
 
 Key Differences:
   • Operation count: TS has 7, PY has 0
@@ -17642,14 +17473,14 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'general_test'
-  - [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, storage.destroy
+  - [HIGH] Python test is missing operations: storage.destroy, _tu.createLegacyWalletSQLiteCopy
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
 
 **Suggestions:**
   - Align test intent: ensure PY test verifies 'verification'
-  - Add operations: _tu.createLegacyWalletSQLiteCopy, storage.destroy
+  - Add operations: storage.destroy, _tu.createLegacyWalletSQLiteCopy
 
 **Explanation:**
 
@@ -17664,7 +17495,7 @@ Test Intent:
 
 Critical Issues (2):
   • [HIGH] Test intent differs: TS verifies 'verification' but PY verifies 'general_test'
-  • [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, storage.destroy
+  • [HIGH] Python test is missing operations: storage.destroy, _tu.createLegacyWalletSQLiteCopy
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -17864,16 +17695,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.serialNumber, rr.relinquished
-  - [HIGH] Python test is missing operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet, wallet.proveCertificate, wallet.listCertificates, wallet.relinquishCertificate, master_certificate.createCertificateFields, storage.destroy, wallet.acquireCertificate
+  - [HIGH] Python test is missing verifications: rr.relinquished, r.serialNumber
+  - [HIGH] Python test is missing operations: storage.destroy, wallet.proveCertificate, veri_cert.decryptFields, wallet.listCertificates, master_certificate.createCertificateFields, signed_cert.sign, wallet.relinquishCertificate, _tu.createSQLiteTestWallet, wallet.acquireCertificate
 
 **Differences:**
   - Operation count: TS has 10, PY has 0
   - Verification count: TS has 2, PY has 5
 
 **Suggestions:**
-  - Add verifications for: r.serialNumber, rr.relinquished
-  - Add operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet
+  - Add verifications for: rr.relinquished, r.serialNumber
+  - Add operations: storage.destroy, wallet.proveCertificate, veri_cert.decryptFields
 
 **Explanation:**
 
@@ -17883,12 +17714,12 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification decryption verification encryption
-  • Python: decryption verification encryption
+  • TypeScript: decryption encryption verification value_verification
+  • Python: decryption encryption verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: r.serialNumber, rr.relinquished
-  • [HIGH] Python test is missing operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet, wallet.proveCertificate, wallet.listCertificates, wallet.relinquishCertificate, master_certificate.createCertificateFields, storage.destroy, wallet.acquireCertificate
+  • [HIGH] Python test is missing verifications: rr.relinquished, r.serialNumber
+  • [HIGH] Python test is missing operations: storage.destroy, wallet.proveCertificate, veri_cert.decryptFields, wallet.listCertificates, master_certificate.createCertificateFields, signed_cert.sign, wallet.relinquishCertificate, _tu.createSQLiteTestWallet, wallet.acquireCertificate
 
 Key Differences:
   • Operation count: TS has 10, PY has 0
@@ -18106,16 +17937,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.serialNumber, rr.relinquished
-  - [HIGH] Python test is missing operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet, wallet.proveCertificate, wallet.listCertificates, wallet.relinquishCertificate, wallet.destroy, master_certificate.createCertificateFields, wallet.acquireCertificate
+  - [HIGH] Python test is missing verifications: rr.relinquished, r.serialNumber
+  - [HIGH] Python test is missing operations: wallet.proveCertificate, veri_cert.decryptFields, wallet.destroy, wallet.listCertificates, master_certificate.createCertificateFields, signed_cert.sign, wallet.relinquishCertificate, _tu.createSQLiteTestWallet, wallet.acquireCertificate
 
 **Differences:**
   - Operation count: TS has 10, PY has 0
   - Verification count: TS has 2, PY has 5
 
 **Suggestions:**
-  - Add verifications for: r.serialNumber, rr.relinquished
-  - Add operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet
+  - Add verifications for: rr.relinquished, r.serialNumber
+  - Add operations: wallet.proveCertificate, veri_cert.decryptFields, wallet.destroy
 
 **Explanation:**
 
@@ -18125,12 +17956,12 @@ Overall Similarity: 17.1%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification decryption verification encryption
-  • Python: decryption verification encryption
+  • TypeScript: decryption encryption verification value_verification
+  • Python: decryption encryption verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: r.serialNumber, rr.relinquished
-  • [HIGH] Python test is missing operations: veri_cert.decryptFields, signed_cert.sign, _tu.createSQLiteTestWallet, wallet.proveCertificate, wallet.listCertificates, wallet.relinquishCertificate, wallet.destroy, master_certificate.createCertificateFields, wallet.acquireCertificate
+  • [HIGH] Python test is missing verifications: rr.relinquished, r.serialNumber
+  • [HIGH] Python test is missing operations: wallet.proveCertificate, veri_cert.decryptFields, wallet.destroy, wallet.listCertificates, master_certificate.createCertificateFields, signed_cert.sign, wallet.relinquishCertificate, _tu.createSQLiteTestWallet, wallet.acquireCertificate
 
 Key Differences:
   • Operation count: TS has 10, PY has 0
@@ -18314,7 +18145,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: r.totalActions, a.inputs, a.outputs
+  - [HIGH] Python test is missing verifications: a.inputs, a.outputs, r.totalActions
   - [HIGH] Python test is missing operations: wallet.listActions
 
 **Differences:**
@@ -18322,7 +18153,7 @@ Key Differences:
   - Verification count: TS has 3, PY has 4
 
 **Suggestions:**
-  - Add verifications for: r.totalActions, a.inputs, a.outputs
+  - Add verifications for: a.inputs, a.outputs, r.totalActions
   - Add operations: wallet.listActions
 
 **Explanation:**
@@ -18333,11 +18164,11 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: r.totalActions, a.inputs, a.outputs
+  • [HIGH] Python test is missing verifications: a.inputs, a.outputs, r.totalActions
   • [HIGH] Python test is missing operations: wallet.listActions
 
 Key Differences:
@@ -18418,7 +18249,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -18543,7 +18374,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -18646,7 +18477,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -19117,10 +18948,10 @@ Key Differences:
   - Alignment: 100.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: task_check_for_proofs.checkNow, task.header
+  - [HIGH] Python test is missing verifications: task.header, task_check_for_proofs.checkNow
 
 **Suggestions:**
-  - Add verifications for: task_check_for_proofs.checkNow, task.header
+  - Add verifications for: task.header, task_check_for_proofs.checkNow
 
 **Explanation:**
 
@@ -19130,11 +18961,11 @@ Overall Similarity: 58.3%
   • Alignment: 100.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing verifications: task_check_for_proofs.checkNow, task.header
+  • [HIGH] Python test is missing verifications: task.header, task_check_for_proofs.checkNow
 
 ---
 
@@ -19236,14 +19067,14 @@ Critical Issues (1):
 
 **Critical Issues:**
   - [HIGH] Test intent differs: TS verifies 'general_test' but PY verifies 'verification'
-  - [HIGH] Python test is missing operations: storage.findProvenTxReqs, monitor.runTask, _tu.createLegacyWalletSQLiteCopy, storage.updateProvenTxReq, storage.updateTransaction, _tu.createLegacyWalletMySQLCopy
+  - [HIGH] Python test is missing operations: _tu.createLegacyWalletMySQLCopy, monitor.runTask, storage.findProvenTxReqs, storage.updateProvenTxReq, storage.updateTransaction, _tu.createLegacyWalletSQLiteCopy
 
 **Differences:**
   - Operation count: TS has 6, PY has 0
 
 **Suggestions:**
   - Align test intent: ensure PY test verifies 'general_test'
-  - Add operations: storage.findProvenTxReqs, monitor.runTask, _tu.createLegacyWalletSQLiteCopy
+  - Add operations: _tu.createLegacyWalletMySQLCopy, monitor.runTask, storage.findProvenTxReqs
 
 **Explanation:**
 
@@ -19258,7 +19089,7 @@ Test Intent:
 
 Critical Issues (2):
   • [HIGH] Test intent differs: TS verifies 'general_test' but PY verifies 'verification'
-  • [HIGH] Python test is missing operations: storage.findProvenTxReqs, monitor.runTask, _tu.createLegacyWalletSQLiteCopy, storage.updateProvenTxReq, storage.updateTransaction, _tu.createLegacyWalletMySQLCopy
+  • [HIGH] Python test is missing operations: _tu.createLegacyWalletMySQLCopy, monitor.runTask, storage.findProvenTxReqs, storage.updateProvenTxReq, storage.updateTransaction, _tu.createLegacyWalletSQLiteCopy
 
 Key Differences:
   • Operation count: TS has 6, PY has 0
@@ -19439,15 +19270,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: tx_status.txid, req.status, tx_status.blockHash, tx_status.merkleRoot, proven.merklePath, tx_status.blockHeight, req.provenTxId
-  - [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, entity_proven_tx_req.fromStorageTxid, monitor.runTask, storage.findProvenTxs
+  - [HIGH] Python test is missing verifications: req.status, tx_status.blockHash, tx_status.merkleRoot, req.provenTxId, tx_status.txid, tx_status.blockHeight, proven.merklePath
+  - [HIGH] Python test is missing operations: entity_proven_tx_req.fromStorageTxid, monitor.runTask, storage.findProvenTxs, _tu.createLegacyWalletSQLiteCopy
 
 **Differences:**
   - Operation count: TS has 6, PY has 0
+  - Verification count: TS has 8, PY has 9
 
 **Suggestions:**
-  - Add verifications for: tx_status.txid, req.status, tx_status.blockHash
-  - Add operations: _tu.createLegacyWalletSQLiteCopy, entity_proven_tx_req.fromStorageTxid, monitor.runTask
+  - Add verifications for: req.status, tx_status.blockHash, tx_status.merkleRoot
+  - Add operations: entity_proven_tx_req.fromStorageTxid, monitor.runTask, storage.findProvenTxs
 
 **Explanation:**
 
@@ -19457,15 +19289,16 @@ Overall Similarity: 30.5%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: tx_status.txid, req.status, tx_status.blockHash, tx_status.merkleRoot, proven.merklePath, tx_status.blockHeight, req.provenTxId
-  • [HIGH] Python test is missing operations: _tu.createLegacyWalletSQLiteCopy, entity_proven_tx_req.fromStorageTxid, monitor.runTask, storage.findProvenTxs
+  • [HIGH] Python test is missing verifications: req.status, tx_status.blockHash, tx_status.merkleRoot, req.provenTxId, tx_status.txid, tx_status.blockHeight, proven.merklePath
+  • [HIGH] Python test is missing operations: entity_proven_tx_req.fromStorageTxid, monitor.runTask, storage.findProvenTxs, _tu.createLegacyWalletSQLiteCopy
 
 Key Differences:
   • Operation count: TS has 6, PY has 0
+  • Verification count: TS has 8, PY has 9
 
 ---
 
@@ -19856,7 +19689,6 @@ Key Differences:
 
 **Differences:**
   - Operation count: TS has 1, PY has 0
-  - Verification count: TS has 1, PY has 0
 
 **Suggestions:**
   - Add verifications for: r.length
@@ -19870,7 +19702,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -19879,7 +19711,6 @@ Critical Issues (2):
 
 Key Differences:
   • Operation count: TS has 1, PY has 0
-  • Verification count: TS has 1, PY has 0
 
 ---
 
@@ -20178,7 +20009,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -20248,7 +20079,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: ptxreq.provenTxReqId
-  - [HIGH] Python test is missing operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  - [HIGH] Python test is missing operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
@@ -20256,7 +20087,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: ptxreq.provenTxReqId
-  - Add operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  - Add operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 **Explanation:**
 
@@ -20266,12 +20097,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: ptxreq.provenTxReqId
-  • [HIGH] Python test is missing operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  • [HIGH] Python test is missing operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -20363,18 +20194,18 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
-  - [HIGH] Python test is missing verifications: e.outputId, e.outputTagId
-  - [HIGH] Python test is missing operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput, _tu.insertTestTransaction
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
+  - [HIGH] Python test is missing verifications: e.outputTagId, e.outputId
+  - [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction, _tu.insertTestOutputTagMap
 
 **Differences:**
   - Operation count: TS has 6, PY has 0
   - Verification count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
-  - Add verifications for: e.outputId, e.outputTagId
-  - Add operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput
+  - Align test intent: ensure PY test verifies 'verification value_verification'
+  - Add verifications for: e.outputTagId, e.outputId
+  - Add operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction
 
 **Explanation:**
 
@@ -20384,13 +20215,13 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
-  • [HIGH] Python test is missing verifications: e.outputId, e.outputTagId
-  • [HIGH] Python test is missing operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput, _tu.insertTestTransaction
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
+  • [HIGH] Python test is missing verifications: e.outputTagId, e.outputId
+  • [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction, _tu.insertTestOutputTagMap
 
 Key Differences:
   • Operation count: TS has 6, PY has 0
@@ -20453,16 +20284,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.userId, e.label, e.txLabelId
-  - [HIGH] Python test is missing operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  - [HIGH] Python test is missing verifications: e.label, e.txLabelId, e.userId
+  - [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.userId, e.label, e.txLabelId
-  - Add operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  - Add verifications for: e.label, e.txLabelId, e.userId
+  - Add operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 **Explanation:**
 
@@ -20472,12 +20303,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.userId, e.label, e.txLabelId
-  • [HIGH] Python test is missing operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  • [HIGH] Python test is missing verifications: e.label, e.txLabelId, e.userId
+  • [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -20556,18 +20387,18 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
   - [HIGH] Python test is missing verifications: e.transactionId, e.txLabelId
-  - [HIGH] Python test is missing operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  - [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 **Differences:**
   - Operation count: TS has 5, PY has 0
   - Verification count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
+  - Align test intent: ensure PY test verifies 'verification value_verification'
   - Add verifications for: e.transactionId, e.txLabelId
-  - Add operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  - Add operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 **Explanation:**
 
@@ -20577,13 +20408,13 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
   • [HIGH] Python test is missing verifications: e.transactionId, e.txLabelId
-  • [HIGH] Python test is missing operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  • [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 Key Differences:
   • Operation count: TS has 5, PY has 0
@@ -20671,7 +20502,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -20761,7 +20592,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -20844,16 +20675,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.certificateId, e.userId, e.fieldName
-  - [HIGH] Python test is missing operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  - [HIGH] Python test is missing verifications: e.certificateId, e.fieldName, e.userId
+  - [HIGH] Python test is missing operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 4, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.certificateId, e.userId, e.fieldName
-  - Add operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  - Add verifications for: e.certificateId, e.fieldName, e.userId
+  - Add operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 **Explanation:**
 
@@ -20863,12 +20694,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.certificateId, e.userId, e.fieldName
-  • [HIGH] Python test is missing operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  • [HIGH] Python test is missing verifications: e.certificateId, e.fieldName, e.userId
+  • [HIGH] Python test is missing operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -20932,7 +20763,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: e.basketId
-  - [HIGH] Python test is missing operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  - [HIGH] Python test is missing operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
@@ -20940,7 +20771,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: e.basketId
-  - Add operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  - Add operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 **Explanation:**
 
@@ -20950,12 +20781,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: e.basketId
-  • [HIGH] Python test is missing operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  • [HIGH] Python test is missing operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -21039,7 +20870,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -21124,7 +20955,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: e.commissionId
-  - [HIGH] Python test is missing operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  - [HIGH] Python test is missing operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
@@ -21132,7 +20963,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: e.commissionId
-  - Add operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  - Add operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 **Explanation:**
 
@@ -21142,12 +20973,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: e.commissionId
-  • [HIGH] Python test is missing operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  • [HIGH] Python test is missing operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -21227,7 +21058,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.outputId, e.satoshis, e.transactionId, e.userId, e.vout
+  - [HIGH] Python test is missing verifications: e.userId, e.outputId, e.transactionId, e.vout, e.satoshis
   - [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 **Differences:**
@@ -21235,7 +21066,7 @@ Key Differences:
   - Verification count: TS has 5, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.outputId, e.satoshis, e.transactionId
+  - Add verifications for: e.userId, e.outputId, e.transactionId
   - Add operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 **Explanation:**
@@ -21246,11 +21077,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.outputId, e.satoshis, e.transactionId, e.userId, e.vout
+  • [HIGH] Python test is missing verifications: e.userId, e.outputId, e.transactionId, e.vout, e.satoshis
   • [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 Key Differences:
@@ -21314,7 +21145,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.userId, e.outputTagId, e.tag
+  - [HIGH] Python test is missing verifications: e.outputTagId, e.tag, e.userId
   - [HIGH] Python test is missing operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 **Differences:**
@@ -21322,7 +21153,7 @@ Key Differences:
   - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.userId, e.outputTagId, e.tag
+  - Add verifications for: e.outputTagId, e.tag, e.userId
   - Add operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 **Explanation:**
@@ -21333,11 +21164,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.userId, e.outputTagId, e.tag
+  • [HIGH] Python test is missing verifications: e.outputTagId, e.tag, e.userId
   • [HIGH] Python test is missing operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 Key Differences:
@@ -21403,14 +21234,14 @@ def test_update_proventx(storage_seeded) -> None:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  - [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   - [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: t.blockHash, t.provenTxId
+  - Add verifications for: t.provenTxId, t.blockHash
   - Add operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Explanation:**
@@ -21421,11 +21252,11 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  • [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   • [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 Key Differences:
@@ -21644,14 +21475,14 @@ def test_update_output(storage_seeded) -> None:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing operations: storage.updateOutput, storage.findOutputs
+  - [HIGH] Python test is missing operations: storage.findOutputs, storage.updateOutput
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
   - Verification count: TS has 0, PY has 2
 
 **Suggestions:**
-  - Add operations: storage.updateOutput, storage.findOutputs
+  - Add operations: storage.findOutputs, storage.updateOutput
 
 **Explanation:**
 
@@ -21661,11 +21492,11 @@ Overall Similarity: 42.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication verification key_change
+  • TypeScript: authentication key_change verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing operations: storage.updateOutput, storage.findOutputs
+  • [HIGH] Python test is missing operations: storage.findOutputs, storage.updateOutput
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -21751,7 +21582,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -21824,7 +21655,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: ptxreq.provenTxReqId
-  - [HIGH] Python test is missing operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  - [HIGH] Python test is missing operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
@@ -21832,7 +21663,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: ptxreq.provenTxReqId
-  - Add operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  - Add operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 **Explanation:**
 
@@ -21842,12 +21673,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: ptxreq.provenTxReqId
-  • [HIGH] Python test is missing operations: _tu.insertTestProvenTxReq, storage.insertProvenTxReq
+  • [HIGH] Python test is missing operations: storage.insertProvenTxReq, _tu.insertTestProvenTxReq
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -21939,18 +21770,18 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
-  - [HIGH] Python test is missing verifications: e.outputId, e.outputTagId
-  - [HIGH] Python test is missing operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput, _tu.insertTestTransaction
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
+  - [HIGH] Python test is missing verifications: e.outputTagId, e.outputId
+  - [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction, _tu.insertTestOutputTagMap
 
 **Differences:**
   - Operation count: TS has 6, PY has 0
   - Verification count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
-  - Add verifications for: e.outputId, e.outputTagId
-  - Add operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput
+  - Align test intent: ensure PY test verifies 'verification value_verification'
+  - Add verifications for: e.outputTagId, e.outputId
+  - Add operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction
 
 **Explanation:**
 
@@ -21960,13 +21791,13 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
-  • [HIGH] Python test is missing verifications: e.outputId, e.outputTagId
-  • [HIGH] Python test is missing operations: _tu.insertTestOutputTagMap, _tu.insertTestOutputTag, _tu.insertTestOutput, _tu.insertTestTransaction
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
+  • [HIGH] Python test is missing verifications: e.outputTagId, e.outputId
+  • [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestOutputTag, _tu.insertTestTransaction, _tu.insertTestOutputTagMap
 
 Key Differences:
   • Operation count: TS has 6, PY has 0
@@ -22029,16 +21860,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.userId, e.label, e.txLabelId
-  - [HIGH] Python test is missing operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  - [HIGH] Python test is missing verifications: e.label, e.txLabelId, e.userId
+  - [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.userId, e.label, e.txLabelId
-  - Add operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  - Add verifications for: e.label, e.txLabelId, e.userId
+  - Add operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 **Explanation:**
 
@@ -22048,12 +21879,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.userId, e.label, e.txLabelId
-  • [HIGH] Python test is missing operations: _tu.insertTestUser, _tu.insertTestTxLabel, storage.insertTxLabel
+  • [HIGH] Python test is missing verifications: e.label, e.txLabelId, e.userId
+  • [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestUser, storage.insertTxLabel
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -22132,18 +21963,18 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
   - [HIGH] Python test is missing verifications: e.transactionId, e.txLabelId
-  - [HIGH] Python test is missing operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  - [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 **Differences:**
   - Operation count: TS has 5, PY has 0
   - Verification count: TS has 2, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
+  - Align test intent: ensure PY test verifies 'verification value_verification'
   - Add verifications for: e.transactionId, e.txLabelId
-  - Add operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  - Add operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 **Explanation:**
 
@@ -22153,13 +21984,13 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'authentication'
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'authentication'
   • [HIGH] Python test is missing verifications: e.transactionId, e.txLabelId
-  • [HIGH] Python test is missing operations: _tu.insertTestTxLabelMap, _tu.insertTestTransaction, _tu.insertTestTxLabel
+  • [HIGH] Python test is missing operations: _tu.insertTestTxLabel, _tu.insertTestTxLabelMap, _tu.insertTestTransaction
 
 Key Differences:
   • Operation count: TS has 5, PY has 0
@@ -22247,7 +22078,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -22338,7 +22169,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -22421,16 +22252,16 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.certificateId, e.userId, e.fieldName
-  - [HIGH] Python test is missing operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  - [HIGH] Python test is missing verifications: e.certificateId, e.fieldName, e.userId
+  - [HIGH] Python test is missing operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
   - Verification count: TS has 4, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.certificateId, e.userId, e.fieldName
-  - Add operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  - Add verifications for: e.certificateId, e.fieldName, e.userId
+  - Add operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 **Explanation:**
 
@@ -22440,12 +22271,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.certificateId, e.userId, e.fieldName
-  • [HIGH] Python test is missing operations: _tu.insertTestCertificate, storage.insertCertificateField, _tu.insertTestCertificateField
+  • [HIGH] Python test is missing verifications: e.certificateId, e.fieldName, e.userId
+  • [HIGH] Python test is missing operations: _tu.insertTestCertificate, _tu.insertTestCertificateField, storage.insertCertificateField
 
 Key Differences:
   • Operation count: TS has 3, PY has 0
@@ -22509,7 +22340,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: e.basketId
-  - [HIGH] Python test is missing operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  - [HIGH] Python test is missing operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 **Differences:**
   - Operation count: TS has 2, PY has 0
@@ -22517,7 +22348,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: e.basketId
-  - Add operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  - Add operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 **Explanation:**
 
@@ -22527,12 +22358,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: e.basketId
-  • [HIGH] Python test is missing operations: _tu.insertTestOutputBasket, storage.insertOutputBasket
+  • [HIGH] Python test is missing operations: storage.insertOutputBasket, _tu.insertTestOutputBasket
 
 Key Differences:
   • Operation count: TS has 2, PY has 0
@@ -22616,7 +22447,7 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
@@ -22701,7 +22532,7 @@ Key Differences:
 
 **Critical Issues:**
   - [HIGH] Python test is missing verifications: e.commissionId
-  - [HIGH] Python test is missing operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  - [HIGH] Python test is missing operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
@@ -22709,7 +22540,7 @@ Key Differences:
 
 **Suggestions:**
   - Add verifications for: e.commissionId
-  - Add operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  - Add operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 **Explanation:**
 
@@ -22719,12 +22550,12 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
   • [HIGH] Python test is missing verifications: e.commissionId
-  • [HIGH] Python test is missing operations: _tu.insertTestCommission, storage.insertCommission, _tu.insertTestTransaction
+  • [HIGH] Python test is missing operations: _tu.insertTestTransaction, _tu.insertTestCommission, storage.insertCommission
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -22804,7 +22635,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.outputId, e.satoshis, e.transactionId, e.userId, e.vout
+  - [HIGH] Python test is missing verifications: e.userId, e.outputId, e.transactionId, e.vout, e.satoshis
   - [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 **Differences:**
@@ -22812,7 +22643,7 @@ Key Differences:
   - Verification count: TS has 5, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.outputId, e.satoshis, e.transactionId
+  - Add verifications for: e.userId, e.outputId, e.transactionId
   - Add operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 **Explanation:**
@@ -22823,11 +22654,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.outputId, e.satoshis, e.transactionId, e.userId, e.vout
+  • [HIGH] Python test is missing verifications: e.userId, e.outputId, e.transactionId, e.vout, e.satoshis
   • [HIGH] Python test is missing operations: _tu.insertTestOutput, _tu.insertTestTransaction, storage.insertOutput
 
 Key Differences:
@@ -22891,7 +22722,7 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: e.userId, e.outputTagId, e.tag
+  - [HIGH] Python test is missing verifications: e.outputTagId, e.tag, e.userId
   - [HIGH] Python test is missing operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 **Differences:**
@@ -22899,7 +22730,7 @@ Key Differences:
   - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: e.userId, e.outputTagId, e.tag
+  - Add verifications for: e.outputTagId, e.tag, e.userId
   - Add operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 **Explanation:**
@@ -22910,11 +22741,11 @@ Overall Similarity: 12.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: authentication verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: e.userId, e.outputTagId, e.tag
+  • [HIGH] Python test is missing verifications: e.outputTagId, e.tag, e.userId
   • [HIGH] Python test is missing operations: storage.insertOutputTag, _tu.insertTestUser, _tu.insertTestOutputTag
 
 Key Differences:
@@ -22980,14 +22811,14 @@ def test_update_proventx(storage_seeded) -> None:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  - [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   - [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: t.blockHash, t.provenTxId
+  - Add verifications for: t.provenTxId, t.blockHash
   - Add operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Explanation:**
@@ -22998,11 +22829,11 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  • [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   • [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 Key Differences:
@@ -23221,14 +23052,14 @@ def test_update_output(storage_seeded) -> None:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing operations: storage.updateOutput, storage.findOutputs
+  - [HIGH] Python test is missing operations: storage.findOutputs, storage.updateOutput
 
 **Differences:**
   - Operation count: TS has 4, PY has 0
   - Verification count: TS has 0, PY has 2
 
 **Suggestions:**
-  - Add operations: storage.updateOutput, storage.findOutputs
+  - Add operations: storage.findOutputs, storage.updateOutput
 
 **Explanation:**
 
@@ -23238,11 +23069,11 @@ Overall Similarity: 42.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: authentication verification key_change
+  • TypeScript: authentication key_change verification
   • Python: verification
 
 Critical Issues (1):
-  • [HIGH] Python test is missing operations: storage.updateOutput, storage.findOutputs
+  • [HIGH] Python test is missing operations: storage.findOutputs, storage.updateOutput
 
 Key Differences:
   • Operation count: TS has 4, PY has 0
@@ -23690,14 +23521,14 @@ def test_update_proventx(storage_seeded) -> None:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  - [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   - [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Differences:**
   - Operation count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Add verifications for: t.blockHash, t.provenTxId
+  - Add verifications for: t.provenTxId, t.blockHash
   - Add operations: storage.updateProvenTx, storage.findProvenTxs
 
 **Explanation:**
@@ -23708,11 +23539,11 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
-  • [HIGH] Python test is missing verifications: t.blockHash, t.provenTxId
+  • [HIGH] Python test is missing verifications: t.provenTxId, t.blockHash
   • [HIGH] Python test is missing operations: storage.updateProvenTx, storage.findProvenTxs
 
 Key Differences:
@@ -23989,7 +23820,7 @@ Overall Similarity: 13.3%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: verification
 
 Critical Issues (2):
@@ -24263,8 +24094,8 @@ Key Differences:
   - Alignment: 0.00%
 
 **Critical Issues:**
-  - [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'general_test'
-  - [HIGH] Python test is missing verifications: error.message, record_to_update3.length, record_to_update4.length
+  - [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'general_test'
+  - [HIGH] Python test is missing verifications: record_to_update3.length, record_to_update4.length, error.message
   - [HIGH] Python test is missing operations: storage.insertProvenTxReq, storage.findProvenTxReqs, storage.updateProvenTxReq
 
 **Differences:**
@@ -24272,8 +24103,8 @@ Key Differences:
   - Verification count: TS has 3, PY has 0
 
 **Suggestions:**
-  - Align test intent: ensure PY test verifies 'value_verification verification'
-  - Add verifications for: error.message, record_to_update3.length, record_to_update4.length
+  - Align test intent: ensure PY test verifies 'verification value_verification'
+  - Add verifications for: record_to_update3.length, record_to_update4.length, error.message
   - Add operations: storage.insertProvenTxReq, storage.findProvenTxReqs, storage.updateProvenTxReq
 
 **Explanation:**
@@ -24284,12 +24115,12 @@ Overall Similarity: 0.0%
   • Alignment: 0.0% (functional equivalence)
 
 Test Intent:
-  • TypeScript: value_verification verification
+  • TypeScript: verification value_verification
   • Python: general_test
 
 Critical Issues (3):
-  • [HIGH] Test intent differs: TS verifies 'value_verification verification' but PY verifies 'general_test'
-  • [HIGH] Python test is missing verifications: error.message, record_to_update3.length, record_to_update4.length
+  • [HIGH] Test intent differs: TS verifies 'verification value_verification' but PY verifies 'general_test'
+  • [HIGH] Python test is missing verifications: record_to_update3.length, record_to_update4.length, error.message
   • [HIGH] Python test is missing operations: storage.insertProvenTxReq, storage.findProvenTxReqs, storage.updateProvenTxReq
 
 Key Differences:

@@ -217,7 +217,7 @@ Focus on:
         # Identify critical issues with AI understanding
         critical_issues = self._identify_critical_issues_ai(
             ts_intent, py_intent, ts_operations, py_operations, 
-            ts_verifications, py_verifications
+            ts_verifications, py_verifications, ts_elements, py_elements
         )
         
         # Find differences (include plain assertions in count for accurate reporting)
@@ -526,10 +526,14 @@ Focus on:
                 
                 # Create normalized plain assertion signatures
                 py_plain_sigs = set()
+                # Store mapping from sig to original plain assertion for has_call_count check
+                py_plain_sig_to_assertion_early = {}
                 for pa in py_plain:
                     obj = pa.get('object', '')
                     method = pa.get('method', '')
-                    py_plain_sigs.add(f"{obj}.{method}")
+                    sig = f"{obj}.{method}"
+                    py_plain_sigs.add(sig)
+                    py_plain_sig_to_assertion_early[sig] = pa
                 
                 if debug_test2:
                     print(f"     [DEBUG Test 2] PY plain_sigs: {py_plain_sigs}")
@@ -538,14 +542,89 @@ Focus on:
                 for ts_verif in list(ts_remaining):
                     if '.' in ts_verif:
                         ts_obj, ts_method = ts_verif.split('.', 1)
+                        # Normalize TS object and method names
+                        ts_obj_norm = self._camel_to_snake(ts_obj)
+                        ts_method_norm = self._camel_to_snake(ts_method)
                         if debug_test2:
                             print(f"     [DEBUG Test 2] Trying to match TS verification: {ts_verif} ({ts_obj}.{ts_method})")
                         
                         for py_plain_sig in list(py_plain_sigs):
                             if '.' in py_plain_sig:
                                 py_obj, py_method = py_plain_sig.split('.', 1)
+                                py_assertion = py_plain_sig_to_assertion_early.get(py_plain_sig, {})
+                                has_call_count = py_assertion.get('has_call_count', False)
+                                has_len = py_assertion.get('has_len', False)
                                 if debug_test2:
-                                    print(f"     [DEBUG Test 2]   Checking against PY: {py_plain_sig} ({py_obj}.{py_method})")
+                                    print(f"     [DEBUG Test 2]   Checking against PY: {py_plain_sig} ({py_obj}.{py_method}), has_call_count={has_call_count}, has_len={has_len}")
+                                
+                                # Pattern 7: ADDITIVE - Match TS obj.length verification with PY len(obj) plain assertion
+                                # snapshot.length <-> len(snapshot)
+                                if has_len and ts_method_norm == 'length':
+                                    ts_obj_variants = {ts_obj_norm}
+                                    if '_token_' in ts_obj_norm:
+                                        ts_obj_variants.add(ts_obj_norm.replace('_token_', '_'))
+                                    elif 'ump' in ts_obj_norm and 'token' not in ts_obj_norm:
+                                        parts = ts_obj_norm.split('_')
+                                        if len(parts) >= 2 and parts[0] == 'mock' and parts[1] == 'ump':
+                                            ts_obj_variants.add('_'.join(parts[:2] + ['token'] + parts[2:]))
+                                    
+                                    def objects_match_len_early(ts_obj_name: str, py_obj_name: str) -> bool:
+                                        if ts_obj_name == py_obj_name:
+                                            return True
+                                        ts_without_token = ts_obj_name.replace('_token_', '_')
+                                        py_without_token = py_obj_name.replace('_token_', '_')
+                                        if ts_without_token == py_without_token:
+                                            return True
+                                        if 'ump' in ts_obj_name and 'ump' in py_obj_name:
+                                            ts_core = ts_obj_name.replace('_token_', '').replace('token', '')
+                                            py_core = py_obj_name.replace('_token_', '').replace('token', '')
+                                            if ts_core == py_core:
+                                                return True
+                                        return False
+                                    
+                                    if (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                        objects_match_len_early(ts_obj_norm, py_obj)):
+                                        if debug_test2:
+                                            print(f"     [DEBUG Test 2]   ✓ MATCHED Pattern 7 (len): {ts_verif} <-> {py_plain_sig}")
+                                        semantic_matches += 1
+                                        py_plain_sigs.discard(py_plain_sig)
+                                        break
+                                
+                                # Pattern 6: ADDITIVE - Match TS verification with PY plain assertion that has call_count
+                                # mockUMPTokenInteractor.buildAndSend <-> mock_ump_interactor.build_and_send.call_count
+                                if has_call_count:
+                                    # Normalize object names and handle variations
+                                    ts_obj_variants = {ts_obj_norm}
+                                    if '_token_' in ts_obj_norm:
+                                        ts_obj_variants.add(ts_obj_norm.replace('_token_', '_'))
+                                    elif 'ump' in ts_obj_norm and 'token' not in ts_obj_norm:
+                                        parts = ts_obj_norm.split('_')
+                                        if len(parts) >= 2 and parts[0] == 'mock' and parts[1] == 'ump':
+                                            ts_obj_variants.add('_'.join(parts[:2] + ['token'] + parts[2:]))
+                                    
+                                    def objects_match_early(ts_obj_name: str, py_obj_name: str) -> bool:
+                                        """Check if two object names match, handling _token_ variations."""
+                                        if ts_obj_name == py_obj_name:
+                                            return True
+                                        ts_without_token = ts_obj_name.replace('_token_', '_')
+                                        py_without_token = py_obj_name.replace('_token_', '_')
+                                        if ts_without_token == py_without_token:
+                                            return True
+                                        if 'ump' in ts_obj_name and 'ump' in py_obj_name:
+                                            ts_core = ts_obj_name.replace('_token_', '').replace('token', '')
+                                            py_core = py_obj_name.replace('_token_', '').replace('token', '')
+                                            if ts_core == py_core:
+                                                return True
+                                        return False
+                                    
+                                    if (ts_method_norm == py_method and 
+                                        (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                         objects_match_early(ts_obj_norm, py_obj))):
+                                        if debug_test2:
+                                            print(f"     [DEBUG Test 2]   ✓ MATCHED Pattern 6 (call_count): {ts_verif} <-> {py_plain_sig}")
+                                        semantic_matches += 1
+                                        py_plain_sigs.discard(py_plain_sig)
+                                        break
                                 
                                 # Pattern 1: Exact method match with object equivalence
                                 # manager.authenticated <-> result.authenticated
@@ -640,11 +719,15 @@ Focus on:
                     ts_plain_sigs.add(f"{obj}.{method}")
                 
                 py_plain_sigs = set()
+                # Store mapping from sig to original plain assertion for has_call_count check
+                py_plain_sig_to_assertion = {}
                 for pa in py_plain:
                     obj = pa.get('object', '')
                     method = pa.get('method', '')
                     # Normalize PY object names for matching (snake_case is already normalized)
-                    py_plain_sigs.add(f"{obj}.{method}")
+                    sig = f"{obj}.{method}"
+                    py_plain_sigs.add(sig)
+                    py_plain_sig_to_assertion[sig] = pa
                 
                 if debug_test2:
                     print(f"     [DEBUG Test 2] TS plain_sigs (normalized): {ts_plain_sigs}")
@@ -660,6 +743,9 @@ Focus on:
                 for ts_verif in list(ts_remaining):
                     if '.' in ts_verif:
                         ts_obj, ts_method = ts_verif.split('.', 1)
+                        # Normalize TS object and method names
+                        ts_obj_norm = self._camel_to_snake(ts_obj)
+                        ts_method_norm = self._camel_to_snake(ts_method)
                         matched = False
                         
                         if debug_test2:
@@ -670,9 +756,95 @@ Focus on:
                         for py_plain_sig in list(py_plain_sigs):
                             if '.' in py_plain_sig:
                                 py_obj, py_method = py_plain_sig.split('.', 1)
+                                py_assertion = py_plain_sig_to_assertion.get(py_plain_sig, {})
+                                has_call_count = py_assertion.get('has_call_count', False)
+                                has_len = py_assertion.get('has_len', False)
                                 
                                 if debug_test2:
-                                    print(f"     [DEBUG]   Checking against PY: {py_plain_sig} ({py_obj}.{py_method})")
+                                    print(f"     [DEBUG]   Checking against PY: {py_plain_sig} ({py_obj}.{py_method}), has_call_count={has_call_count}, has_len={has_len}")
+                                
+                                # Pattern 7: ADDITIVE - Match TS obj.length verification with PY len(obj) plain assertion
+                                # snapshot.length <-> len(snapshot)
+                                # This handles: expect(snapshot.length).toBeGreaterThan(64) <-> assert len(snapshot) > 64
+                                if has_len and ts_method_norm == 'length':
+                                    # Normalize object names and handle variations
+                                    ts_obj_variants = {ts_obj_norm}
+                                    if '_token_' in ts_obj_norm:
+                                        ts_obj_variants.add(ts_obj_norm.replace('_token_', '_'))
+                                    elif 'ump' in ts_obj_norm and 'token' not in ts_obj_norm:
+                                        parts = ts_obj_norm.split('_')
+                                        if len(parts) >= 2 and parts[0] == 'mock' and parts[1] == 'ump':
+                                            ts_obj_variants.add('_'.join(parts[:2] + ['token'] + parts[2:]))
+                                    
+                                    def objects_match_len(ts_obj_name: str, py_obj_name: str) -> bool:
+                                        """Check if two object names match for len() matching."""
+                                        if ts_obj_name == py_obj_name:
+                                            return True
+                                        ts_without_token = ts_obj_name.replace('_token_', '_')
+                                        py_without_token = py_obj_name.replace('_token_', '_')
+                                        if ts_without_token == py_without_token:
+                                            return True
+                                        if 'ump' in ts_obj_name and 'ump' in py_obj_name:
+                                            ts_core = ts_obj_name.replace('_token_', '').replace('token', '')
+                                            py_core = py_obj_name.replace('_token_', '').replace('token', '')
+                                            if ts_core == py_core:
+                                                return True
+                                        return False
+                                    
+                                    if (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                        objects_match_len(ts_obj_norm, py_obj)):
+                                        if debug_test2:
+                                            print(f"     [DEBUG]   ✓ MATCHED Pattern 7 (len): {ts_verif} <-> {py_plain_sig}")
+                                        semantic_matches += 1
+                                        py_plain_sigs.discard(py_plain_sig)
+                                        matched = True
+                                        break
+                                
+                                # Pattern 6: ADDITIVE - Match TS verification with PY plain assertion that has call_count
+                                # mockUMPTokenInteractor.buildAndSend <-> mock_ump_interactor.build_and_send.call_count
+                                # This handles: expect(mockUMPTokenInteractor.buildAndSend).toHaveBeenCalledTimes(2)
+                                #           <-> assert mock_ump_interactor.build_and_send.call_count == 2
+                                if has_call_count:
+                                    # Normalize object names and handle variations (e.g., mock_ump_token_interactor vs mock_ump_interactor)
+                                    ts_obj_variants = {ts_obj_norm}
+                                    # Try adding/removing _token_ in the middle
+                                    if '_token_' in ts_obj_norm:
+                                        ts_obj_variants.add(ts_obj_norm.replace('_token_', '_'))
+                                    elif 'ump' in ts_obj_norm and 'token' not in ts_obj_norm:
+                                        # Try adding _token_ after ump
+                                        parts = ts_obj_norm.split('_')
+                                        if len(parts) >= 2 and parts[0] == 'mock' and parts[1] == 'ump':
+                                            ts_obj_variants.add('_'.join(parts[:2] + ['token'] + parts[2:]))
+                                    
+                                    # Check if normalized method names match and object names match (with variations)
+                                    # Helper function to check object name matching with _token_ variations
+                                    def objects_match_with_variations(ts_obj_name: str, py_obj_name: str) -> bool:
+                                        """Check if two object names match, handling _token_ variations."""
+                                        if ts_obj_name == py_obj_name:
+                                            return True
+                                        # Handle _token_ variations: mock_ump_token_interactor <-> mock_ump_interactor
+                                        ts_without_token = ts_obj_name.replace('_token_', '_')
+                                        py_without_token = py_obj_name.replace('_token_', '_')
+                                        if ts_without_token == py_without_token:
+                                            return True
+                                        # Check if one is a substring of the other (for partial matches)
+                                        if 'ump' in ts_obj_name and 'ump' in py_obj_name:
+                                            # Both have 'ump', check if core parts match
+                                            ts_core = ts_obj_name.replace('_token_', '').replace('token', '')
+                                            py_core = py_obj_name.replace('_token_', '').replace('token', '')
+                                            if ts_core == py_core:
+                                                return True
+                                        return False
+                                    
+                                    if (ts_method_norm == py_method and 
+                                        (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                         objects_match_with_variations(ts_obj_norm, py_obj))):
+                                        if debug_test2:
+                                            print(f"     [DEBUG]   ✓ MATCHED Pattern 6 (call_count): {ts_verif} <-> {py_plain_sig}")
+                                        semantic_matches += 1
+                                        py_plain_sigs.discard(py_plain_sig)
+                                        matched = True
+                                        break
                                 
                                 # Pattern 1: Exact method match with object equivalence
                                 # manager.authenticated <-> result.authenticated
@@ -957,7 +1129,9 @@ Focus on:
         ts_operations: List[str],
         py_operations: List[str],
         ts_verifications: List[str],
-        py_verifications: List[str]
+        py_verifications: List[str],
+        ts_elements: Dict[str, Any] = None,
+        py_elements: Dict[str, Any] = None
     ) -> List[Dict[str, Any]]:
         """Identify critical issues using AI understanding."""
         issues = []
@@ -993,7 +1167,56 @@ Focus on:
             else:
                 py_verif_set.add(v)
         
+        # ADDITIVE: Before reporting missing verifications, check if PY has equivalent plain assertions
+        # This prevents false positives when PY uses call_count instead of mock assertions
         missing_verif = ts_verif_set - py_verif_set
+        if missing_verif and py_elements:
+            # Get PY plain assertions
+            py_plain = py_elements.get('plain_assertions', [])
+            # Check if any missing verification has a semantic match in PY plain assertions
+            actually_missing = []
+            for missing_v in missing_verif:
+                if '.' in missing_v:
+                    ts_obj_norm, ts_method_norm = missing_v.split('.', 1)
+                    # Check if PY has a plain assertion that matches (call_count or len)
+                    found_match = False
+                    for pa in py_plain:
+                        py_obj = pa.get('object', '')
+                        py_method = pa.get('method', '')
+                        has_call_count = pa.get('has_call_count', False)
+                        has_len = pa.get('has_len', False)
+                        
+                        # Normalize and check for match
+                        ts_obj_variants = {ts_obj_norm}
+                        if '_token_' in ts_obj_norm:
+                            ts_obj_variants.add(ts_obj_norm.replace('_token_', '_'))
+                        elif 'ump' in ts_obj_norm and 'token' not in ts_obj_norm:
+                            parts = ts_obj_norm.split('_')
+                            if len(parts) >= 2 and parts[0] == 'mock' and parts[1] == 'ump':
+                                ts_obj_variants.add('_'.join(parts[:2] + ['token'] + parts[2:]))
+                        
+                        # Check for len() match: TS obj.length <-> PY len(obj)
+                        if has_len and ts_method_norm == 'length':
+                            if (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                self._objects_match_for_issues(ts_obj_norm, py_obj)):
+                                found_match = True
+                                break
+                        
+                        # Check for call_count match: TS obj.method <-> PY obj.method.call_count
+                        if has_call_count and ts_method_norm == py_method:
+                            if (ts_obj_norm == py_obj or py_obj in ts_obj_variants or
+                                self._objects_match_for_issues(ts_obj_norm, py_obj)):
+                                found_match = True
+                                break
+                    
+                    if not found_match:
+                        actually_missing.append(missing_v)
+                else:
+                    # Non-dotted verification, keep as missing
+                    actually_missing.append(missing_v)
+            
+            missing_verif = actually_missing
+        
         if missing_verif:
             issues.append({
                 'type': 'missing_verifications',
@@ -1205,6 +1428,22 @@ Focus on:
                             obj = dict_match.group(1)
                             attr = dict_match.group(2)
                             plain_assertions.append({'object': obj, 'method': attr, 'type': 'plain'})
+                        # ADDITIVE: Handle len(obj) patterns (e.g., len(snapshot) > 64)
+                        # This matches TS obj.length patterns
+                        elif re.search(r'\blen\((\w+)\)', condition):
+                            len_match = re.search(r'\blen\((\w+)\)', condition)
+                            if len_match:
+                                obj = len_match.group(1)
+                                # Store as obj.length for matching with TS verifications
+                                plain_assertions.append({'object': obj, 'method': 'length', 'type': 'plain', 'has_len': True})
+                        # ADDITIVE: Handle obj.method.call_count patterns (e.g., mock_ump_interactor.build_and_send.call_count)
+                        elif re.search(r'(\w+)\.(\w+)\.call_count', condition):
+                            call_count_match = re.search(r'(\w+)\.(\w+)\.call_count', condition)
+                            if call_count_match:
+                                obj = call_count_match.group(1)
+                                method = call_count_match.group(2)
+                                # Store as obj.method for matching with TS verifications
+                                plain_assertions.append({'object': obj, 'method': method, 'type': 'plain', 'has_call_count': True})
                         elif re.search(r'(\w+)\.(\w+)', condition):
                             obj_match = re.search(r'(\w+)\.(\w+)', condition)
                             if obj_match:
@@ -1537,6 +1776,27 @@ Focus on:
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
     
+    def _objects_match_for_issues(self, ts_obj_name: str, py_obj_name: str) -> bool:
+        """Check if two object names match, handling _token_ variations.
+        
+        Used in _identify_critical_issues_ai to check if PY plain assertions match TS verifications.
+        """
+        if ts_obj_name == py_obj_name:
+            return True
+        # Handle _token_ variations: mock_ump_token_interactor <-> mock_ump_interactor
+        ts_without_token = ts_obj_name.replace('_token_', '_')
+        py_without_token = py_obj_name.replace('_token_', '_')
+        if ts_without_token == py_without_token:
+            return True
+        # Check if one is a substring of the other (for partial matches)
+        if 'ump' in ts_obj_name and 'ump' in py_obj_name:
+            # Both have 'ump', check if core parts match
+            ts_core = ts_obj_name.replace('_token_', '').replace('token', '')
+            py_core = py_obj_name.replace('_token_', '').replace('token', '')
+            if ts_core == py_core:
+                return True
+        return False
+    
     def _adjust_for_setup_overhead(
         self,
         structural_score: float,
@@ -1780,6 +2040,13 @@ def main():
     """Main function."""
     import sys
     import os
+    import argparse
+    
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='Compare TypeScript and Python test implementations using AI analysis')
+    parser.add_argument('-n', '--test-number', type=int, metavar='N', 
+                       help='Run comparison for a specific test number (1-indexed)')
+    args = parser.parse_args()
     
     # Default paths
     DEFAULT_TS_BASE_DIR = os.environ.get('TS_BASE_DIR', 'wallet-toolbox')
@@ -1802,14 +2069,24 @@ def main():
     
     test_data = load_test_data(test_json_path)
     
-    print(f"Comparing {len(test_data)} tests using AI analysis...")
+    # Filter to specific test number if requested
+    if args.test_number:
+        if args.test_number < 1 or args.test_number > len(test_data):
+            print(f"Error: Test number {args.test_number} is out of range (1-{len(test_data)})")
+            return
+        test_data = [test_data[args.test_number - 1]]
+        print(f"Running comparison for test {args.test_number} only...")
+    else:
+        print(f"Comparing {len(test_data)} tests using AI analysis...")
     print("="*80)
     
     comparator = AITestComparator()
     comparisons = []
     
     for i, entry in enumerate(test_data, 1):
-        print(f"\n[{i}/{len(test_data)}] Analyzing: {entry['test_name']}")
+        # Adjust test number display if filtering
+        test_num = args.test_number if args.test_number else i
+        print(f"\n[{test_num}/{len(test_data) if not args.test_number else 1}] Analyzing: {entry['test_name']}")
         
         # Read test code
         ts_file = Path(DEFAULT_TS_BASE_DIR) / entry['ts_file']

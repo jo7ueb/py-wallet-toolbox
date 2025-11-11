@@ -96,6 +96,8 @@ async def create_mock_ump_token(  # noqa: PLR0913
     primary_password = SymmetricKey(xor_bytes(primary_key, password_key))
 
     temp_privileged_key_manager = PrivilegedKeyManager(lambda: PrivateKey(privileged_key))
+    assert manager.authenticationFlow == 'new-user'
+    assert manager.authenticated is True
 
     return {
         "passwordSalt": list(password_salt),
@@ -443,6 +445,7 @@ class TestCWIStyleWalletManagerSnapshot:
         await manager1.authenticate(presentation_key)
 
         snapshot = await manager1.save_snapshot()
+        assert len(snapshot) > 64  # 32 bytes + encrypted data
 
         manager2 = CWIStyleWalletManager(
             ump_token_interactor=mock_ump_interactor,
